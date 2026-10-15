@@ -102,6 +102,9 @@
   tr, td, table { break-inside: avoid; }
 }
 
+/* A greyed-out text button shouldn't light up under the mouse as if it could be pressed. */
+.btn-ghost:disabled:hover, .btn-ghost:disabled:active { background: transparent; }
+
 /* — List screen — */
 .list-num { font-size: 13px; color: var(--color-neutral-700); white-space: nowrap; }
 .list-muted { color: var(--color-neutral-700); }

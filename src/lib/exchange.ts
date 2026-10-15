@@ -4,10 +4,11 @@
 // checked and repaired here rather than trusted.
 
 import {
-  MAX_ITEM_TEXT, MAX_NAME, MAX_ROUTES, uid,
+  MAX_ITEM_TEXT, MAX_LABEL, MAX_NAME, MAX_ROUTES, uid,
   type Chart, type Direction, type Item, type Route,
 } from '../data/charts.ts';
 import { isShapeType } from '../data/shapes.ts';
+import { withMinimumRoutes } from './chartOps.ts';
 
 /** The part of the app's state that is a person's work (not which screen is open). */
 export interface Library {
@@ -46,21 +47,40 @@ function sanitiseItems(raw: unknown): Item[] {
     if (Array.isArray(rec.routes)) {
       item.routes = rec.routes.filter(isObject).slice(0, MAX_ROUTES).map((rt): Route => ({
         id: typeof rt.id === 'string' && rt.id ? rt.id : uid(),
-        label: str(rt.label, '', 40),
+        label: str(rt.label, '', MAX_LABEL),
         to: typeof rt.to === 'string' && seen.has(rt.to) ? rt.to : null,
       }));
     }
   }
+  // A decision always has at least two answers (the List and the Chart rely on it).
+  rows.forEach(({ item }, i) => {
+    if (item.type === 'decision') item.routes = withMinimumRoutes(item.routes, rows[i + 1]?.item.id ?? null);
+  });
   return rows.map((r) => r.item);
 }
 
+function sanitisePositions(raw: unknown, items: Item[]): Chart['positions'] {
+  if (!isObject(raw)) return undefined;
+  const known = new Set(items.map((i) => i.id));
+  const out: NonNullable<Chart['positions']> = {};
+  for (const [id, p] of Object.entries(raw)) {
+    if (known.has(id) && isObject(p) && Number.isFinite(p.x) && Number.isFinite(p.y)) out[id] = { x: p.x as number, y: p.y as number };
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
+// Every field of Chart must be carried across here: anything left out is
+// silently dropped the next time the page loads (this runs on every load).
 export function sanitiseChart(raw: unknown): Chart | null {
   if (!isObject(raw) || typeof raw.id !== 'string' || !raw.id) return null;
+  const items = sanitiseItems(raw.items);
+  const positions = sanitisePositions(raw.positions, items);
   return {
     id: raw.id,
     name: str(raw.name, 'Untitled', MAX_NAME),
-    items: sanitiseItems(raw.items),
+    items,
     direction: DIRECTIONS.includes(raw.direction as Direction) ? (raw.direction as Direction) : 'auto',
+    ...(positions ? { positions } : {}),
     lastEditedAt: typeof raw.lastEditedAt === 'number' ? raw.lastEditedAt : Date.now(),
   };
 }

@@ -2,9 +2,9 @@ import { useState, type KeyboardEvent, type ReactNode } from 'react';
 import { flushSync } from 'react-dom';
 import { useApp } from '../state/store.tsx';
 import { SHAPES, SHAPE_ORDER, type ShapeType } from '../data/shapes.ts';
-import { MAX_ITEM_TEXT, MAX_ROUTES, MIN_ROUTES, type Item, type Next, type Route } from '../data/charts.ts';
-import { countReferences, itemLabel, routeLetter } from '../lib/chartOps.ts';
-import { focusItemText } from '../lib/focus.ts';
+import { MAX_ITEM_TEXT, MAX_LABEL, MAX_ROUTES, MIN_ROUTES, type Item, type Next, type Route } from '../data/charts.ts';
+import { countReferences, itemLabel, leadsTo, routeLetter } from '../lib/chartOps.ts';
+import { focusItemText, selectAllSoon } from '../lib/focus.ts';
 import { useDragReorder } from '../lib/useDragReorder.ts';
 import { useIsNarrow } from '../lib/responsive.ts';
 import { IconGrip, IconPlus, IconTrash } from '../lib/icons.tsx';
@@ -43,7 +43,8 @@ export function ListScreen() {
 
   // Enter adds the next row; Up/Down move between rows' text boxes.
   const itemKeyDown = (item: Item, index: number) => (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    // (Not while an accented-letter or other input-method keyboard is still composing.)
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
       e.preventDefault();
       addAndFocus(item.id);
     } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
@@ -85,10 +86,9 @@ export function ListScreen() {
 
   /** "then → next / ends here / a chosen item", for any row that isn't a decision. */
   const thenSelect = (item: Item, index: number) => {
-    const isLast = index === items.length - 1;
-    // With nothing after it, "next" can only mean the chart stops here — show it that way.
+    // "next" with nothing after it can only mean the chart stops here — show it that way.
     const thenTo = item.then.kind === 'item' ? item.then.to : null;
-    const shown = thenTo !== null ? `item:${thenTo}` : item.then.kind === 'next' && isLast ? 'end' : item.then.kind;
+    const shown = thenTo !== null ? `item:${thenTo}` : leadsTo(items, index) === null ? 'end' : 'next';
     const change = (value: string) => {
       const then: Next = value === 'next' ? { kind: 'next' } : value === 'end' ? { kind: 'end' } : { kind: 'item', to: value.slice(5) };
       setItemThen(item.id, then);
@@ -123,9 +123,11 @@ export function ListScreen() {
           inputMode="numeric"
           aria-label={`Number of routes from ${item.text.trim() || 'this decision'}`}
           value={draft ?? String(item.routes.length)}
-          onFocus={(e) => e.currentTarget.select()}
+          onFocus={(e) => selectAllSoon(e.currentTarget)}
           onChange={(e) => {
-            const text = e.target.value.replace(/\D/g, '').slice(0, 1);
+            // One digit (2–6). Keep the one just typed, so typing "3" over a "2"
+            // works even if the old number wasn't selected.
+            const text = e.target.value.replace(/\D/g, '').slice(-1);
             setCountDrafts((d) => ({ ...d, [item.id]: text }));
             const n = parseInt(text, 10);
             if (n >= MIN_ROUTES && n <= MAX_ROUTES) setRouteCount(item.id, n);
@@ -164,7 +166,7 @@ export function ListScreen() {
       className="plain-input outlined-input"
       style={style}
       value={route.label}
-      maxLength={40}
+      maxLength={MAX_LABEL}
       placeholder="Answer"
       aria-label={`Answer ${label}`}
       onChange={(e) => setRouteLabel(item.id, route.id, e.target.value)}

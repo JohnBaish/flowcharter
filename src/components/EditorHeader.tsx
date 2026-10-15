@@ -9,7 +9,7 @@ import { IconPlus } from '../lib/icons.tsx';
 /** Header for the List screen (the Chart screen gets its own in Stage 2): the
  *  chart's name, a count of its items, and the screen's actions. */
 export function EditorHeader() {
-  const { chart, renameChart, duplicateChart, openChart, setScreen, addItem } = useApp();
+  const { chart, renameChart, duplicateChart, openChart, setScreen, addItem, clearItems } = useApp();
   const nameInput = useRef<HTMLTextAreaElement | null>(null);
 
   // The name is a textarea so a long one wraps; keep it exactly as tall as its text.
@@ -26,6 +26,14 @@ export function EditorHeader() {
     let id = '';
     flushSync(() => { id = addItem(null); });
     focusItemText(id);
+  };
+
+  // Clearing has no undo, so it asks first and says exactly what will go.
+  const handleClear = () => {
+    const n = chart.items.length;
+    const what = n === 1 ? 'the 1 item' : `all ${n} items`;
+    const name = chart.name.trim() || 'this flowchart';
+    if (window.confirm(`Clear ${what} from "${name}"? This can't be undone.`)) clearItems();
   };
 
   return (
@@ -52,6 +60,15 @@ export function EditorHeader() {
       <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
         <button className="btn btn-ghost" onClick={addAndFocus} style={{ color: 'var(--color-accent-700)' }}>
           <IconPlus size={15} />Add item
+        </button>
+        <button
+          className="btn btn-ghost"
+          onClick={handleClear}
+          disabled={chart.items.length === 0}
+          title={chart.items.length === 0 ? 'The list is already empty' : 'Remove every item from this list'}
+          style={{ color: 'var(--color-neutral-700)' }}
+        >
+          Clear
         </button>
         <button
           className="btn btn-secondary"

@@ -38,7 +38,10 @@ Key points from the house style, repeated because they matter most:
   - `screens/`, `components/`: Library and List screens, Nav, the List header.
     `ChartScreen` and `GuideScreen` are placeholders until Stages 2 and 3.
   - `lib/`: also `icons.tsx`, `responsive.ts`, `useDragReorder.ts` (copied from
-    clockwheel), `time.ts`, `focus.ts`.
+    clockwheel), `time.ts`, and `focus.ts` (focusing a row's box, plus
+    `isTouch`/`selectAllSoon` from clockwheel's `timeInput.ts`).
+  - `chartOps.leadsTo()` is the one rule for where an ordinary row flows; the
+    Chart (Stage 2) must use it rather than re-deriving "next".
   - `styles/organic.css`, `global.css`: from clockwheel; `global.css` is trimmed
     of Clockmaker-only rules and has the List screen's styles added.
 - `scripts/check-chart-ops.ts`: `npm run check` tests `chartOps` and `exchange`
@@ -75,7 +78,7 @@ for John's approval: the eight shapes in their colours, and the List
 **Agreed later the same day:** the "then →" choice on ordinary rows (SPEC §4).
 
 **Still to confirm with John:** the small Start/End-word addition to type guessing, and the footer and
-library wording (SPEC §9).
+library wording (SPEC §9). *(All confirmed later the same day; see the review entry below.)*
 
 **Left alone:** no app code yet. Nothing in clockwheel was changed.
 
@@ -142,3 +145,54 @@ design, for John to confirm: it removes every row of the open chart (the name an
 direction stay), after a `window.confirm` saying how many items will be lost; text
 style button in `--color-neutral-700` in the header's action row (HOUSE-STYLE §5);
 hidden or disabled when the list is already empty; also reachable on a phone.
+
+### 2026-10-15 — Stage 1 review, the Clear button, and John's confirmations (branch `stage-1-list`)
+
+**John confirmed:** the Start/End-word guessing rule, the footer and Library
+wording (SPEC §9), and every item in "Details settled while building Stage 1"
+(SPEC §4). SPEC.md no longer has anything marked "to confirm".
+
+**Review (Opus), against SPEC, HOUSE-STYLE and clockwheel.** The code was in good
+shape: the rules are in one place, everything read from outside is repaired, and
+the screens match the approved mock-ups. Nothing found was a wrong design choice.
+Fixed:
+
+- **Routes box on iPhone (bug).** It kept only the *first* digit typed, and an
+  iPhone doesn't reliably select the old number on tap (clockwheel's `timeInput.ts`
+  exists for exactly this), so typing "3" into "2" could give "23" → "2" and be
+  ignored. Now it keeps the digit just typed, and selects with clockwheel's
+  `selectAllSoon`.
+- **Stage 4 trap.** `sanitiseChart` runs on every page load and rebuilt each chart
+  field by field, so `positions` (moving boxes by hand) would have been silently
+  thrown away on every reload. It now keeps valid positions, with a comment that
+  every new Chart field must be carried across there.
+- **Stage 2 trap.** A damaged file could leave a decision with fewer than two
+  answers; the sanitiser now tops it up to two, so the chart can rely on it.
+- **One rule for "where does this row lead"** (`chartOps.leadsTo`), used by the
+  List now and for the Chart in Stage 2, so they can't disagree.
+- Small: Enter doesn't add a row while an input-method keyboard is still composing
+  (accents, other alphabets); answer-label length is one constant (`MAX_LABEL`);
+  a chart whose name was deleted shows as "Untitled" in the Library instead of an
+  empty, unclickable title.
+
+Looked at and left alone, deliberately: two browser tabs editing at once overwrite
+each other's saves (Clockmaker behaves the same; rare for one person); the empty
+table's column headings shift slightly when there are no rows (cosmetic).
+
+**Added: Clear** (John's request, design confirmed by him). Grey text button after
+"+ Add item" in the List header, as Backtimer's Clear. It asks first — "Clear all 8
+items from "Backup newsreader"? This can't be undone." ("the 1 item" for one) —
+then removes every row; the name and direction stay. Greyed out (and no hover
+shading) when the list is already empty.
+
+**Verified:** `npm run build` clean; `npm run lint` only the two known warnings;
+`npm run check` 22 checks (new: `leadsTo`, decisions topped up to two answers,
+positions kept). In Chromium at 1200px and at 390px with touch emulation: the whole
+Stage 1 browser run again with no regressions; Clear (Cancel keeps rows, OK empties,
+name kept, greyed out when empty, survives reload, singular wording, 44px tall on a
+phone); the routes box selects on tap and accepts a new digit typed after an
+unselected old one; "Untitled" in the Library. No page errors, no sideways scroll.
+
+**Couldn't be checked:** a real iPhone — the routes-box fix is aimed at real iPhone
+behaviour that touch emulation in Chromium doesn't reproduce exactly, so it's worth
+John trying it on his phone in the next preview.

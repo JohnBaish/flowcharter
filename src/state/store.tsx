@@ -55,6 +55,8 @@ interface AppContextValue extends PersistedState {
   /** Adds a blank row after `afterId` (or at the end) and returns its id. */
   addItem: (afterId?: ItemId | null) => ItemId;
   removeItem: (itemId: ItemId) => void;
+  /** Removes every row of the open chart (its name and settings stay). */
+  clearItems: () => void;
   reorderItems: (from: number, to: number) => void;
   setItemText: (itemId: ItemId, text: string) => void;
   setItemType: (itemId: ItemId, type: ShapeType) => void;
@@ -145,6 +147,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return id;
     },
     removeItem: (itemId) => editItems((items) => ops.removeItem(items, itemId)),
+    clearItems: () => editItems(() => []),
     reorderItems: (from, to) => editItems((items) => ops.reorderItems(items, from, to)),
     setItemText: (itemId, text) => editItems((items) => ops.setText(items, itemId, text)),
     setItemType: (itemId, type) => editItems((items) => ops.setType(items, itemId, type)),

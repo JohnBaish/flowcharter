@@ -10,8 +10,8 @@ type, buttons, phone rules, privacy wording, hosting and ways of working.
 Where this file is silent, follow the house style; where they disagree, ask
 John.
 
-Agreed with John on 2026-10-15. Anything marked **(to confirm)** still
-needs his yes.
+Agreed with John on 2026-10-15. Everything in this file has his yes (the last
+open points were confirmed later that day).
 
 ---
 
@@ -38,7 +38,7 @@ Hamburger at ≤720px.
 | Screen | What's on it |
 |---|---|
 | **Library** | All saved charts as cards (name, number of items, last edited). Open, Duplicate, Delete (with `window.confirm`). **Import** / **Export** of the whole library. The footer notice (§9). |
-| **List** | The open chart's rows (§4). Header: kicker "Flowchart", the chart name (edit in place), a tag "8 items · 2 decisions", actions **+ Add item** (ghost), **Duplicate**, **Done** (→ Library). |
+| **List** | The open chart's rows (§4). Header: kicker "Flowchart", the chart name (edit in place), a tag "8 items · 2 decisions", actions **+ Add item** (ghost), **Clear** (ghost, grey), **Duplicate**, **Done** (→ Library). |
 | **Chart** | The drawn flowchart (§5). Same header, with actions **Print** (ghost), **Duplicate**, **Copy image**, **Done**. A **Direction** switch: Automatic · Down · Across. A key underneath showing only the shape types this chart uses. |
 | **Guide** | What Flowcharter is, how to fill in the list, the full key of shapes with their meanings, and tips for a clear chart, taken from John's guide. |
 
@@ -128,7 +128,7 @@ After that it's never changed for you.
 
 1. Row 1 → **Start / End**.
 2. The text is just "Start", "End", "Finish" or "Stop" (any capitals, ignoring a
-   final full stop) → **Start / End**. (A small addition to the agreed rule.)
+   final full stop) → **Start / End**. (Added while building; confirmed by John.)
 3. The text ends with "?" → **Decision** (with 2 routes, Yes/No).
 4. Otherwise → **Process**.
 
@@ -146,8 +146,8 @@ Follow Clockmaker's List screen and HOUSE-STYLE §6.
 
 ### Details settled while building Stage 1 (2026-10-15)
 
-Small behaviours the spec above didn't spell out. John has not been asked about
-these yet; they're easy to change.
+Small behaviours the spec above didn't spell out. All confirmed by John on
+2026-10-15.
 
 - **A new chart starts with no rows**, and its name box is ready to type over.
   "+ Add item" (or Enter in a box) adds rows.
@@ -175,6 +175,11 @@ these yet; they're easy to change.
   beside the type box, as in the mock-up.
 - **Every button is at least 44px tall on a phone**, including the nav's.
 - **Each Library card shows a thin colour strip** of the shape types in that chart.
+- **Clear** (added at John's request after Stage 1): removes every row of the open
+  chart; the name and settings stay. It asks first ("Clear all 8 items from
+  'Backup newsreader'? This can't be undone.") and is greyed out when the list is
+  already empty. A grey text button in the header, as in Clockmaker's Backtimer.
+- **A chart whose name has been deleted** shows as "Untitled" in the Library.
 
 ### The worked example
 
@@ -322,10 +327,10 @@ computer and `.list-cards` on a phone. Light theme only.
   project by John Baish. The flowcharts you make here are not collected;
   they're only saved in your browser. We collect anonymous visit statistics
   (no cookies, no personal data) to see how the site is used. Contact:
-  flowcharter@baish.net" **(to confirm wording)**
+  flowcharter@baish.net" (confirmed by John)
 - Library note (as Clockmaker): "Your flowcharts are saved automatically, but
   only in this browser, on this device. Use Export to keep a backup or move
-  them to another device." **(to confirm wording)**
+  them to another device." (confirmed by John)
 - The Guide screen text: drafted in Stage 3 for John to edit.
 
 ## 10. Hosting and launch

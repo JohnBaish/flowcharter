@@ -31,6 +31,8 @@ export function LibraryScreen() {
   const handleDelete = (id: string, name: string) => {
     if (window.confirm(`Delete "${name}"? This can't be undone.`)) removeChart(id);
   };
+  // A chart whose name has been deleted still needs a title to click.
+  const title = (c: Chart) => c.name.trim() || 'Untitled';
 
   const handleExport = () => {
     const blob = new Blob([exportState()], { type: 'application/json' });
@@ -102,7 +104,7 @@ export function LibraryScreen() {
                     onClick={() => openChart(id)}
                     style={{ font: '700 15.5px var(--font-body)', lineHeight: 1.2, textWrap: 'pretty', cursor: 'pointer', overflowWrap: 'anywhere' }}
                   >
-                    {c.name}
+                    {title(c)}
                   </div>
                   <div className="mono" style={{ fontSize: 12, color: 'var(--color-neutral-700)', marginTop: 3 }}>{summary(c.items)}</div>
                   <div className="mono" style={{ fontSize: 12, color: 'var(--color-neutral-700)' }}>Last changed {relativeTime(c.lastEditedAt, now)}</div>
@@ -111,7 +113,7 @@ export function LibraryScreen() {
                 <div style={{ display: 'flex', gap: 6, marginTop: 'auto', paddingTop: 2 }}>
                   <button className="btn btn-ghost" onClick={() => openChart(id)} style={{ padding: '6px 14px', fontSize: '12.5px', flex: 1, color: 'var(--color-accent-700)', borderColor: 'var(--color-divider)' }}>Open</button>
                   <button className="btn btn-secondary" onClick={() => duplicateChart(id)} style={{ padding: '6px 14px', fontSize: '12.5px' }}>Duplicate</button>
-                  <button className="btn btn-ghost" onClick={() => handleDelete(id, c.name)} style={{ padding: '6px 14px', fontSize: '12.5px', color: 'var(--color-neutral-700)' }}>Delete</button>
+                  <button className="btn btn-ghost" onClick={() => handleDelete(id, title(c))} style={{ padding: '6px 14px', fontSize: '12.5px', color: 'var(--color-neutral-700)' }}>Delete</button>
                 </div>
               </div>
             );

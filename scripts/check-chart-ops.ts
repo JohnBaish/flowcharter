@@ -5,7 +5,7 @@
 import assert from 'node:assert/strict';
 import { seedChart, newChart, type Item } from '../src/data/charts.ts';
 import {
-  addItem, countReferences, guessType, removeItem, reorderItems, setRouteCount, setRouteLabel,
+  addItem, countReferences, guessType, leadsTo, removeItem, reorderItems, setRouteCount, setRouteLabel,
   setRouteTo, setText, setThen, setType, summary,
 } from '../src/lib/chartOps.ts';
 import { exportJson, parseImport, sanitiseChart } from '../src/lib/exchange.ts';
@@ -211,6 +211,35 @@ test('damaged charts are repaired, not trusted', () => {
   assert.equal(c.items[1].routes[1].label, '');
   assert.equal(sanitiseChart({ name: 'no id' }), null);
   assert.equal(newChart().items.length, 0);
+});
+
+test('leadsTo: next row, a chosen row, or nowhere', () => {
+  const items = seedChart().items;
+  assert.equal(leadsTo(items, 0), 's2', 'row 1 leads on to row 2');
+  assert.equal(leadsTo(items, 3), 's5', '"Book the backup" leads into End');
+  assert.equal(leadsTo(items, 4), null, 'End ends');
+  assert.equal(leadsTo(items, 7), null, 'the last row ends');
+  assert.equal(leadsTo(setThen(items, 's2', { kind: 'item', to: 's6' }), 1), 's6', 'a chosen row');
+  const last = addItem(items, 'z', 's8'); // a Process after the final End
+  assert.equal(leadsTo(last, 8), null, '"next" on the last row means it stops');
+  assert.equal(leadsTo(addItem(last, 'y', 'z'), 8), 'y', '…until a row is added after it');
+});
+
+test('a decision always has at least two answers, even from a damaged file', () => {
+  const c = sanitiseChart({ id: 'x', items: [
+    { id: 'q', text: 'Ok?', type: 'decision', routes: [] },
+    { id: 'n', text: 'Next', type: 'process' },
+    { id: 'r', text: 'One?', type: 'decision', routes: [{ id: 'only', label: 'Yes', to: 'n' }] },
+  ] })!;
+  assert.deepEqual(c.items[0].routes.map((r) => [r.label, r.to]), [['Yes', 'n'], ['No', null]]);
+  assert.deepEqual(c.items[2].routes.map((r) => [r.label, r.to]), [['Yes', 'n'], ['', null]]);
+});
+
+test('saved box positions (Stage 4) survive a reload; bad ones are dropped', () => {
+  const c = sanitiseChart({ id: 'x', items: [{ id: 'a', type: 'process' }, { id: 'b', type: 'process' }],
+    positions: { a: { x: 10, y: 20 }, b: { x: 'left', y: 0 }, ghost: { x: 1, y: 1 } } })!;
+  assert.deepEqual(c.positions, { a: { x: 10, y: 20 } });
+  assert.equal('positions' in sanitiseChart({ id: 'y', items: [] })!, false, 'no positions → no field');
 });
 
 console.log(`${passed} checks passed`);

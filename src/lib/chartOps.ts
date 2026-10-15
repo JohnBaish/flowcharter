@@ -33,7 +33,7 @@ export function defaultThen(type: ShapeType, index: number): Next {
 
 /** A decision needs at least two answers. The first goes to the next row, the
  *  rest start as "Choose…". With two answers the labels default to Yes / No. */
-function withMinimumRoutes(routes: Route[], followingId: ItemId | null): Route[] {
+export function withMinimumRoutes(routes: Route[], followingId: ItemId | null): Route[] {
   if (routes.length >= MIN_ROUTES) return routes;
   if (routes.length === 0) {
     return [
@@ -153,7 +153,17 @@ export function setRouteTo(items: Item[], id: ItemId, routeId: string, to: ItemI
   return editRoute(items, id, routeId, { to });
 }
 
-// — read-only helpers the screens share —
+// — read-only helpers the screens (and the chart drawing) share —
+
+/** Where an ordinary (non-decision) row leads: the id of the row it flows into,
+ *  or null if the chart stops there. "next" on the last row means it stops.
+ *  The List shows this and the Chart draws it, so both must use this one rule. */
+export function leadsTo(items: Item[], index: number): ItemId | null {
+  const then = items[index].then;
+  if (then.kind === 'end') return null;
+  if (then.kind === 'item') return items.some((it) => it.id === then.to) ? then.to : null;
+  return items[index + 1]?.id ?? null;
+}
 
 export const routeLetter = (i: number): string => 'abcdef'[i] ?? String(i + 1);
 

@@ -47,6 +47,7 @@ export const MIN_ROUTES = 2;
 export const MAX_ROUTES = 6;
 export const MAX_ITEM_TEXT = 80;
 export const MAX_NAME = 40;
+export const MAX_LABEL = 40;
 
 /** Short random id. Unique within a chart is all that's needed. */
 export function uid(): string {
