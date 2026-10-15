@@ -49,7 +49,7 @@ export function GuideScreen() {
       <div className="card" style={section}>
         <p style={{ ...body, margin: 0 }}>
           Flowcharter turns a list into a flowchart. You write your steps one row at a time, say what kind of step each
-          one is, and the chart is drawn for you. There's no dragging boxes about.
+          one is, and the chart is drawn for you. There's no dragging boxes about. (You can return to this intro page at any time via “Guide”.)
         </p>
       </div>
 

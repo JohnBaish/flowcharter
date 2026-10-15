@@ -352,3 +352,9 @@ real iPhone.
 **Don't forget (flagged by John):** near the end, add a Flowcharter card to baish.net's landing page (`landing.html` in `JohnBaish/clockwheel`) — a change in the other repo, needing John's OK first.
 
 **Still to do with John:** add `flowcharter.baish.net` in Vercel and DNS; turn on Web Analytics in the Vercel dashboard (the code is already in `src/main.tsx`; no repo change needed).
+
+### 2026-10-15 — First visit opens the Guide with an empty Library (branch `first-visit`)
+
+**John asked for:** the site to open blank rather than with "Backup newsreader", and the Guide to appear for first-time users as Clockmaker's does. The live site is https://flowcharter.vercel.app/ (works without a login).
+
+**Changed:** `firstVisit()` in `state/store.tsx` now gives an empty library and `screen: 'guide'`; `seedChart()` is kept for the checks and `design/test-charts.json` only. Guide wording: added "(You can return to this intro page at any time via “Guide”.)" after "There's no dragging boxes about." SPEC §4 and §7 updated. Anyone who has already visited keeps what they saved (including John's copy of the example).

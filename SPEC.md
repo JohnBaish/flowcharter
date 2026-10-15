@@ -168,8 +168,9 @@ Small behaviours the spec above didn't spell out. All confirmed by John on
   at it are cleared quietly.
 - **Import replaces the whole library**, so it asks first if there's anything in
   the library to lose. (Clockmaker's doesn't.)
-- **First visit lands on the Library**, where the example chart is. (Clockmaker
-  lands on its Guide; Flowcharter's Guide doesn't exist until Stage 3.)
+- **First visit lands on the Guide, with an empty Library**, as Clockmaker does
+  (changed at John's request, 2026-10-15; it first landed on the Library with the
+  example chart in it).
 - **On a phone, an ordinary row's "then" box gets its own line** under the type
   box; the two can't share a 390px-wide line. A decision keeps its route-count box
   beside the type box, as in the mock-up.
@@ -318,8 +319,9 @@ Down on a phone, because the screen is tall and narrow.
 - No accounts, no backend. Everything is saved automatically in the browser
   (`localStorage`) under the key **`flowcharter-state-v1`**. Once live,
   **never rename this key**.
-- First visit: the library contains one chart, the worked example (§4),
-  named "Backup newsreader", so there's something to look at.
+- First visit: the library is empty and the Guide is shown. (The worked example,
+  "Backup newsreader", still exists in code as `seedChart()` for the checks and
+  the test charts, but is no longer added for new visitors.)
 - **Export** saves the whole library as
   `flowcharter-library-YYYY-MM-DD-HHMM.json` (local date and time, as Clockmaker does) containing
   `{ app: 'flowcharter', version: 1, exportedAt, state }`. **Import** reads such
