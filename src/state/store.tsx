@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { newChart, seedChart, uid, MAX_NAME, type Chart, type Direction, type ItemId, type Next } from '../data/charts.ts';
+import { newChart, uid, MAX_NAME, type Chart, type Direction, type ItemId, type Next } from '../data/charts.ts';
 import type { ShapeType } from '../data/shapes.ts';
 import * as ops from '../lib/chartOps.ts';
 import { exportJson, sanitiseLibrary, type Library } from '../lib/exchange.ts';
@@ -19,9 +19,12 @@ interface PersistedState extends Library {
   lastEditedAt: number;
 }
 
+// A truly first-ever visit (nothing saved yet) starts with an empty Library and
+// lands on the Guide, so someone new reads it before diving in. Once they
+// navigate anywhere, `screen` is saved like everything else, so this happens
+// once. (Also used if the saved copy is damaged beyond repair.)
 function firstVisit(): PersistedState {
-  const chart = seedChart();
-  return { screen: 'lib', charts: { [chart.id]: chart }, chartOrder: [chart.id], openChartId: chart.id, lastEditedAt: Date.now() };
+  return { screen: 'guide', charts: {}, chartOrder: [], openChartId: null, lastEditedAt: Date.now() };
 }
 
 function loadInitial(): PersistedState {
