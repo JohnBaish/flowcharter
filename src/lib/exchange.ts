@@ -104,10 +104,10 @@ export function exportJson(library: Library, now = new Date()): string {
   return JSON.stringify({ app: EXPORT_APP, version: EXPORT_VERSION, exportedAt: now.toISOString(), state: library }, null, 2);
 }
 
-/** `flowcharter-library-2026-10-15.json`, using the person's local date. */
+/** `flowcharter-library-2026-10-15-1430.json`, using the person's local date and time (as Clockmaker does). */
 export function exportFilename(now = new Date()): string {
   const pad = (n: number) => String(n).padStart(2, '0');
-  return `flowcharter-library-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}.json`;
+  return `flowcharter-library-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}.json`;
 }
 
 export type ParsedImport = { error: string } | { library: Library };

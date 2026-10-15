@@ -100,6 +100,25 @@
   .nav { display: none !important; }
   .print-only { display: block; }
   tr, td, table { break-inside: avoid; }
+
+  /* Every printed screen starts with the flowchart's name. */
+  .print-title { font: 400 22px var(--font-heading); margin: 0 0 var(--space-3); }
+
+  /* The chart fills the page's width (printScreen sets the most height it may
+     take, for the paper's direction), and its label pills match the white paper. */
+  .chart-frame { overflow: visible; }
+  .chart-frame svg { width: 100% !important; height: auto !important; }
+  .chart-paper-fill { fill: #fff; }
+  .chart-key { padding-top: var(--space-3); }
+
+  /* The List prints as a plain table: no boxes, no drop-down arrows, and narrow
+     enough to fit the page. */
+  .table { width: 100%; }
+  .table th { width: auto !important; }
+  .plain-input, .plain-input.outlined-input { border-color: transparent !important; background: none !important; padding-left: 0; }
+  .list-text-input { display: none !important; }
+  select.input { appearance: none; -webkit-appearance: none; border-color: transparent; background: none; padding-left: 0; padding-right: 0; }
+  .list-then select.input { width: auto; }
 }
 
 /* A greyed-out text button shouldn't light up under the mouse as if it could be pressed. */
@@ -153,3 +172,9 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
   .chart-toolbar .seg-opt { min-height: 44px; display: inline-flex; align-items: center; }
   .chart-toolbar-note { margin-left: 0; flex-basis: 100%; }
 }
+
+/* — Guide screen — */
+.guide-shapes { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
+.guide-shape { background: var(--color-neutral-100); border-radius: var(--radius-md); padding: var(--space-3); }
+@media (max-width: 960px) { .guide-shapes { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .guide-shapes { grid-template-columns: 1fr; } }

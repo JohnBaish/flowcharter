@@ -55,17 +55,22 @@ export function ListScreen() {
 
   // — pieces shared by the computer table and the phone cards —
 
+  // A text box can't wrap long wording and would cut it off on paper, so a
+  // printout shows the wording as plain text instead (the box is hidden then).
   const itemInput = (item: Item, index: number, extraStyle?: object) => (
-    <input
-      data-item-input={item.id}
-      className="plain-input"
-      style={{ fontWeight: 600, ...extraStyle }}
-      value={item.text}
-      maxLength={MAX_ITEM_TEXT}
-      aria-label={`Item ${index + 1}`}
-      onChange={(e) => setItemText(item.id, e.target.value)}
-      onKeyDown={itemKeyDown(item, index)}
-    />
+    <>
+      <input
+        data-item-input={item.id}
+        className="plain-input list-text-input"
+        style={{ fontWeight: 600, ...extraStyle }}
+        value={item.text}
+        maxLength={MAX_ITEM_TEXT}
+        aria-label={`Item ${index + 1}`}
+        onChange={(e) => setItemText(item.id, e.target.value)}
+        onKeyDown={itemKeyDown(item, index)}
+      />
+      <span className="print-only" style={{ fontWeight: 600 }}>{item.text}</span>
+    </>
   );
 
   const typeSelect = (item: Item, index: number) => (
@@ -162,15 +167,18 @@ export function ListScreen() {
   };
 
   const answerInput = (item: Item, route: Route, label: string, style?: object) => (
-    <input
-      className="plain-input outlined-input"
-      style={style}
-      value={route.label}
-      maxLength={MAX_LABEL}
-      placeholder="Answer"
-      aria-label={`Answer ${label}`}
-      onChange={(e) => setRouteLabel(item.id, route.id, e.target.value)}
-    />
+    <>
+      <input
+        className="plain-input outlined-input list-text-input"
+        style={style}
+        value={route.label}
+        maxLength={MAX_LABEL}
+        placeholder="Answer"
+        aria-label={`Answer ${label}`}
+        onChange={(e) => setRouteLabel(item.id, route.id, e.target.value)}
+      />
+      <span className="print-only">{route.label}</span>
+    </>
   );
 
   const emptyMessage = 'No items yet — add the first one above.';
@@ -180,6 +188,7 @@ export function ListScreen() {
   if (!isNarrow) {
     return (
       <div className="screen" style={{ padding: '0 var(--space-6) var(--space-6)' }}>
+        <div className="print-only print-title">{chart?.name}</div>
         <table className="table">
           <thead>
             <tr>
@@ -264,6 +273,7 @@ export function ListScreen() {
 
   return (
     <div className="screen" style={{ padding: '0 var(--space-4) var(--space-6)' }}>
+      <div className="print-only print-title">{chart?.name}</div>
       {items.length === 0 && (
         <div style={{ textAlign: 'center', padding: 'var(--space-6)', color: 'var(--color-neutral-700)' }}>{emptyMessage}</div>
       )}

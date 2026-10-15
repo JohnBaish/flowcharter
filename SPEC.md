@@ -38,7 +38,7 @@ Hamburger at ≤720px.
 | Screen | What's on it |
 |---|---|
 | **Library** | All saved charts as cards (name, number of items, last edited). Open, Duplicate, Delete (with `window.confirm`). **Import** / **Export** of the whole library. The footer notice (§9). |
-| **List** | The open chart's rows (§4). Header: kicker "Flowchart", the chart name (edit in place), a tag "8 items · 2 decisions", actions **+ Add item** (ghost), **Clear** (ghost, grey), **Duplicate**, **Done** (→ Library). |
+| **List** | The open chart's rows (§4). Header: kicker "Flowchart", the chart name (edit in place), a tag "8 items · 2 decisions", actions **+ Add item** (ghost), **Clear** (ghost, grey), **Print** (ghost), **Duplicate**, **Done** (→ Library). |
 | **Chart** | The drawn flowchart (§5). Same header, with actions **Print** (ghost), **Duplicate**, **Copy image**, **Done**. A **Direction** switch: Automatic · Down · Across. A key underneath showing only the shape types this chart uses. |
 | **Guide** | What Flowcharter is, how to fill in the list, the full key of shapes with their meanings, and tips for a clear chart, taken from John's guide. |
 
@@ -247,6 +247,29 @@ Not yet seen by John; easy to change.
 - The layout library loads only when a chart is first drawn, so the List and
   Library stay quick.
 
+### Details settled while building Stage 3 (2026-10-15)
+
+Confirmed by John on 2026-10-15.
+
+- **Print is on the List screen too** (Clockmaker's is on every screen that can
+  print). The List prints on portrait A4 as a plain table: the item wording and
+  answers as ordinary wrapping text, no boxes or drop-down arrows, the chart's
+  name at the top, and the column headings repeated on later pages.
+- **The Chart prints on one page:** portrait for Down, landscape for Across
+  (whichever way Automatic chose, if Automatic). A big chart, such as the
+  23-row newsreaders tree, is shrunk until it fits and so prints small — that
+  is "fit one A4 page" working as agreed, not a bug. The answer labels print on
+  white rather than cream, to match the paper.
+- **Copy image** makes the picture at full chart size (not the screen's shrunk
+  size) at 2× resolution, or less for an enormous chart, because browsers can't
+  make canvases beyond about 14 million pixels; it says "Copied!", or
+  "Downloaded" when the browser won't take images on the clipboard (the file is
+  named after the chart, e.g. `backup-newsreader.png`), or "Couldn't copy".
+  The key wraps onto several lines if it has to.
+- **The Guide** is a first draft for John to edit: what it does, six steps, the
+  shape key with samples, tips (from John's symbols guide, trimmed to what
+  suits Flowcharter), and where flowcharts are kept (using the approved wording).
+
 ### Direction
 
 - **Automatic** (the default for a new chart) lays the chart out both ways and
@@ -278,7 +301,7 @@ Down on a phone, because the screen is tall and narrow.
 
 ## 6. Print and image
 
-- **Print** (Chart screen): the chart scaled to fit one A4 page, with the chart
+- **Print** (Chart screen — and the List, below): the chart scaled to fit one A4 page, with the chart
   name at the top and the key underneath. Use landscape for Across and portrait
   for Down. The nav and buttons are hidden (`data-noprint`). The List screen
   prints as a plain table too, as Clockmaker's does.
@@ -298,7 +321,7 @@ Down on a phone, because the screen is tall and narrow.
 - First visit: the library contains one chart, the worked example (§4),
   named "Backup newsreader", so there's something to look at.
 - **Export** saves the whole library as
-  `flowcharter-library-YYYY-MM-DD.json` (local date) containing
+  `flowcharter-library-YYYY-MM-DD-HHMM.json` (local date and time, as Clockmaker does) containing
   `{ app: 'flowcharter', version: 1, exportedAt, state }`. **Import** reads such
   a file back, with a friendly error if it isn't one. Follow Clockmaker's
   `exportState` / `importState`.
