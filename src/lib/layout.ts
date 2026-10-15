@@ -47,11 +47,14 @@ export interface ChartLayout {
 }
 
 // Which side of a shape each kind of connection uses. "Forward" is the way the
-// chart reads (down, or across to the right); a loop arrives on a side of its
-// own so it doesn't collide with the main flow coming in.
+// chart reads (down, or across to the right). A loop arrives on the same side
+// a decision's second answer leaves from (right when down, bottom when across):
+// loops mostly come from answers, so they then go round the outside instead of
+// crossing the line they loop back over. (With loops arriving on the top when
+// across, the test charts had 11 crossings; on the bottom, none.)
 const SIDES: Record<LaidOutDirection, { in: Side; out: Side; back: Side }> = {
   down: { in: 'N', out: 'S', back: 'E' },
-  across: { in: 'W', out: 'E', back: 'N' },
+  across: { in: 'W', out: 'E', back: 'S' },
 };
 
 /** Which side each of a decision's answers leaves from, in list order, so the

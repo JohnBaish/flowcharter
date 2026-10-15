@@ -148,6 +148,32 @@ await test('five answers leave from the diamond in list order, starting on its o
   }
 });
 
+/** How many times two different lines cross (right-angled lines, so only an
+ *  upright stretch against a level one can cross). */
+function crossings(L: ChartLayout): number {
+  const segs: { e: number; a: Point; b: Point }[] = [];
+  L.edges.forEach((e, i) => { for (let k = 0; k + 1 < e.points.length; k++) segs.push({ e: i, a: e.points[k], b: e.points[k + 1] }); });
+  let n = 0;
+  for (let i = 0; i < segs.length; i++) for (let j = i + 1; j < segs.length; j++) {
+    const p = segs[i], q = segs[j];
+    if (p.e === q.e) continue;
+    const pUp = close(p.a.x, p.b.x, 0.5), qUp = close(q.a.x, q.b.x, 0.5);
+    if (pUp === qUp) continue;
+    const [v, h] = pUp ? [p, q] : [q, p];
+    const inH = v.a.x > Math.min(h.a.x, h.b.x) + 0.5 && v.a.x < Math.max(h.a.x, h.b.x) - 0.5;
+    const inV = h.a.y > Math.min(v.a.y, v.b.y) + 0.5 && h.a.y < Math.max(v.a.y, v.b.y) - 0.5;
+    if (inH && inV) n++;
+  }
+  return n;
+}
+
+await test('no lines cross in any test chart, either way round', async () => {
+  for (const id of fixtures.chartOrder) for (const direction of ['down', 'across'] as const) {
+    const L = await layoutChart(fixtures.charts[id].items, direction, measure);
+    assert.equal(crossings(L), 0, `${id} ${direction}`);
+  }
+});
+
 await test('an empty chart and a single row lay out', async () => {
   const empty = await layoutChart([], 'down', measure);
   assert.equal(empty.nodes.length, 0);

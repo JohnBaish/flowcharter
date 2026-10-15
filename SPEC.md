@@ -237,8 +237,10 @@ Not yet seen by John; easy to change.
 - **Paths that rejoin** meet at the middle of the shape they lead into, so
   several arrows merge into one, as is usual on flowcharts.
 - **A loop** (an arrow back to an earlier row) arrives on the right-hand side
-  of its shape when the chart runs down, and on the top when it runs across,
-  so it never collides with the main flow coming in.
+  of its shape when the chart runs down, and on the bottom when it runs across
+  — the same side a question's second answer leaves from — so it goes round
+  the outside rather than crossing other lines. (Changed after John spotted a
+  crossing in the Across view; the test charts now have no crossings either way.)
 - **Size:** shown at full size if it fits the width, otherwise shrunk to fit,
   but never below 60% (75% on a phone, about 10.5px text). A chart still too
   wide scrolls sideways inside its frame; the page scrolls up and down as usual.

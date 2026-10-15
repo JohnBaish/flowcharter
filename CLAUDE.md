@@ -259,3 +259,17 @@ checks still pass (one old check expected the Chart placeholder, now gone).
 **Couldn't be checked:** a real iPhone or Safari (fonts, the sideways-scrolling
 frame); very long single words in boxes beyond the test charts; performance on
 a slow phone with a very large chart (the 30-row chart lays out instantly here).
+
+### 2026-10-15 — Across view: loops no longer cross other lines (branch `stage-2-chart`)
+
+**What:** John spotted lines crossing in the worked example's Across view. Cause:
+when across, a question's second answer leaves from the diamond's bottom, but
+loops arrived on the top of their shape, so a "No" loop had to climb over the
+line it looped round. Loops now arrive on the bottom when across (still the
+right-hand side when down) — the same side second answers leave from.
+
+**Verified:** counted crossings in every test chart both ways: 11 before (all
+Across: the example 1, every-shape 1, the 30-row list 9), none after. That count
+is now one of the layout checks (`npm run check`: 22 + 11). Re-drew every test
+chart in Chromium at 1200px (Automatic and Across) and 390px — no errors, no
+sideways page scroll; looked at the example and every-shape Across views.
