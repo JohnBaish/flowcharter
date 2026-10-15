@@ -330,3 +330,15 @@ Chart placeholder is obsolete).
 **Couldn't be checked:** an actual printer or the browser's own print dialog (only
 the PDF the print rules produce), Safari's clipboard and print behaviour, and a
 real iPhone.
+
+### 2026-10-15 — Stage 3 (part 2): favicon and link preview wired in (branch `stage-3-launch`)
+
+**John chose** favicon option A (the boxes-and-line mark: ink square, line, terracotta dot, on a cream disc) and approved the link-preview image.
+
+**What:** `public/favicon.svg` (copy of `design/favicon-options/a-boxes.svg`), `public/og-flowcharter.png` (1200×630, rendered from `design/og-flowcharter.html` with Playwright; identical to the image John approved), and the favicon link plus `og:`/`twitter:` tags in `index.html` (title "Flowcharter", description "Create a flowchart from a list", image/URL on `https://flowcharter.baish.net/`). This replaces the earlier note that wiring was pending.
+
+**Verified:** `npm run build` clean; `npm run lint` only the two known warnings; `npm run check` 22 + 11. In Chromium against the built app: the favicon and preview image are served with the right types and the page links to them; the only failed request is Vercel's own `/_vercel/insights/script.js`, expected until it's on Vercel.
+
+**Couldn't be checked:** how the preview looks when a link is pasted into a real app (needs the live domain; apps also cache previews), and the favicon in Safari's tab bar.
+
+**Still to do:** the `flowcharter.baish.net` domain (after John says merge), and the optional Flowcharter card on baish.net's landing page (a change in the clockwheel repo — needs John's OK).
