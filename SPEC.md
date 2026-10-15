@@ -144,6 +144,38 @@ Follow Clockmaker's List screen and HOUSE-STYLE §6.
   `inputMode="numeric"`. Every box is 16px text, and tap targets are at least
   44px.
 
+### Details settled while building Stage 1 (2026-10-15)
+
+Small behaviours the spec above didn't spell out. John has not been asked about
+these yet; they're easy to change.
+
+- **A new chart starts with no rows**, and its name box is ready to type over.
+  "+ Add item" (or Enter in a box) adds rows.
+- **Adding a row straight after a question** fills in that question's first
+  answer (if it still says "Choose…") to point at the new row, which is what
+  typing a list from the top wants.
+- **The last row's "then" shows as "ends here"** (nothing follows it). Add a row
+  after it and it leads on to that row again.
+- **The "loops back" tag also appears on a "then" that points at an earlier row**,
+  not only on a decision's answers.
+- **Types are guessed only when a row is created or its text is edited.** Moving
+  or deleting rows never changes a row's type.
+- **Changing a row's type** resets its "then" to the new type's default (Start/End
+  on row 2 or later ends here; anything else leads on), unless it was pointed at a
+  specific item.
+- **Deleting a row** that other routes lead to asks first; those routes go back
+  to "Choose…" (answers) or to the row's default (then). Hidden answers pointing
+  at it are cleared quietly.
+- **Import replaces the whole library**, so it asks first if there's anything in
+  the library to lose. (Clockmaker's doesn't.)
+- **First visit lands on the Library**, where the example chart is. (Clockmaker
+  lands on its Guide; Flowcharter's Guide doesn't exist until Stage 3.)
+- **On a phone, an ordinary row's "then" box gets its own line** under the type
+  box; the two can't share a 390px-wide line. A decision keeps its route-count box
+  beside the type box, as in the mock-up.
+- **Every button is at least 44px tall on a phone**, including the nav's.
+- **Each Library card shows a thin colour strip** of the shape types in that chart.
+
 ### The worked example
 
 Used for the seed chart (§7) and the mock-ups:

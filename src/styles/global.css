@@ -1,10 +1,5 @@
 .mono { font-variant-numeric: tabular-nums; }
 
-.week-pick-label:hover { background: var(--color-accent-100); }
-.week-toggle-local:hover { border-color: var(--color-accent); background: var(--color-accent-100); }
-.week-picker-row:hover { background: var(--color-accent-100); border-color: var(--color-accent-200) !important; }
-.library-clock-name:hover { color: var(--color-accent-700); text-decoration: underline; }
-
 /* Landing page (baish.net root) — three whole-card links out to the other
    sites. Built on top of .card (organic.css) rather than a bespoke style,
    so it inherits the same surface/spacing as everywhere else; only the
@@ -36,28 +31,19 @@
 .plain-input:hover { border-color: var(--color-neutral-300); }
 .plain-input:focus-visible { border-color: var(--color-accent); outline: none; background: var(--color-surface); }
 
-/* A .plain-input variant for Dur specifically, at John's request: instead
-   of staying invisible until hover (the default .plain-input behaviour
-   above), it shows permanently the border .plain-input would otherwise
-   only show on hover, then darkens further on hover itself — a third,
-   more prominent step before :focus-visible's accent border + filled
-   background kicks in once you're actually editing it. Compound selector
-   (two classes) so it wins over the plain .plain-input rules above without
-   having to touch those — nothing else using .plain-input (segment/item
-   names, the clock name field, Backtimer's out time) is affected.
-   :focus-visible is repeated here (not just inherited from the plain
-   .plain-input rule above) at matching specificity to :hover, declared
-   after it — clicking to edit leaves the mouse hovering over the field at
-   the same time it becomes focused, so without this the two classes'
-   higher-specificity :hover would otherwise win that tie and hide the
-   accent "now editing" border behind the merely-darker hover one. */
+/* A .plain-input variant for boxes that should always look editable (the
+   answer labels and route count, as opposed to item text, which stays plain
+   until hovered). Two classes so it wins over the plain .plain-input rules
+   without touching them. :focus-visible is repeated here, after :hover, so
+   the accent "now editing" border isn't hidden behind the merely-darker
+   hover one while the mouse is still over the box. */
 .plain-input.outlined-input { border-color: var(--color-neutral-300); }
 .plain-input.outlined-input:hover { border-color: var(--color-neutral-500); }
 .plain-input.outlined-input:focus-visible { border-color: var(--color-accent); background: var(--color-surface); }
 
 /* Hidden on screen, shown only in a printed page — the opposite of
    [data-noprint] — for identifying text a screen doesn't otherwise need
-   (e.g. which clock/hour a printed List belongs to). */
+   (e.g. which chart a printed List belongs to). */
 .print-only { display: none; }
 
 /* — narrow-screen breakpoint — */
@@ -75,22 +61,20 @@
 .nav-panel { display: contents; }
 
 @media (max-width: 720px) {
-  .nav-menu-toggle { display: inline-flex; }
+  .nav-menu-toggle { display: inline-flex; width: 44px; height: 44px; }
   .nav-panel {
     display: none; flex-direction: column; align-items: flex-start;
     gap: var(--space-2); width: 100%; order: 10;
   }
   .nav-panel.open { display: flex; }
-  /* Backtimer-only's nav-panel only ever holds Print and the saved-tag —
-     nothing worth hiding behind a hamburger (Nav.tsx skips rendering the
-     toggle entirely in that case). Keeping it `display: contents` here too
-     means it just wraps onto its own line under the brand, the same way it
-     would lay out on a wide screen, rather than collapsing. */
-  .nav-panel.nav-panel-static { display: contents; }
   /* iPhone zooms the page in when a box with text under 16px is tapped. */
   .plain-input { font-size: 16px; }
-  /* Apple's minimum comfortable tap height. */
-  .list-cards .plain-input { min-height: 44px; }
+  /* Apple's minimum comfortable tap height, for buttons as well as boxes. */
+  .btn { min-height: 44px; }
+  .nav-panel a { display: inline-flex; align-items: center; min-height: 44px; }
+  .list-cards .plain-input,
+  .list-cards select.input { min-height: 44px; }
+  .list-cards select.input { font-size: 16px; }
 }
 
 /* List screen's narrow-width alternative to its desktop <table> — one
@@ -104,12 +88,9 @@
 .list-card-row { display: flex; align-items: center; gap: 8px; }
 .list-card-grip {
   display: flex; align-items: center; justify-content: center;
-  width: 30px; height: 30px; flex: none; margin-left: -6px;
+  width: 30px; height: 44px; flex: none; margin-left: -6px;
   color: var(--color-neutral-600); cursor: grab; touch-action: none;
 }
-
-.callout-label { cursor: grab; touch-action: none; -webkit-user-select: none; user-select: none; }
-.callout-label:active { cursor: grabbing; }
 
 @media print {
   @page { size: A4 portrait; margin: 12mm; }
@@ -118,6 +99,37 @@
   [data-noprint] { display: none !important; }
   .nav { display: none !important; }
   .print-only { display: block; }
-  .print-clock-card { background: none !important; box-shadow: none !important; padding: 0 !important; }
   tr, td, table { break-inside: avoid; }
 }
+
+/* — List screen — */
+.list-num { font-size: 13px; color: var(--color-neutral-700); white-space: nowrap; }
+.list-muted { color: var(--color-neutral-700); }
+.list-small { font-size: 12px; white-space: nowrap; }
+.list-swatch {
+  display: inline-block; width: 14px; height: 14px; flex: none;
+  border-radius: 4px; border: 1.5px solid var(--color-text);
+}
+.list-type { display: flex; align-items: center; gap: 8px; }
+select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px; }
+.list-routes-input { width: 52px; text-align: center; }
+.list-then { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+/* A native select is as wide as its longest option, which here would be the
+   longest item name — so hold it to a steady width (long names are cut off in
+   the box; the number at the front is what matters, and the open list shows all). */
+.list-then select.input { width: 11em; }
+/* On a phone the "then" box has a line to itself: let it fill that line. */
+.list-card .list-then { flex: 1; min-width: 0; }
+.list-card .list-then select.input { flex: 1 1 8em; width: auto; min-width: 0; }
+/* A decision's answer rows sit tight under it, indented a little. */
+.table tr.list-answer td { padding-top: 2px; padding-bottom: 2px; }
+.table tr.list-answer .list-num { padding-left: 14px; }
+.list-goes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.list-drop-target > tr > td { background: var(--color-accent-100); }
+.list-card-answer {
+  display: flex; align-items: center; gap: 8px;
+  margin: 6px 0 0 22px; padding-top: 6px; border-top: 1px dashed var(--color-divider);
+}
+.list-card-answer .plain-input { width: 84px; flex: none; }
+.list-card-answer select.input { flex: 1; min-width: 0; }
+.list-card-note { margin: 4px 0 0 52px; }
