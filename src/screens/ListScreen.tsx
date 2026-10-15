@@ -41,6 +41,7 @@ export function ListScreen() {
     removeItem(item.id);
   };
 
+
   // Enter adds the next row; Up/Down move between rows' text boxes.
   const itemKeyDown = (item: Item, index: number) => (e: KeyboardEvent<HTMLInputElement>) => {
     // (Not while an accented-letter or other input-method keyboard is still composing.)

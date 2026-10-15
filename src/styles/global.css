@@ -157,9 +157,10 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
 .list-card-note { margin: 4px 0 0 52px; }
 
 /* — Chart screen — */
-.chart-toolbar { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; padding: 0 0 var(--space-3); }
+.chart-toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 0 0 var(--space-3); }
+/* Bold, ink and close to its switch, so it reads as the switch's label. */
+.chart-toolbar-label { font-size: 13px; font-weight: 700; color: var(--color-text); }
 .chart-toolbar .seg-opt { padding: 5px 14px; font-size: 13px; }
-.chart-toolbar-note { font-size: 13px; margin-left: auto; }
 /* A chart too wide to fit at a readable size scrolls sideways inside this frame;
    the page itself never does (HOUSE-STYLE §6). */
 .chart-frame { width: 100%; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
@@ -170,7 +171,6 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
 .chart-key-item { display: inline-flex; align-items: center; gap: 6px; }
 @media (max-width: 720px) {
   .chart-toolbar .seg-opt { min-height: 44px; display: inline-flex; align-items: center; }
-  .chart-toolbar-note { margin-left: 0; flex-basis: 100%; }
 }
 
 /* — Guide screen — */
@@ -178,3 +178,18 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
 .guide-shape { background: var(--color-neutral-100); border-radius: var(--radius-md); padding: var(--space-3); }
 @media (max-width: 960px) { .guide-shapes { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .guide-shapes { grid-template-columns: 1fr; } }
+
+/* — The List / Chart header: name and count left, List | Chart switch centred,
+   actions right on one line (as Backtimer's). On a phone it stacks. — */
+.editor-header {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  gap: var(--space-3); padding: var(--space-3) var(--space-4);
+}
+.editor-actions { justify-self: end; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.view-toggle .seg-opt { padding: 6px 18px; font-size: 13.5px; }
+@media (max-width: 720px) {
+  .editor-header { grid-template-columns: 1fr; }
+  .view-toggle { justify-self: start; }
+  .editor-actions { justify-self: start; justify-content: flex-start; }
+  .view-toggle .seg-opt { min-height: 44px; display: inline-flex; align-items: center; }
+}

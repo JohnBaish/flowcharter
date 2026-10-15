@@ -368,3 +368,27 @@ real iPhone.
 **Note for users:** charts saved at `flowcharter.vercel.app` don't appear at `flowcharter.baish.net` (browsers keep saved data per address); Export then Import moves them.
 
 **Still to do:** John edits the Guide's words before real users arrive; the Flowcharter card on baish.net's landing page (clockwheel repo, needs John's OK); Stage 4 (moving boxes by hand) when John wants to plan it.
+
+### 2026-10-15 — Proposal: tidier List/Chart header (branch `tidy-header`, not merged)
+
+**John asked** (on Opus) for a review of the List/Chart header against Clockmaker: drop Duplicate there (the Library has it), put Print top-right as Clockmaker does, and an easy way to go from the List to the Chart.
+
+**Compared with Clockmaker:** its header's right-hand group is the same on List and Clock (Print · Duplicate · Copy image · Done), and "+ Add segment" sits in a strip under the header ("18 segments · drag to reorder"). Ours had Add item and Clear in the header, so its right-hand group changed between List and Chart and Print sat in the middle.
+
+**Built as a preview for John to judge:** Duplicate removed from both screens (still on each Library card); Add item and Clear moved to a strip above the list (`.list-toolbar`, "Drag to reorder" on the left), as Clockmaker's; the header's right-hand group is now Print · (Copy image on the Chart) · Done; a **List | Chart** switch in the header (`.view-toggle`, same place on both screens). The nav's List and Chart links stay, as Clockmaker keeps its own. The phone's bottom "+ Add item" button is unchanged.
+
+**Verified:** build clean, lint the two known warnings, checks 23 + 11. In Chromium at 1200px and 390px with touch: no Duplicate; Add item adds a row and focuses it; the switch goes to the Chart and back; Clear asks, empties, then greys out; switch and strip buttons 44px on the phone; no errors, no sideways scroll.
+
+**Second preview, at John's request (same branch):** the nav's List and Chart links removed (the switch is now the only way between them, so nobody wonders what the duplicates do; a chart is opened from the Library); the count tag moved under the name so the switch sits centred (`.editor-header` is a 1fr · auto · 1fr grid, stacking on a phone); Done removed (the nav's Library does that); the strip above the list removed again, and **Print · + Add item · Clear** put in one line at the top right, as in Backtimer (Chart: **Print · Copy image**). John chose the wording "List | Chart" and no Copy image on the List. SPEC §2 updated. The Guide's step 6 ("Open the Chart") may want rewording to mention the switch — John's call when he edits the Guide.
+
+**Verified:** build clean, lint the two known warnings. In Chromium at 1200px and 390px with touch: nav shows only Library and Guide; no Duplicate or Done; Add item adds and focuses a row; the switch goes to the Chart and back; Clear asks, empties, then greys out; action buttons and switch 44px on a phone; no errors, no sideways scroll.
+
+**Third change on the same branch (preview):** the sentence "Automatic is showing it … which fits this chart best" is gone; instead the Automatic button itself says what it picks ("Automatic · Down" / "Automatic · Across"), even when Down or Across is selected, so it's clear what choosing it would do (`automatic` in `ChartScreen.tsx`; hover text explains). Option A (plain "Automatic" with the chosen direction lightly shaded) was shown to John as a screenshot only. Note: Automatic doesn't always choose Down — the worked example goes Across on a computer and Down on a phone.
+
+**Verified:** build clean; lint two known warnings; in Chromium at 1200px (example: "Automatic · Across", drawn across; forcing Down keeps the label and redraws down) and 390px touch ("Automatic · Down"; fits, no sideways scroll); no errors.
+
+**Fourth change (preview), at John's suggestion:** the Direction switch has two buttons, not three: "Automatic · Down" + "Across", or "Automatic · Across" + "Down". The second is always the direction Automatic didn't pick, and forces it (`options`/`selected` in `ChartScreen.tsx`). Saved values are unchanged (`auto`/`down`/`across`); a chart forced to the direction Automatic picks anyway shows as Automatic. Trade-off accepted: you can no longer pin the direction Automatic currently picks so it stays put on another screen size or on paper.
+
+**Verified:** in Chromium at 1200px (example: "Automatic · Across | Down"; Down redraws down and survives reload; Automatic returns to across; a chart forced Across shows as Automatic) and 390px touch ("Automatic · Down | Across", same checks); no errors, no sideways scroll; build, lint, checks as before.
+
+**Fifth change, then merged at John's say-so:** "Direction:" now has a colon, is bold and ink-coloured, and sits 8px from its switch (`.chart-toolbar-label`; option B of three mock-ups shown to John). `tidy-header` merged into `main`.
