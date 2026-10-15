@@ -402,3 +402,9 @@ real iPhone.
 **John asked** (with his "Am I married to my cousin?" chart): some "No" labels sat after the line's corner, far from their question, where two lines shared a run. **Changed:** `onLine` in `lib/layout.ts` now centres a label on the first stretch of its line if that stretch is at least the label's width plus 12px each side (`LABEL_ROOM`), else on the next stretch that is, else (rare) the old nearest-stretch rule. Judging upright stretches by the label's width too stops labels squeezing onto the short drop under a diamond (the first try did that in the five-answer chart and the example's Across view). John's chart added to the test charts as `cousin`; a new layout check (23 + 12) that labels sit centred on a long-enough first stretch. SPEC §5 updated.
 
 **Verified:** before/after pictures of all ten test charts both ways (only the straight line, with no answers, is unchanged); John's chart, the example, five answers, three answers and the newsreaders tree looked at closely. No errors.
+
+### 2026-10-15 — More space above the key (branch `key-space`)
+
+**John asked** (from his phone) for space between the bottom of the chart and the key. Screen: 17.6px → 35.2px (`.chart-key` padding, `--space-8`); print: `--space-3` → `--space-6`; Copy image: 14px → 32px (`KEY_SPACE` in `exportImage.ts`).
+
+**Verified:** in Chromium at 1200px and 390px touch, the chart-to-key gap measures 35px; the cousin chart still prints on one A4 page; build, lint, checks (23 + 12) as before; no errors.

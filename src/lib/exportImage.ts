@@ -65,6 +65,8 @@ const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const PAD = 28;
 const KEY_ROW_H = 26;
 const KEY_GAP = 22;
+// Space between the bottom of the chart and the key (John, 2026-10-15: it was too tight).
+const KEY_SPACE = 32;
 
 /** The key, laid out in centred rows no wider than `width`. */
 function keySvg(types: ShapeType[], width: number, measure: (text: string, font: string) => number): { svg: string; height: number } {
@@ -120,7 +122,7 @@ export function buildImageSvg(
   copy.removeAttribute('aria-label');
   const chart = new XMLSerializer().serializeToString(copy);
 
-  const keyY = PAD + 38 + ch + 14;
+  const keyY = PAD + 38 + ch + KEY_SPACE;
   const height = Math.ceil(keyY + key.height + PAD - 6);
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`
     + `<style>${fonts}</style>`
