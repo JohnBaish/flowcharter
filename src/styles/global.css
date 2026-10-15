@@ -109,7 +109,7 @@
   .chart-frame { overflow: visible; }
   .chart-frame svg { width: 100% !important; height: auto !important; }
   .chart-paper-fill { fill: #fff; }
-  .chart-key { padding-top: var(--space-3); }
+  .chart-key { padding-top: var(--space-6); }
 
   /* The List prints as a plain table: no boxes, no drop-down arrows, and narrow
      enough to fit the page. */
@@ -166,7 +166,7 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
 .chart-frame { width: 100%; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
 .chart-key {
   display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2) var(--space-4);
-  padding: var(--space-4) 0 0; font-size: 12.5px; color: var(--color-neutral-700);
+  padding: var(--space-8) 0 0; font-size: 12.5px; color: var(--color-neutral-700);
 }
 .chart-key-item { display: inline-flex; align-items: center; gap: 6px; }
 @media (max-width: 720px) {
