@@ -14,7 +14,7 @@ const NARROW = 720;
 export function ListScreen() {
   const {
     chart, addItem, removeItem, reorderItems, setItemText, setItemType, setItemThen,
-    setRouteCount, setRouteLabel, setRouteTo, clearItems,
+    setRouteCount, setRouteLabel, setRouteTo,
   } = useApp();
   const items = chart?.items ?? [];
   const isNarrow = useIsNarrow(NARROW);
@@ -41,34 +41,6 @@ export function ListScreen() {
     removeItem(item.id);
   };
 
-  // Clearing has no undo, so it asks first and says exactly what will go.
-  const handleClear = () => {
-    if (!chart) return;
-    const n = items.length;
-    const what = n === 1 ? 'the 1 item' : `all ${n} items`;
-    const name = chart.name.trim() || 'this flowchart';
-    if (window.confirm(`Clear ${what} from "${name}"? This can't be undone.`)) clearItems();
-  };
-
-  // The strip above the list, as Clockmaker's ("18 segments · drag to reorder"
-  // on the left, "+ Add segment" on the right).
-  const toolbar = (
-    <div data-noprint="1" className="list-toolbar">
-      <span className="list-toolbar-note">Drag to reorder</span>
-      <button className="btn btn-ghost" onClick={() => addAndFocus(null)} style={{ marginLeft: 'auto', color: 'var(--color-accent-700)' }}>
-        <IconPlus size={15} />Add item
-      </button>
-      <button
-        className="btn btn-ghost"
-        onClick={handleClear}
-        disabled={items.length === 0}
-        title={items.length === 0 ? 'The list is already empty' : 'Remove every item from this list'}
-        style={{ color: 'var(--color-neutral-700)' }}
-      >
-        Clear
-      </button>
-    </div>
-  );
 
   // Enter adds the next row; Up/Down move between rows' text boxes.
   const itemKeyDown = (item: Item, index: number) => (e: KeyboardEvent<HTMLInputElement>) => {
@@ -218,7 +190,6 @@ export function ListScreen() {
     return (
       <div className="screen" style={{ padding: '0 var(--space-6) var(--space-6)' }}>
         <div className="print-only print-title">{chart?.name}</div>
-        {toolbar}
         <table className="table">
           <thead>
             <tr>
@@ -304,7 +275,6 @@ export function ListScreen() {
   return (
     <div className="screen" style={{ padding: '0 var(--space-4) var(--space-6)' }}>
       <div className="print-only print-title">{chart?.name}</div>
-      {toolbar}
       {items.length === 0 && (
         <div style={{ textAlign: 'center', padding: 'var(--space-6)', color: 'var(--color-neutral-700)' }}>{emptyMessage}</div>
       )}

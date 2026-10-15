@@ -32,14 +32,14 @@ the thing the design is optimised for.
 ## 2. Screens
 
 Nav bar, as Clockmaker: brand **Flowcharter** on the left; **New chart**
-(primary button); links **Library · List · Chart · Guide**; "saved …" tag.
+(primary button); links **Library · Guide** (List and Chart are reached from an open chart's own List | Chart switch, not the nav — John, 2026-10-15); "saved …" tag.
 Hamburger at ≤720px.
 
 | Screen | What's on it |
 |---|---|
 | **Library** | All saved charts as cards (name, number of items, last edited). Open, Duplicate, Delete (with `window.confirm`). **Import** / **Export** of the whole library. The footer notice (§9). |
-| **List** | The open chart's rows (§4). Header: kicker "Flowchart", the chart name (edit in place), a tag "8 items · 2 decisions", actions **+ Add item** (ghost), **Clear** (ghost, grey), **Print** (ghost), **Duplicate**, **Done** (→ Library). |
-| **Chart** | The drawn flowchart (§5). Same header, with actions **Print** (ghost), **Duplicate**, **Copy image**, **Done**. A **Direction** switch: Automatic · Down · Across. A key underneath showing only the shape types this chart uses. |
+| **List** | The open chart's rows (§4). Header: on the left the kicker "Flowchart", the chart name (edit in place) and a tag "8 items · 2 decisions" beneath it; centred, a **List \| Chart** switch (the only way between the two); on the right, in one line as in Backtimer, **Print** (ghost), **+ Add item** (ghost), **Clear** (ghost, grey). No Duplicate (it's on the Library's cards) and no Done (the nav's Library link does that). |
+| **Chart** | The drawn flowchart (§5). Same header, with actions **Print** (ghost) and **Copy image**. A **Direction** switch: Automatic · Down · Across. A key underneath showing only the shape types this chart uses. |
 | **Guide** | What Flowcharter is, how to fill in the list, the full key of shapes with their meanings, and tips for a clear chart, taken from John's guide. |
 
 List and Chart are two views of the same chart, as List and Clock are in

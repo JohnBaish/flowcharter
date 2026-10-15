@@ -179,13 +179,17 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
 @media (max-width: 960px) { .guide-shapes { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .guide-shapes { grid-template-columns: 1fr; } }
 
-/* — List / Chart switch in the editor header, and the List's own strip — */
-.view-toggle .seg-opt { padding: 5px 16px; font-size: 13px; }
-.list-toolbar { display: flex; align-items: center; gap: 6px; margin-bottom: var(--space-2); }
-.list-toolbar-note {
-  font: 700 11px var(--font-body); letter-spacing: .09em; text-transform: uppercase; color: var(--color-neutral-700);
+/* — The List / Chart header: name and count left, List | Chart switch centred,
+   actions right on one line (as Backtimer's). On a phone it stacks. — */
+.editor-header {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  gap: var(--space-3); padding: var(--space-3) var(--space-4);
 }
+.editor-actions { justify-self: end; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.view-toggle .seg-opt { padding: 6px 18px; font-size: 13.5px; }
 @media (max-width: 720px) {
+  .editor-header { grid-template-columns: 1fr; }
+  .view-toggle { justify-self: start; }
+  .editor-actions { justify-self: start; justify-content: flex-start; }
   .view-toggle .seg-opt { min-height: 44px; display: inline-flex; align-items: center; }
-  .list-toolbar .btn { min-height: 44px; }
 }

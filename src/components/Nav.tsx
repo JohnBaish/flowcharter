@@ -4,10 +4,10 @@ import { useApp, type Screen } from '../state/store.tsx';
 import { relativeTime, useNow } from '../lib/time.ts';
 import { IconClose, IconMenu } from '../lib/icons.tsx';
 
+// List and Chart aren't here: the List | Chart switch in a chart's own header is
+// the one way between them (John, 2026-10-15), and a chart is opened from the Library.
 const LINKS: { screen: Screen; label: string }[] = [
   { screen: 'lib', label: 'Library' },
-  { screen: 'list', label: 'List' },
-  { screen: 'chart', label: 'Chart' },
   { screen: 'guide', label: 'Guide' },
 ];
 
