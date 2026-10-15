@@ -476,6 +476,107 @@
         "direction": "auto",
         "lastEditedAt": 1792022400000
       },
+      "cousin": {
+        "id": "cousin",
+        "name": "Test: am I married to my cousin?",
+        "items": [
+          {
+            "id": "cousin-1",
+            "text": "Start",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "cousin-2",
+            "text": "Are you married?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "cousin-2-r0",
+                "label": "Yes",
+                "to": "cousin-3"
+              },
+              {
+                "id": "cousin-2-r1",
+                "label": "No",
+                "to": "cousin-5"
+              }
+            ]
+          },
+          {
+            "id": "cousin-3",
+            "text": "Are you from Norfolk?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "cousin-3-r0",
+                "label": "Yes",
+                "to": "cousin-4"
+              },
+              {
+                "id": "cousin-3-r1",
+                "label": "No",
+                "to": "cousin-5"
+              }
+            ]
+          },
+          {
+            "id": "cousin-4",
+            "text": "Is your spouse from Norfolk?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "cousin-4-r0",
+                "label": "Yes",
+                "to": "cousin-6"
+              },
+              {
+                "id": "cousin-4-r1",
+                "label": "No",
+                "to": "cousin-5"
+              }
+            ]
+          },
+          {
+            "id": "cousin-5",
+            "text": "You are not married to your cousin",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "cousin-6",
+            "text": "You are married to your cousin",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          }
+        ],
+        "direction": "auto",
+        "lastEditedAt": 1792022400000
+      },
       "shapes": {
         "id": "shapes",
         "name": "Test: every shape",
@@ -1423,6 +1524,7 @@
       "drink",
       "five",
       "rejoin",
+      "cousin",
       "shapes",
       "unfinished",
       "newsreaders",

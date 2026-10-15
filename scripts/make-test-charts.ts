@@ -55,6 +55,16 @@ const charts: Chart[] = [
     ['Send the updated rota', 'document'],
     ['End', 'terminator'],
   ]),
+  // John's example (2026-10-15): answers from later questions joining an
+  // earlier ending, where the labels used to land after the line's corner.
+  chart('cousin', 'Test: am I married to my cousin?', [
+    ['Start', 'terminator'],
+    ['Are you married?', 'decision', [['Yes', 3], ['No', 5]]],
+    ['Are you from Norfolk?', 'decision', [['Yes', 4], ['No', 5]]],
+    ['Is your spouse from Norfolk?', 'decision', [['Yes', 6], ['No', 5]]],
+    ['You are not married to your cousin', 'terminator', undefined, 'end'],
+    ['You are married to your cousin', 'terminator', undefined, 'end'],
+  ]),
   chart('shapes', 'Test: every shape', [
     ['Start', 'terminator'],
     ['Receive the order', 'io'],

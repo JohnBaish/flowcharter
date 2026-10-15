@@ -396,3 +396,9 @@ real iPhone.
 ### 2026-10-15 — Plan changed: what comes next (docs only; branch `plan-update`)
 
 **John decided:** moving boxes by hand (the old Stage 4) is parked as an idea that may be revisited; the automatic layout stays. Next comes a new **Stage 4: smoother answers for a decision on the List** (today you must add the rows before an answer can point anywhere), then **Stage 5: a step-by-step card walkthrough** like Backtimer's, in conversational English, building the chart as it goes. Both are to be talked through with John, with mock-ups, before building. The Guide rewrite waits until the big design work is done; the baish.net landing card waits until John calls it ready for semi-public release (about three people are testing it now). Recorded in PLAN.md ("Re-planned with John") and SPEC §5, §11.
+
+### 2026-10-15 — Answer labels where the line leaves the question (branch `label-placement`)
+
+**John asked** (with his "Am I married to my cousin?" chart): some "No" labels sat after the line's corner, far from their question, where two lines shared a run. **Changed:** `onLine` in `lib/layout.ts` now centres a label on the first stretch of its line if that stretch is at least the label's width plus 12px each side (`LABEL_ROOM`), else on the next stretch that is, else (rare) the old nearest-stretch rule. Judging upright stretches by the label's width too stops labels squeezing onto the short drop under a diamond (the first try did that in the five-answer chart and the example's Across view). John's chart added to the test charts as `cousin`; a new layout check (23 + 12) that labels sit centred on a long-enough first stretch. SPEC §5 updated.
+
+**Verified:** before/after pictures of all ten test charts both ways (only the straight line, with no answers, is unchanged); John's chart, the example, five answers, three answers and the newsreaders tree looked at closely. No errors.

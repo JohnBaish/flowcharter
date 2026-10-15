@@ -230,10 +230,31 @@ function onOutline(p: Point, n: LayoutNode): Point {
 }
 
 /** elkjs puts an answer's label beside its line; the agreed look (SPEC §5) has it
- *  sitting on the line, on a cream pill. So move each label's centre onto the
- *  nearest stretch of its line, kept clear of that stretch's ends where there's
- *  room, so it never covers an arrowhead or a shape. */
+ *  sitting on the line, on a cream pill. An answer is read with its question, so
+ *  the label goes on the first stretch of the line, where it leaves the question,
+ *  centred there — as long as that stretch is long enough (LABEL_ROOM either side).
+ *  If that stretch is too short, the next one that fits is used; if none does,
+ *  the stretch nearest elkjs's own spot. It never covers an arrowhead or a shape. */
+const LABEL_CLEARANCE = 6;
+const LABEL_ROOM = 12;
+
 function onLine(label: LayoutLabel, points: Point[]): LayoutLabel {
+  // Judged by the label's width even on an upright stretch: a pill squeezed
+  // onto a short drop just below a diamond looks cramped and can meet its
+  // neighbours' labels (five answers leaving one diamond).
+  const fits = (a: Point, b: Point) => Math.hypot(b.x - a.x, b.y - a.y) >= label.w + 2 * LABEL_ROOM;
+  for (let i = 0; i + 1 < points.length; i++) {
+    const a = points[i], b = points[i + 1];
+    if (fits(a, b)) {
+      const p = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+      return { ...label, x: p.x - label.w / 2, y: p.y - label.h / 2 };
+    }
+  }
+  return nearestStretch(label, points);
+}
+
+/** The old rule, kept as the fallback: the nearest stretch to elkjs's spot. */
+function nearestStretch(label: LayoutLabel, points: Point[]): LayoutLabel {
   const c = { x: label.x + label.w / 2, y: label.y + label.h / 2 };
   let best: { p: Point; d: number; a: Point; b: Point } | null = null;
   for (let i = 0; i + 1 < points.length; i++) {
@@ -249,7 +270,7 @@ function onLine(label: LayoutLabel, points: Point[]): LayoutLabel {
   const { a, b } = best;
   const p = { ...best.p };
   const keepClear = (lo: number, hi: number, v: number, half: number) => {
-    const min = Math.min(lo, hi) + half + 6, max = Math.max(lo, hi) - half - 6;
+    const min = Math.min(lo, hi) + half + LABEL_CLEARANCE, max = Math.max(lo, hi) - half - LABEL_CLEARANCE;
     return min <= max ? Math.max(min, Math.min(max, v)) : (lo + hi) / 2;
   };
   if (Math.abs(a.x - b.x) < 0.5) p.y = keepClear(a.y, b.y, p.y, label.h / 2);

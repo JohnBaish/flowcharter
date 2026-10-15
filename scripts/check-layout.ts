@@ -116,6 +116,25 @@ await test('answer labels sit on their own lines', async () => {
   }
 });
 
+await test('an answer label sits where its line leaves the question, when that stretch is long enough', async () => {
+  let first = 0;
+  for (const id of fixtures.chartOrder) {
+    for (const direction of ['down', 'across'] as const) {
+      const L = await layoutChart(fixtures.charts[id].items, direction, measure);
+      for (const e of L.edges) {
+        if (!e.label || e.points.length < 2) continue;
+        const [a, b] = e.points;
+        if (Math.hypot(b.x - a.x, b.y - a.y) < e.label.w + 24) continue;
+        const c = { x: e.label.x + e.label.w / 2, y: e.label.y + e.label.h / 2 };
+        assert.ok(Math.abs(c.x - (a.x + b.x) / 2) < 1 && Math.abs(c.y - (a.y + b.y) / 2) < 1,
+          `${id} ${direction}: "${e.label.text}" is centred on its first stretch`);
+        first++;
+      }
+    }
+  }
+  assert.ok(first > 20);
+});
+
 await test('an unfinished answer ends at an open circle; a row nothing leads to still appears', async () => {
   const items = fixtures.charts['unfinished'].items;
   const L = await layoutChart(items, 'down', measure);
