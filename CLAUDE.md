@@ -342,3 +342,13 @@ real iPhone.
 **Couldn't be checked:** how the preview looks when a link is pasted into a real app (needs the live domain; apps also cache previews), and the favicon in Safari's tab bar.
 
 **Still to do:** the `flowcharter.baish.net` domain (after John says merge), and the optional Flowcharter card on baish.net's landing page (a change in the clockwheel repo — needs John's OK).
+
+### 2026-10-15 — Stage 3 finished: export file name, and merge (branch `stage-3-launch` → `main`)
+
+**John confirmed:** the Stage 3 details in SPEC.md (now marked confirmed), the favicon and preview, and that the Guide stays as drafted for now — he will come back to edit its words (`src/screens/GuideScreen.tsx`) **before real users arrive**.
+
+**Changed:** Export's file name now has the local time as well as the date, as Clockmaker's does: `flowcharter-library-2026-10-15-1430.json` (`exportFilename` in `lib/exchange.ts`; one new check, 23 + 11 now).
+
+**Don't forget (flagged by John):** near the end, add a Flowcharter card to baish.net's landing page (`landing.html` in `JohnBaish/clockwheel`) — a change in the other repo, needing John's OK first.
+
+**Still to do with John:** add `flowcharter.baish.net` in Vercel and DNS; turn on Web Analytics in the Vercel dashboard (the code is already in `src/main.tsx`; no repo change needed).

@@ -8,7 +8,7 @@ import {
   addItem, countReferences, guessType, leadsTo, removeItem, reorderItems, setRouteCount, setRouteLabel,
   setRouteTo, setText, setThen, setType, summary,
 } from '../src/lib/chartOps.ts';
-import { exportJson, parseImport, sanitiseChart } from '../src/lib/exchange.ts';
+import { exportFilename, exportJson, parseImport, sanitiseChart } from '../src/lib/exchange.ts';
 
 let passed = 0;
 const test = (name: string, fn: () => void) => {
@@ -240,6 +240,10 @@ test('saved box positions (Stage 4) survive a reload; bad ones are dropped', () 
     positions: { a: { x: 10, y: 20 }, b: { x: 'left', y: 0 }, ghost: { x: 1, y: 1 } } })!;
   assert.deepEqual(c.positions, { a: { x: 10, y: 20 } });
   assert.equal('positions' in sanitiseChart({ id: 'y', items: [] })!, false, 'no positions → no field');
+});
+
+test('export file name carries local date and time, like Clockmaker', () => {
+  assert.equal(exportFilename(new Date(2026, 9, 5, 9, 7)), 'flowcharter-library-2026-10-05-0907.json');
 });
 
 console.log(`${passed} checks passed`);
