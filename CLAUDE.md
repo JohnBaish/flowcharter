@@ -392,3 +392,7 @@ real iPhone.
 **Verified:** in Chromium at 1200px (example: "Automatic · Across | Down"; Down redraws down and survives reload; Automatic returns to across; a chart forced Across shows as Automatic) and 390px touch ("Automatic · Down | Across", same checks); no errors, no sideways scroll; build, lint, checks as before.
 
 **Fifth change, then merged at John's say-so:** "Direction:" now has a colon, is bold and ink-coloured, and sits 8px from its switch (`.chart-toolbar-label`; option B of three mock-ups shown to John). `tidy-header` merged into `main`.
+
+### 2026-10-15 — Plan changed: what comes next (docs only; branch `plan-update`)
+
+**John decided:** moving boxes by hand (the old Stage 4) is parked as an idea that may be revisited; the automatic layout stays. Next comes a new **Stage 4: smoother answers for a decision on the List** (today you must add the rows before an answer can point anywhere), then **Stage 5: a step-by-step card walkthrough** like Backtimer's, in conversational English, building the chart as it goes. Both are to be talked through with John, with mock-ups, before building. The Guide rewrite waits until the big design work is done; the baish.net landing card waits until John calls it ready for semi-public release (about three people are testing it now). Recorded in PLAN.md ("Re-planned with John") and SPEC §5, §11.

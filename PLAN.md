@@ -80,11 +80,51 @@ Branch: `stage-3-launch`
    `flowcharter.baish.net` in Vercel and DNS (Claude says exactly what to
    click).
 6. Separately, in `JohnBaish/clockwheel`: add a Flowcharter card to
-   `landing.html`.
+   `landing.html`. *(Deferred by John until semi-public release; see below.)*
 
-## Stage 4 — moving boxes by hand
+## Re-planned with John, 2026-10-15
 
-Branch: `stage-4-drag`. Re-plan this with John (and Opus) before starting.
-The open questions are how lines re-route around a moved box, and what
-happens to moved boxes when the list changes. `Chart.positions` is already in
-the data shape for it.
+Stages 1–3 are live at `flowcharter.baish.net`, being tried by about three
+people. What comes next, in this order:
+
+### Stage 4 — smoother answers for a decision on the List (next)
+
+**John's note:** when you type something that leads to choices, the List
+should prompt for the choices that come out of the Yes / No more smoothly. At
+the moment it's clunky: you have to realise you need to add a new row before
+you can tell the system where each branch goes.
+
+Not designed yet. Talk it through with John first and show mock-ups before
+building. Ideas to bring (none agreed): offer to add the step for each answer
+straight from the answer row (e.g. a "+ new step" choice in its "goes to" box,
+which adds the row and points the answer at it); after a decision, move the
+cursor to its first answer; mark unfinished answers more clearly. List rules
+go in `lib/chartOps.ts`, as always. Branch: `stage-4-answers`.
+
+### Stage 5 — a step-by-step card walkthrough (after Stage 4)
+
+**John's idea:** a set of cards, like Backtimer's walkthrough
+(`BacktimerWalkthrough.tsx` in clockwheel), that leads people through making a
+flowchart in conversational English, and builds the chart in the List and Chart
+as they go. Probably bigger cards than Backtimer's, and some a little more
+complicated (e.g. asking what the choices are at a decision and where each
+leads). Re-plan with John (and Opus) before starting: the questions, their
+wording, how the cards handle decisions and loops, and how someone leaves and
+comes back. Branch: `stage-5-walkthrough`.
+
+### Before semi-public release (not yet)
+
+- **The Guide:** John rewrites it once the big design elements are finished
+  (Stages 4 and 5). Step 6 still says "Open the Chart"; it should mention the
+  List | Chart switch.
+- **The Flowcharter card on baish.net** (`landing.html` in
+  `JohnBaish/clockwheel`): only when John says it's ready for semi-public
+  release, not while it's being tested by a few people.
+
+### Parked: moving boxes by hand (was Stage 4)
+
+An idea that may be revisited, not planned. John (2026-10-15): it's neater for
+now to let the system lay the chart out. The open questions, if it ever comes
+back, are how lines re-route around a moved box and what happens to moved
+boxes when the list changes. `Chart.positions` is still in the data shape (and
+kept on load by `sanitiseChart`), so nothing needs undoing.

@@ -289,11 +289,12 @@ open circle, with its label. Nothing is hidden just because it isn't
 finished. A row that nothing leads to (other than row 1) still appears, as
 its own little island.
 
-### Moving boxes by hand (Stage 4, later)
+### Moving boxes by hand (parked idea, not planned)
 
 Drag a box to move it. Its lines re-route, and the position is remembered for
 that chart. A **Tidy up** button returns to the automatic layout. Not in the
-first version, by agreement.
+first version, by agreement; on 2026-10-15 John parked it as an idea that may
+be revisited (PLAN.md).
 
 ### Phones
 
@@ -398,5 +399,5 @@ computer and `.list-cards` on a phone. Light theme only.
 ## 11. Not in this version
 
 Swimlanes (not now, possibly never). Share links. Automatic connector pairs
-for long lines. Dark mode. The step-by-step card walkthrough (possibly
-later). Moving boxes by hand comes in Stage 4.
+for long lines. Dark mode. The step-by-step card walkthrough is now planned
+as Stage 5 (PLAN.md). Moving boxes by hand is parked.
