@@ -275,9 +275,11 @@ Confirmed by John on 2026-10-15.
 
 - **Automatic** (the default for a new chart) lays the chart out both ways and
   picks the one that better fits the space available. Its button says which
-  it picks — "Automatic · Down" or "Automatic · Across" — whichever button is
-  selected (replacing an earlier separate sentence; preview for John, 2026-10-15).
-- **Down** and **Across** force the direction.
+  it picks — "Automatic · Down" or "Automatic · Across".
+- The only other button is the opposite direction ("Down" or "Across"), which
+  forces it. Forcing the direction Automatic already picks would look the same,
+  so it isn't offered (John, 2026-10-15). A chart saved with that direction
+  forced shows as Automatic.
 - The choice is saved with each chart.
 
 ### Unfinished routes
