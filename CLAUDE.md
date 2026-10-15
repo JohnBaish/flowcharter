@@ -358,3 +358,13 @@ real iPhone.
 **John asked for:** the site to open blank rather than with "Backup newsreader", and the Guide to appear for first-time users as Clockmaker's does. The live site is https://flowcharter.vercel.app/ (works without a login).
 
 **Changed:** `firstVisit()` in `state/store.tsx` now gives an empty library and `screen: 'guide'`; `seedChart()` is kept for the checks and `design/test-charts.json` only. Guide wording: added "(You can return to this intro page at any time via “Guide”.)" after "There's no dragging boxes about." SPEC §4 and §7 updated. Anyone who has already visited keeps what they saved (including John's copy of the example).
+
+### 2026-10-15 — flowcharter.baish.net is live; Analytics on (branch `log-domain-live`)
+
+**John did** (in Vercel and his DNS, no code change): added `flowcharter.baish.net` to the Vercel project and its DNS record, and switched on Web Analytics. He reports the domain working. The site is also still at https://flowcharter.vercel.app/.
+
+**Couldn't be checked from here:** the live domain (the sandbox's network blocks it). `index.html`'s `og:` and `twitter:` tags already point at `https://flowcharter.baish.net/`, so the link preview should work once apps refresh their caches.
+
+**Note for users:** charts saved at `flowcharter.vercel.app` don't appear at `flowcharter.baish.net` (browsers keep saved data per address); Export then Import moves them.
+
+**Still to do:** John edits the Guide's words before real users arrive; the Flowcharter card on baish.net's landing page (clockwheel repo, needs John's OK); Stage 4 (moving boxes by hand) when John wants to plan it.
