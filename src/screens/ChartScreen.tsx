@@ -1,20 +1,131 @@
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useApp } from '../state/store.tsx';
+import type { Direction, Item } from '../data/charts.ts';
+import { chooseDirection, layoutChart, type ChartLayout } from '../lib/layout.ts';
+import { LABEL_FONT, TEXT_FONT } from '../lib/shapes.ts';
+import { canvasMeasure, fontsReady } from '../lib/textWrap.ts';
+import { useIsNarrow } from '../lib/responsive.ts';
+import { FlowChart, ShapeKey } from '../components/FlowChart.tsx';
 
-/** Placeholder until Stage 2, which draws the chart (PLAN.md). */
+const NARROW = 720;
+// Never shrink the chart below this, or its text gets too small to read — a
+// wider chart scrolls sideways inside its frame instead (the page itself never
+// does). Phones get a larger minimum: their screens are small already.
+const MIN_SCALE = 0.6;
+const MIN_SCALE_PHONE = 0.75;
+
+const DIRECTIONS: { value: Direction; label: string }[] = [
+  { value: 'auto', label: 'Automatic' },
+  { value: 'down', label: 'Down' },
+  { value: 'across', label: 'Across' },
+];
+
+const NO_ITEMS: Item[] = [];
+
+type Layouts = { down: ChartLayout; across: ChartLayout };
+type Drawn = { items: unknown; layouts: Layouts } | { items: unknown; error: true };
+
 export function ChartScreen() {
-  const { chart, setScreen } = useApp();
-  return (
-    <div style={{ padding: 'var(--space-4) var(--space-6) var(--space-6)' }}>
-      <div className="card" style={{ padding: 'var(--space-6)', maxWidth: 560 }}>
-        <div className="card-kicker">Coming next</div>
-        <h3 className="card-title" style={{ margin: '4px 0 var(--space-2)' }}>The chart</h3>
-        <p className="card-body" style={{ opacity: 1 }}>
-          This is where “{chart?.name}” will be drawn as a flowchart. For now, build and check your list on the List screen.
-        </p>
-        <button className="btn btn-primary" onClick={() => setScreen('list')} style={{ marginTop: 'var(--space-3)', padding: '8px 18px', fontSize: '13.5px' }}>
-          Back to the List
-        </button>
+  const { chart, setDirection, setScreen } = useApp();
+  const items = chart?.items ?? NO_ITEMS;
+  const hasItems = items.length > 0;
+  const isNarrow = useIsNarrow(NARROW);
+  const [drawn, setDrawn] = useState<Drawn | null>(null);
+  const frame = useRef<HTMLDivElement | null>(null);
+  const [space, setSpace] = useState({ width: 1000, height: 640 });
+
+  // Lay the chart out both ways whenever the list changes. Both are needed for
+  // "Automatic", and each takes a few milliseconds, so it's simplest to always
+  // have both ready. Results for a list that has since changed are ignored.
+  useEffect(() => {
+    if (!items.length) return;
+    let current = true;
+    (async () => {
+      try {
+        await fontsReady([TEXT_FONT, LABEL_FONT]);
+        const measure = canvasMeasure();
+        const [down, across] = await Promise.all([layoutChart(items, 'down', measure), layoutChart(items, 'across', measure)]);
+        if (current) setDrawn({ items, layouts: { down, across } });
+      } catch (err) {
+        console.error('Flowcharter could not lay out this chart', err);
+        if (current) setDrawn({ items, error: true });
+      }
+    })();
+    return () => { current = false; };
+  }, [items]);
+
+  // The space the chart has to fit: the frame's width, and the window's height
+  // below the frame's top (so "fits" means fits on screen without scrolling).
+  useLayoutEffect(() => {
+    const el = frame.current;
+    if (!el) return;
+    const measure = () => {
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      setSpace({ width: el.clientWidth, height: Math.max(320, window.innerHeight - Math.min(top, 260) - 24) });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener('resize', measure);
+    return () => { ro.disconnect(); window.removeEventListener('resize', measure); };
+  }, [hasItems]);
+
+  if (!chart) return null;
+
+  if (!items.length) {
+    return (
+      <div style={{ padding: 'var(--space-6)', textAlign: 'center', color: 'var(--color-neutral-700)' }}>
+        <p style={{ margin: '0 0 var(--space-3)' }}>There's nothing to draw yet — add some items on the List.</p>
+        <button className="btn btn-primary" onClick={() => setScreen('list')} style={{ padding: '8px 18px', fontSize: '13.5px' }}>Go to the List</button>
       </div>
+    );
+  }
+
+  const layouts = drawn && 'layouts' in drawn ? drawn.layouts : null;
+  const failed = drawn && 'error' in drawn && drawn.items === items;
+  const layout = layouts
+    ? chart.direction === 'down' ? layouts.down
+      : chart.direction === 'across' ? layouts.across
+        : chooseDirection(layouts.down, layouts.across, space.width, space.height)
+    : null;
+  const minScale = isNarrow ? MIN_SCALE_PHONE : MIN_SCALE;
+  const scale = layout ? Math.max(minScale, Math.min(1, space.width / layout.width)) : 1;
+  const usedTypes = [...new Set(items.map((it) => it.type))];
+
+  return (
+    <div style={{ padding: '0 var(--space-4) var(--space-6)' }}>
+      <div className="chart-toolbar" data-noprint="1">
+        <span className="list-muted" style={{ fontSize: 13 }}>Direction</span>
+        <div className="seg" role="radiogroup" aria-label="Direction">
+          {DIRECTIONS.map((d) => (
+            <label key={d.value} className="seg-opt">
+              <input
+                type="radio" name="chart-direction" value={d.value}
+                checked={chart.direction === d.value}
+                onChange={() => setDirection(chart.id, d.value)}
+              />
+              {d.label}
+            </label>
+          ))}
+        </div>
+        {chart.direction === 'auto' && layout && (
+          <span className="list-muted chart-toolbar-note">
+            Automatic is showing it {layout.direction === 'down' ? 'top to bottom' : 'left to right'}, which fits this chart best.
+          </span>
+        )}
+      </div>
+      <div ref={frame} className="chart-frame">
+        {failed ? (
+          <p style={{ textAlign: 'center', color: 'var(--color-neutral-700)', padding: 'var(--space-6)' }}>
+            Sorry — this chart couldn't be drawn. Your list is safe; try changing it slightly, or tell flowcharter@baish.net.
+          </p>
+        ) : layout ? (
+          <FlowChart layout={layout} scale={scale} title={chart.name} />
+        ) : (
+          <p style={{ textAlign: 'center', color: 'var(--color-neutral-700)', padding: 'var(--space-6)' }}>Drawing…</p>
+        )}
+      </div>
+      <ShapeKey types={usedTypes} />
     </div>
   );
 }

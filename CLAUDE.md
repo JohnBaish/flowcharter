@@ -35,8 +35,15 @@ Key points from the house style, repeated because they matter most:
     browser's saved copy, import files) and the export format.
   - `state/store.tsx`: app state, `localStorage` (`flowcharter-state-v1`), and
     thin wrappers over `chartOps`.
-  - `screens/`, `components/`: Library and List screens, Nav, the List header.
-    `ChartScreen` and `GuideScreen` are placeholders until Stages 2 and 3.
+  - `screens/`, `components/`: Library, List and Chart screens, Nav, and
+    `EditorHeader` (shared by List and Chart). `GuideScreen` is a placeholder
+    until Stage 3. `components/FlowChart.tsx` draws a laid-out chart as SVG
+    (colours written out, not CSS variables, so Stage 3 can save it as an
+    image) plus the shape key.
+  - `lib/shapes.ts`: each shape's outline, its size for its text, and where a
+    line meets it (`outlineInset`). `lib/textWrap.ts`: measuring and wrapping
+    text in the real font. `lib/layout.ts`: list → elkjs graph → positions
+    (`layoutChart`), and Automatic's choice (`chooseDirection`).
   - `lib/`: also `icons.tsx`, `responsive.ts`, `useDragReorder.ts` (copied from
     clockwheel), `time.ts`, and `focus.ts` (focusing a row's box, plus
     `isTouch`/`selectAllSoon` from clockwheel's `timeInput.ts`).
@@ -44,8 +51,13 @@ Key points from the house style, repeated because they matter most:
     Chart (Stage 2) must use it rather than re-deriving "next".
   - `styles/organic.css`, `global.css`: from clockwheel; `global.css` is trimmed
     of Clockmaker-only rules and has the List screen's styles added.
-- `scripts/check-chart-ops.ts`: `npm run check` tests `chartOps` and `exchange`
-  (Node runs it directly; there is no test framework).
+- `scripts/check-chart-ops.ts` and `scripts/check-layout.ts`: `npm run check`
+  runs both (Node runs them directly; there is no test framework). The layout
+  checks run every chart in `design/test-charts.json` both ways.
+- `scripts/make-test-charts.ts` writes `design/test-charts.json`, a normal
+  Flowcharter export of test charts (straight line, three and five answers,
+  rejoining paths, every shape, unfinished answers, John's newsreaders tree,
+  30 rows). Import it on the Library to look at them.
 - `design/`: mock-ups and design sources, not app code. Open the HTML files
   from disk after `npm ci` (fonts load from `node_modules` by path).
   `previews/` holds their renders. `shapes.js` is the prototype shape
@@ -196,3 +208,54 @@ unselected old one; "Untitled" in the Library. No page errors, no sideways scrol
 **Couldn't be checked:** a real iPhone — the routes-box fix is aimed at real iPhone
 behaviour that touch emulation in Chromium doesn't reproduce exactly, so it's worth
 John trying it on his phone in the next preview.
+
+### 2026-10-15 — Stage 1 merged; Stage 2: the chart (branch `stage-2-chart`)
+
+**Merged:** `stage-1-list` into `main` at John's say-so; Vercel's production build
+went green.
+
+**What (Stage 2):** the Chart screen draws the open chart from its list —
+shapes in their colours, right-angled lines with arrowheads, answers written on
+their lines on cream pills, loops, the open circle for an unfinished answer,
+stray rows as their own island, the Automatic / Down / Across switch (saved with
+each chart), and a key of the shape types used. Built on elkjs (lazy-loaded,
+its own ~440 KB file) with the settings proven in the spike.
+
+**Why these choices** (SPEC §5 "Details settled while building Stage 2" has the
+behaviour; these are the mechanics):
+
+- Every shape has fixed connection points ("ports"): in on the near side, out
+  on the far side, loops on their own side. Decisions place theirs exactly
+  (`placeOnDiamond`): elkjs otherwise ignores port spacing when the order is
+  fixed, and bunched five answers at the bottom tip.
+- elkjs routes to the shape's *box*; each line's ends are then extended along
+  their last straight stretch onto the real outline (`outlineInset`), so arrows
+  touch the diamond's slope, the document's wave, the Start/End's curve.
+- elkjs puts labels beside lines; they're moved onto the nearest stretch of
+  their own line (`onLine`), kept clear of its ends.
+- The document shape's wave is one sine formula used for both drawing and
+  outline-meeting, so they can't disagree.
+- Both directions are laid out on every change (a few ms each), so Automatic
+  can compare which needs less shrinking for the space available.
+
+**Left alone:** Print, Copy image, the Guide, favicon and link preview (Stage 3).
+Moving boxes by hand (Stage 4). In a chart forced Across, elkjs sometimes routes
+a loop the long way round or crosses one line over another; Automatic picks Down
+for those, and Stage 4 will give John the last word. No change to the List or
+Library apart from `EditorHeader` gaining a Chart mode.
+
+**Verified:** `npm run build` clean (the one size warning for elkjs's own file is
+silenced in `vite.config.ts` with a comment); `npm run lint` only the two known
+warnings; `npm run check` 22 + 10 layout checks (every line of every test chart
+starts and ends on a shape's outline, right angles only, labels on their lines,
+answers in list order, loops not turning the chart upside down, five answers
+on the diamond's outline). In Chromium: all nine test charts drawn at 1200px in
+Automatic, Down and Across, and at 390px with touch — no errors, no sideways page
+scroll; direction remembered after reload; List edits appear on the Chart;
+the layout library isn't fetched until the Chart opens; empty-chart message;
+44px buttons and ~10.5px chart text on the phone. The earlier Stage 1 browser
+checks still pass (one old check expected the Chart placeholder, now gone).
+
+**Couldn't be checked:** a real iPhone or Safari (fonts, the sideways-scrolling
+frame); very long single words in boxes beyond the test charts; performance on
+a slow phone with a very large chart (the 30-row chart lays out instantly here).

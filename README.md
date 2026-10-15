@@ -16,5 +16,5 @@ npm ci
 npm run dev      # run it locally
 npm run build    # type-check and build
 npm run lint
-npm run check    # tests the list's rules
+npm run check    # tests the list's rules and the chart layout
 ```

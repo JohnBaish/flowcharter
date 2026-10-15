@@ -225,6 +225,26 @@ Used for the seed chart (§7) and the mock-ups:
   boxes. For diamonds the text is narrower and the diamond is sized so the
   text block fits inside it.
 
+### Details settled while building Stage 2 (2026-10-15)
+
+Not yet seen by John; easy to change.
+
+- **Which tips a decision's answers leave from**, so they read in list order:
+  two answers — the first carries straight on (down, or right), the second
+  goes to the side (right, or down), as in the approved mock-up; three — left,
+  bottom, right in list order (top, right, bottom when across); four to six —
+  first and last from the side tips, the rest spread along the forward edges.
+- **Paths that rejoin** meet at the middle of the shape they lead into, so
+  several arrows merge into one, as is usual on flowcharts.
+- **A loop** (an arrow back to an earlier row) arrives on the right-hand side
+  of its shape when the chart runs down, and on the top when it runs across,
+  so it never collides with the main flow coming in.
+- **Size:** shown at full size if it fits the width, otherwise shrunk to fit,
+  but never below 60% (75% on a phone, about 10.5px text). A chart still too
+  wide scrolls sideways inside its frame; the page scrolls up and down as usual.
+- The layout library loads only when a chart is first drawn, so the List and
+  Library stay quick.
+
 ### Direction
 
 - **Automatic** (the default for a new chart) lays the chart out both ways and
@@ -249,8 +269,9 @@ first version, by agreement.
 
 ### Phones
 
-At ≤720px the chart is shown at a readable size inside a frame that scrolls
-both ways. The page itself never scrolls sideways. Automatic will usually pick
+At ≤720px the chart is shown at a readable size; a wide chart scrolls sideways
+inside its frame, and the page scrolls up and down as usual. The page itself
+never scrolls sideways. Automatic will usually pick
 Down on a phone, because the screen is tall and narrow.
 
 ## 6. Print and image

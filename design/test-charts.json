@@ -1,0 +1,1433 @@
+{
+  "app": "flowcharter",
+  "version": 1,
+  "exportedAt": "2026-10-15T00:00:00.000Z",
+  "state": {
+    "charts": {
+      "seed-backup-newsreader": {
+        "id": "seed-backup-newsreader",
+        "name": "Backup newsreader",
+        "items": [
+          {
+            "id": "s1",
+            "text": "Start",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "s2",
+            "text": "Receive sick call",
+            "type": "io",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "s3",
+            "text": "Is a backup available?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "s3a",
+                "label": "Yes",
+                "to": "s4"
+              },
+              {
+                "id": "s3b",
+                "label": "No",
+                "to": "s6"
+              }
+            ]
+          },
+          {
+            "id": "s4",
+            "text": "Book the backup",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "s5",
+            "text": "End",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "s6",
+            "text": "Ask the next station for cover",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "s7",
+            "text": "Has cover been agreed?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "s7a",
+                "label": "Yes",
+                "to": "s8"
+              },
+              {
+                "id": "s7b",
+                "label": "No",
+                "to": "s6"
+              }
+            ]
+          },
+          {
+            "id": "s8",
+            "text": "End",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          }
+        ],
+        "direction": "auto",
+        "lastEditedAt": 1792022400000
+      },
+      "tea": {
+        "id": "tea",
+        "name": "Test: a straight line",
+        "items": [
+          {
+            "id": "tea-1",
+            "text": "Start",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "tea-2",
+            "text": "Boil the kettle",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "tea-3",
+            "text": "Pour the water onto the tea bag",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "tea-4",
+            "text": "End",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          }
+        ],
+        "direction": "auto",
+        "lastEditedAt": 1792022400000
+      },
+      "drink": {
+        "id": "drink",
+        "name": "Test: a three-way question",
+        "items": [
+          {
+            "id": "drink-1",
+            "text": "Start",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "drink-2",
+            "text": "Which drink would they like?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "drink-2-r0",
+                "label": "Tea",
+                "to": "drink-3"
+              },
+              {
+                "id": "drink-2-r1",
+                "label": "Coffee",
+                "to": "drink-4"
+              },
+              {
+                "id": "drink-2-r2",
+                "label": "Water",
+                "to": "drink-5"
+              }
+            ]
+          },
+          {
+            "id": "drink-3",
+            "text": "Make the tea",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "item",
+              "to": "drink-6"
+            },
+            "routes": []
+          },
+          {
+            "id": "drink-4",
+            "text": "Make the coffee",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "item",
+              "to": "drink-6"
+            },
+            "routes": []
+          },
+          {
+            "id": "drink-5",
+            "text": "Pour a glass of water",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "drink-6",
+            "text": "Serve the drink",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "drink-7",
+            "text": "End",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          }
+        ],
+        "direction": "auto",
+        "lastEditedAt": 1792022400000
+      },
+      "five": {
+        "id": "five",
+        "name": "Test: five answers",
+        "items": [
+          {
+            "id": "five-1",
+            "text": "Start",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "five-2",
+            "text": "What's the weather like?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "five-2-r0",
+                "label": "Sunny",
+                "to": "five-3"
+              },
+              {
+                "id": "five-2-r1",
+                "label": "Cloudy",
+                "to": "five-4"
+              },
+              {
+                "id": "five-2-r2",
+                "label": "Rain",
+                "to": "five-5"
+              },
+              {
+                "id": "five-2-r3",
+                "label": "Snow",
+                "to": "five-6"
+              },
+              {
+                "id": "five-2-r4",
+                "label": "Fog",
+                "to": "five-7"
+              }
+            ]
+          },
+          {
+            "id": "five-3",
+            "text": "Play the summer jingle",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "item",
+              "to": "five-8"
+            },
+            "routes": []
+          },
+          {
+            "id": "five-4",
+            "text": "Read the forecast",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "item",
+              "to": "five-8"
+            },
+            "routes": []
+          },
+          {
+            "id": "five-5",
+            "text": "Warn about flooding",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "item",
+              "to": "five-8"
+            },
+            "routes": []
+          },
+          {
+            "id": "five-6",
+            "text": "Read the school closures",
+            "type": "document",
+            "typeChosen": true,
+            "then": {
+              "kind": "item",
+              "to": "five-8"
+            },
+            "routes": []
+          },
+          {
+            "id": "five-7",
+            "text": "Warn drivers",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "five-8",
+            "text": "Tell the listeners",
+            "type": "io",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "five-9",
+            "text": "End",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          }
+        ],
+        "direction": "auto",
+        "lastEditedAt": 1792022400000
+      },
+      "rejoin": {
+        "id": "rejoin",
+        "name": "Test: two paths rejoining",
+        "items": [
+          {
+            "id": "rejoin-1",
+            "text": "Start",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "rejoin-2",
+            "text": "Receive sick call",
+            "type": "io",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "rejoin-3",
+            "text": "Is a backup available?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "rejoin-3-r0",
+                "label": "Yes",
+                "to": "rejoin-4"
+              },
+              {
+                "id": "rejoin-3-r1",
+                "label": "No",
+                "to": "rejoin-5"
+              }
+            ]
+          },
+          {
+            "id": "rejoin-4",
+            "text": "Book the backup",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "item",
+              "to": "rejoin-6"
+            },
+            "routes": []
+          },
+          {
+            "id": "rejoin-5",
+            "text": "Ask another station for cover",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "rejoin-6",
+            "text": "Send the updated rota",
+            "type": "document",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "rejoin-7",
+            "text": "End",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          }
+        ],
+        "direction": "auto",
+        "lastEditedAt": 1792022400000
+      },
+      "shapes": {
+        "id": "shapes",
+        "name": "Test: every shape",
+        "items": [
+          {
+            "id": "shapes-1",
+            "text": "Start",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "shapes-2",
+            "text": "Receive the order",
+            "type": "io",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "shapes-3",
+            "text": "Check the stock system",
+            "type": "predefined",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "shapes-4",
+            "text": "Is it in stock?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "shapes-4-r0",
+                "label": "Yes",
+                "to": "shapes-5"
+              },
+              {
+                "id": "shapes-4-r1",
+                "label": "No",
+                "to": "shapes-8"
+              }
+            ]
+          },
+          {
+            "id": "shapes-5",
+            "text": "Print the invoice",
+            "type": "document",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "shapes-6",
+            "text": "Wait for payment",
+            "type": "delay",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "shapes-7",
+            "text": "A",
+            "type": "connector",
+            "typeChosen": true,
+            "then": {
+              "kind": "item",
+              "to": "shapes-9"
+            },
+            "routes": []
+          },
+          {
+            "id": "shapes-8",
+            "text": "Order more stock",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "item",
+              "to": "shapes-3"
+            },
+            "routes": []
+          },
+          {
+            "id": "shapes-9",
+            "text": "End",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          }
+        ],
+        "direction": "auto",
+        "lastEditedAt": 1792022400000
+      },
+      "unfinished": {
+        "id": "unfinished",
+        "name": "Test: unfinished answers and a stray row",
+        "items": [
+          {
+            "id": "unfinished-1",
+            "text": "Start",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "unfinished-2",
+            "text": "Is the studio free?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "unfinished-2-r0",
+                "label": "Yes",
+                "to": "unfinished-3"
+              },
+              {
+                "id": "unfinished-2-r1",
+                "label": "No",
+                "to": null
+              }
+            ]
+          },
+          {
+            "id": "unfinished-3",
+            "text": "Book the studio",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "unfinished-4",
+            "text": "End",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "unfinished-5",
+            "text": "Find another room",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          }
+        ],
+        "direction": "auto",
+        "lastEditedAt": 1792022400000
+      },
+      "newsreaders": {
+        "id": "newsreaders",
+        "name": "Test: John's weekend newsreaders tree",
+        "items": [
+          {
+            "id": "newsreaders-1",
+            "text": "Start",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "newsreaders-2",
+            "text": "Which station is without a newsreader?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "newsreaders-2-r0",
+                "label": "Berkshire",
+                "to": "newsreaders-3"
+              },
+              {
+                "id": "newsreaders-2-r1",
+                "label": "Oxford",
+                "to": "newsreaders-10"
+              },
+              {
+                "id": "newsreaders-2-r2",
+                "label": "Solent",
+                "to": "newsreaders-17"
+              }
+            ]
+          },
+          {
+            "id": "newsreaders-3",
+            "text": "What day is it?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "newsreaders-3-r0",
+                "label": "Saturday",
+                "to": "newsreaders-4"
+              },
+              {
+                "id": "newsreaders-3-r1",
+                "label": "Sunday",
+                "to": "newsreaders-7"
+              }
+            ]
+          },
+          {
+            "id": "newsreaders-4",
+            "text": "What time is it?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "newsreaders-4-r0",
+                "label": "0700-0900",
+                "to": "newsreaders-5"
+              },
+              {
+                "id": "newsreaders-4-r1",
+                "label": "1000-1400",
+                "to": "newsreaders-6"
+              }
+            ]
+          },
+          {
+            "id": "newsreaders-5",
+            "text": "Solent do live bulletins for Solent & Berkshire. No opting out required.",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "newsreaders-6",
+            "text": "Oxford do live bulletins for Oxford & Berkshire via Contribution",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "newsreaders-7",
+            "text": "What time is it?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "newsreaders-7-r0",
+                "label": "0700-0900",
+                "to": "newsreaders-8"
+              },
+              {
+                "id": "newsreaders-7-r1",
+                "label": "1000-1300",
+                "to": "newsreaders-9"
+              }
+            ]
+          },
+          {
+            "id": "newsreaders-8",
+            "text": "Oxford do live bulletins for Oxford & Berkshire. No opting out required.",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "newsreaders-9",
+            "text": "Oxford do live bulletins for Oxford & Berkshire via Contribution",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "newsreaders-10",
+            "text": "What day is it?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "newsreaders-10-r0",
+                "label": "Saturday",
+                "to": "newsreaders-11"
+              },
+              {
+                "id": "newsreaders-10-r1",
+                "label": "Sunday",
+                "to": "newsreaders-14"
+              }
+            ]
+          },
+          {
+            "id": "newsreaders-11",
+            "text": "What time is it?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "newsreaders-11-r0",
+                "label": "0700-0900",
+                "to": "newsreaders-12"
+              },
+              {
+                "id": "newsreaders-11-r1",
+                "label": "1000-1400",
+                "to": "newsreaders-13"
+              }
+            ]
+          },
+          {
+            "id": "newsreaders-12",
+            "text": "Solent do live bulletins for Solent & Oxford. No opting out required.",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "newsreaders-13",
+            "text": "Berkshire do live bulletins for Berkshire & Oxford. No opting out required.",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "newsreaders-14",
+            "text": "What time is it?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "newsreaders-14-r0",
+                "label": "0700-0900",
+                "to": "newsreaders-15"
+              },
+              {
+                "id": "newsreaders-14-r1",
+                "label": "1000-1300",
+                "to": "newsreaders-16"
+              }
+            ]
+          },
+          {
+            "id": "newsreaders-15",
+            "text": "Berkshire do live bulletins for Berkshire & Oxford via Contribution",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "newsreaders-16",
+            "text": "Berkshire do live bulletins for Berkshire & Oxford. No opting out required.",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "newsreaders-17",
+            "text": "What day is it?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "newsreaders-17-r0",
+                "label": "Saturday",
+                "to": "newsreaders-18"
+              },
+              {
+                "id": "newsreaders-17-r1",
+                "label": "Sunday",
+                "to": "newsreaders-21"
+              }
+            ]
+          },
+          {
+            "id": "newsreaders-18",
+            "text": "What time is it?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "newsreaders-18-r0",
+                "label": "0700-0900",
+                "to": "newsreaders-19"
+              },
+              {
+                "id": "newsreaders-18-r1",
+                "label": "1000-1300",
+                "to": "newsreaders-20"
+              }
+            ]
+          },
+          {
+            "id": "newsreaders-19",
+            "text": "Berkshire do live bulletins for Berkshire & Solent via Contribution",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "newsreaders-20",
+            "text": "Berkshire do live bulletins for Berkshire & Solent. No opting out required.",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "newsreaders-21",
+            "text": "What time is it?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "newsreaders-21-r0",
+                "label": "0700-0900",
+                "to": "newsreaders-22"
+              },
+              {
+                "id": "newsreaders-21-r1",
+                "label": "1000-1300",
+                "to": "newsreaders-23"
+              }
+            ]
+          },
+          {
+            "id": "newsreaders-22",
+            "text": "Oxford do live bulletins for Oxford & Solent. No opting out required.",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          },
+          {
+            "id": "newsreaders-23",
+            "text": "Berkshire do live bulletins for Berkshire & Solent. No opting out required.",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          }
+        ],
+        "direction": "auto",
+        "lastEditedAt": 1792022400000
+      },
+      "long": {
+        "id": "long",
+        "name": "Test: a long list (30 rows)",
+        "items": [
+          {
+            "id": "long-1",
+            "text": "Start",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-2",
+            "text": "Prepare segment 1",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-3",
+            "text": "Write the cue sheet for segment 1",
+            "type": "document",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-4",
+            "text": "Is segment 1 approved?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "long-4-r0",
+                "label": "Yes",
+                "to": "long-5"
+              },
+              {
+                "id": "long-4-r1",
+                "label": "No",
+                "to": "long-2"
+              }
+            ]
+          },
+          {
+            "id": "long-5",
+            "text": "Prepare segment 2",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-6",
+            "text": "Write the cue sheet for segment 2",
+            "type": "document",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-7",
+            "text": "Is segment 2 approved?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "long-7-r0",
+                "label": "Yes",
+                "to": "long-8"
+              },
+              {
+                "id": "long-7-r1",
+                "label": "No",
+                "to": "long-5"
+              }
+            ]
+          },
+          {
+            "id": "long-8",
+            "text": "Prepare segment 3",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-9",
+            "text": "Write the cue sheet for segment 3",
+            "type": "document",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-10",
+            "text": "Is segment 3 approved?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "long-10-r0",
+                "label": "Yes",
+                "to": "long-11"
+              },
+              {
+                "id": "long-10-r1",
+                "label": "No",
+                "to": "long-8"
+              }
+            ]
+          },
+          {
+            "id": "long-11",
+            "text": "Prepare segment 4",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-12",
+            "text": "Write the cue sheet for segment 4",
+            "type": "document",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-13",
+            "text": "Is segment 4 approved?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "long-13-r0",
+                "label": "Yes",
+                "to": "long-14"
+              },
+              {
+                "id": "long-13-r1",
+                "label": "No",
+                "to": "long-11"
+              }
+            ]
+          },
+          {
+            "id": "long-14",
+            "text": "Prepare segment 5",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-15",
+            "text": "Write the cue sheet for segment 5",
+            "type": "document",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-16",
+            "text": "Is segment 5 approved?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "long-16-r0",
+                "label": "Yes",
+                "to": "long-17"
+              },
+              {
+                "id": "long-16-r1",
+                "label": "No",
+                "to": "long-14"
+              }
+            ]
+          },
+          {
+            "id": "long-17",
+            "text": "Prepare segment 6",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-18",
+            "text": "Write the cue sheet for segment 6",
+            "type": "document",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-19",
+            "text": "Is segment 6 approved?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "long-19-r0",
+                "label": "Yes",
+                "to": "long-20"
+              },
+              {
+                "id": "long-19-r1",
+                "label": "No",
+                "to": "long-17"
+              }
+            ]
+          },
+          {
+            "id": "long-20",
+            "text": "Prepare segment 7",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-21",
+            "text": "Write the cue sheet for segment 7",
+            "type": "document",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-22",
+            "text": "Is segment 7 approved?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "long-22-r0",
+                "label": "Yes",
+                "to": "long-23"
+              },
+              {
+                "id": "long-22-r1",
+                "label": "No",
+                "to": "long-20"
+              }
+            ]
+          },
+          {
+            "id": "long-23",
+            "text": "Prepare segment 8",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-24",
+            "text": "Write the cue sheet for segment 8",
+            "type": "document",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-25",
+            "text": "Is segment 8 approved?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "long-25-r0",
+                "label": "Yes",
+                "to": "long-26"
+              },
+              {
+                "id": "long-25-r1",
+                "label": "No",
+                "to": "long-23"
+              }
+            ]
+          },
+          {
+            "id": "long-26",
+            "text": "Prepare segment 9",
+            "type": "process",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-27",
+            "text": "Write the cue sheet for segment 9",
+            "type": "document",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-28",
+            "text": "Is segment 9 approved?",
+            "type": "decision",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": [
+              {
+                "id": "long-28-r0",
+                "label": "Yes",
+                "to": "long-29"
+              },
+              {
+                "id": "long-28-r1",
+                "label": "No",
+                "to": "long-26"
+              }
+            ]
+          },
+          {
+            "id": "long-29",
+            "text": "Go live",
+            "type": "io",
+            "typeChosen": true,
+            "then": {
+              "kind": "next"
+            },
+            "routes": []
+          },
+          {
+            "id": "long-30",
+            "text": "End",
+            "type": "terminator",
+            "typeChosen": true,
+            "then": {
+              "kind": "end"
+            },
+            "routes": []
+          }
+        ],
+        "direction": "auto",
+        "lastEditedAt": 1792022400000
+      }
+    },
+    "chartOrder": [
+      "seed-backup-newsreader",
+      "tea",
+      "drink",
+      "five",
+      "rejoin",
+      "shapes",
+      "unfinished",
+      "newsreaders",
+      "long"
+    ],
+    "openChartId": "seed-backup-newsreader"
+  }
+}

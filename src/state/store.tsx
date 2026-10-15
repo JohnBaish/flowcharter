@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { newChart, seedChart, uid, MAX_NAME, type Chart, type ItemId, type Next } from '../data/charts.ts';
+import { newChart, seedChart, uid, MAX_NAME, type Chart, type Direction, type ItemId, type Next } from '../data/charts.ts';
 import type { ShapeType } from '../data/shapes.ts';
 import * as ops from '../lib/chartOps.ts';
 import { exportJson, sanitiseLibrary, type Library } from '../lib/exchange.ts';
@@ -51,6 +51,8 @@ interface AppContextValue extends PersistedState {
   duplicateChart: (id: string) => string;
   removeChart: (id: string) => void;
   renameChart: (id: string, name: string) => void;
+  /** Automatic, Down or Across — saved with the chart. */
+  setDirection: (id: string, direction: Direction) => void;
 
   /** Adds a blank row after `afterId` (or at the end) and returns its id. */
   addItem: (afterId?: ItemId | null) => ItemId;
@@ -139,6 +141,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     renameChart: (id, name) => setEdited((s) => {
       const chart = s.charts[id];
       return chart ? { ...s, charts: { ...s.charts, [id]: { ...chart, name: name.slice(0, MAX_NAME), lastEditedAt: Date.now() } } } : s;
+    }),
+    setDirection: (id, direction) => setEdited((s) => {
+      const chart = s.charts[id];
+      return chart ? { ...s, charts: { ...s.charts, [id]: { ...chart, direction, lastEditedAt: Date.now() } } } : s;
     }),
 
     addItem: (afterId = null) => {

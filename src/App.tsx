@@ -23,8 +23,8 @@ function Shell() {
         )}
         {screen === 'lib' && <LibraryScreen />}
         {screen === 'guide' && <GuideScreen />}
-        {screen === 'list' && chart && <><EditorHeader /><ListScreen /></>}
-        {screen === 'chart' && chart && <ChartScreen />}
+        {screen === 'list' && chart && <><EditorHeader mode="list" /><ListScreen /></>}
+        {screen === 'chart' && chart && <><EditorHeader mode="chart" /><ChartScreen /></>}
       </div>
     </div>
   );

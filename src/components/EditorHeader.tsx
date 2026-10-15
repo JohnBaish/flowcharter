@@ -6,9 +6,10 @@ import { focusItemText } from '../lib/focus.ts';
 import { MAX_NAME } from '../data/charts.ts';
 import { IconPlus } from '../lib/icons.tsx';
 
-/** Header for the List screen (the Chart screen gets its own in Stage 2): the
- *  chart's name, a count of its items, and the screen's actions. */
-export function EditorHeader() {
+/** Header for the List and Chart screens — two views of the same chart, as List
+ *  and Clock are in Clockmaker: the chart's name, a count of its items, and the
+ *  screen's actions. (Print and Copy image join the Chart's actions in Stage 3.) */
+export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
   const { chart, renameChart, duplicateChart, openChart, setScreen, addItem, clearItems } = useApp();
   const nameInput = useRef<HTMLTextAreaElement | null>(null);
 
@@ -58,18 +59,22 @@ export function EditorHeader() {
       </div>
       <span className="tag tag-neutral mono">{summary(chart.items)}</span>
       <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
-        <button className="btn btn-ghost" onClick={addAndFocus} style={{ color: 'var(--color-accent-700)' }}>
-          <IconPlus size={15} />Add item
-        </button>
-        <button
-          className="btn btn-ghost"
-          onClick={handleClear}
-          disabled={chart.items.length === 0}
-          title={chart.items.length === 0 ? 'The list is already empty' : 'Remove every item from this list'}
-          style={{ color: 'var(--color-neutral-700)' }}
-        >
-          Clear
-        </button>
+        {mode === 'list' && (
+          <>
+            <button className="btn btn-ghost" onClick={addAndFocus} style={{ color: 'var(--color-accent-700)' }}>
+              <IconPlus size={15} />Add item
+            </button>
+            <button
+              className="btn btn-ghost"
+              onClick={handleClear}
+              disabled={chart.items.length === 0}
+              title={chart.items.length === 0 ? 'The list is already empty' : 'Remove every item from this list'}
+              style={{ color: 'var(--color-neutral-700)' }}
+            >
+              Clear
+            </button>
+          </>
+        )}
         <button
           className="btn btn-secondary"
           onClick={() => openChart(duplicateChart(chart.id))}
