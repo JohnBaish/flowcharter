@@ -178,3 +178,14 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
 .guide-shape { background: var(--color-neutral-100); border-radius: var(--radius-md); padding: var(--space-3); }
 @media (max-width: 960px) { .guide-shapes { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .guide-shapes { grid-template-columns: 1fr; } }
+
+/* — List / Chart switch in the editor header, and the List's own strip — */
+.view-toggle .seg-opt { padding: 5px 16px; font-size: 13px; }
+.list-toolbar { display: flex; align-items: center; gap: 6px; margin-bottom: var(--space-2); }
+.list-toolbar-note {
+  font: 700 11px var(--font-body); letter-spacing: .09em; text-transform: uppercase; color: var(--color-neutral-700);
+}
+@media (max-width: 720px) {
+  .view-toggle .seg-opt { min-height: 44px; display: inline-flex; align-items: center; }
+  .list-toolbar .btn { min-height: 44px; }
+}

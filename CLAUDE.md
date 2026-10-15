@@ -368,3 +368,13 @@ real iPhone.
 **Note for users:** charts saved at `flowcharter.vercel.app` don't appear at `flowcharter.baish.net` (browsers keep saved data per address); Export then Import moves them.
 
 **Still to do:** John edits the Guide's words before real users arrive; the Flowcharter card on baish.net's landing page (clockwheel repo, needs John's OK); Stage 4 (moving boxes by hand) when John wants to plan it.
+
+### 2026-10-15 — Proposal: tidier List/Chart header (branch `tidy-header`, not merged)
+
+**John asked** (on Opus) for a review of the List/Chart header against Clockmaker: drop Duplicate there (the Library has it), put Print top-right as Clockmaker does, and an easy way to go from the List to the Chart.
+
+**Compared with Clockmaker:** its header's right-hand group is the same on List and Clock (Print · Duplicate · Copy image · Done), and "+ Add segment" sits in a strip under the header ("18 segments · drag to reorder"). Ours had Add item and Clear in the header, so its right-hand group changed between List and Chart and Print sat in the middle.
+
+**Built as a preview for John to judge:** Duplicate removed from both screens (still on each Library card); Add item and Clear moved to a strip above the list (`.list-toolbar`, "Drag to reorder" on the left), as Clockmaker's; the header's right-hand group is now Print · (Copy image on the Chart) · Done; a **List | Chart** switch in the header (`.view-toggle`, same place on both screens). The nav's List and Chart links stay, as Clockmaker keeps its own. The phone's bottom "+ Add item" button is unchanged.
+
+**Verified:** build clean, lint the two known warnings, checks 23 + 11. In Chromium at 1200px and 390px with touch: no Duplicate; Add item adds a row and focuses it; the switch goes to the Chart and back; Clear asks, empties, then greys out; switch and strip buttons 44px on the phone; no errors, no sideways scroll.
