@@ -1,0 +1,104 @@
+<!doctype html>
+<!--
+  Design mock-up (not app code): the Chart screen, drawn by hand for the
+  example list in SPEC.md §4. In the real app the positions come from the
+  automatic layout. Open from disk after `npm ci`; screenshot at 1200px.
+-->
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flowcharter: Chart screen mock-up</title>
+<link rel="stylesheet" href="../src/styles/organic.css">
+<link rel="stylesheet" href="../src/styles/global.css">
+<style>
+  @font-face { font-family: 'Caprasimo'; font-weight: 400; src: url('../node_modules/@fontsource/caprasimo/files/caprasimo-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 400; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 600; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-600-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 700; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-700-normal.woff2') format('woff2'); }
+  .col { width: 100%; max-width: 1100px; margin: 0 auto; }
+  .head { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); flex-wrap: wrap; }
+  .actions { margin-left: auto; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .actions .btn-secondary, .actions .btn-primary { padding: 8px 16px; font-size: 13.5px; white-space: nowrap; }
+  .toolbar { display: flex; align-items: center; gap: var(--space-3); padding: 0 var(--space-4) var(--space-2); flex-wrap: wrap; font-size: 13px; color: var(--color-neutral-700); }
+  .seg-opt { padding: 5px 14px; font-size: 13px; }
+  .chart { padding: 0 var(--space-4); }
+  .chart svg { display: block; width: 100%; max-width: 760px; height: auto; margin: 0 auto; }
+  .key { display: flex; gap: var(--space-4); flex-wrap: wrap; justify-content: center; padding: var(--space-4); font-size: 12.5px; color: var(--color-neutral-700); }
+  .key span { display: inline-flex; align-items: center; gap: 6px; }
+  .ann { position: relative; }
+</style>
+</head>
+<body>
+<div class="nav" style="padding: var(--space-3) var(--space-6); background: var(--color-surface); flex-wrap: wrap">
+  <span class="nav-brand">Flowcharter</span>
+  <button class="btn btn-primary" style="padding: 7px 16px; font-size: 13.5px; margin-left: auto">New chart</button>
+  <div class="nav-panel">
+    <a href="#">Library</a><a href="#">List</a><a href="#" aria-current="page">Chart</a><a href="#">Guide</a>
+    <span class="tag tag-neutral mono">saved just now</span>
+  </div>
+</div>
+<div class="col">
+  <div class="head">
+    <div>
+      <div class="card-kicker">Flowchart</div>
+      <h2 style="margin: 1px 0 0; line-height: 1.05">Backup newsreader</h2>
+    </div>
+    <span class="tag tag-neutral mono">8 items · 2 decisions</span>
+    <div class="actions">
+      <button class="btn btn-ghost" style="color: var(--color-accent-700)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print
+      </button>
+      <button class="btn btn-secondary">Duplicate</button>
+      <button class="btn btn-secondary">Copy image</button>
+      <button class="btn btn-primary">Done</button>
+    </div>
+  </div>
+  <div class="toolbar">
+    <span>Direction</span>
+    <div class="seg">
+      <label class="seg-opt"><input type="radio" name="dir" checked>Automatic</label>
+      <label class="seg-opt"><input type="radio" name="dir">Down</label>
+      <label class="seg-opt"><input type="radio" name="dir">Across</label>
+    </div>
+    <span style="margin-left: auto">Automatic is showing it top to bottom, which fits this chart best.</span>
+  </div>
+  <div class="chart"><svg id="chart" viewBox="0 0 760 600"></svg></div>
+  <div class="key" id="key"></div>
+</div>
+<script src="shapes.js"></script>
+<script>
+  // Hand-placed for the mock-up. Column A x=230, column B x=520.
+  const A = 230, B = 520;
+  let s = `<defs>${ARROW_DEFS}</defs>`;
+  // flowlines first, so shapes and labels sit on top of them
+  s += lineSvg([[A, 72], [A, 112]]);                       // 1 → 2
+  s += lineSvg([[A, 168], [A, 213]]);                      // 2 → 3
+  s += lineSvg([[A, 327], [A, 384]]);                      // 3a Yes → 4
+  s += lineSvg([[A + 95, 270], [B - 102, 270]]);           // 3b No → 6
+  s += lineSvg([[A, 436], [A, 486]]);                      // 4 → 5
+  s += lineSvg([[B, 298], [B, 353]]);                      // 6 → 7
+  s += lineSvg([[B, 467], [B, 526]]);                      // 7a Yes → 8
+  s += lineSvg([[B + 95, 410], [690, 410], [690, 270], [B + 102, 270]]); // 7b No → back to 6
+  // shapes
+  s += shapeSvg('terminator', A, 50, 120, 44) + textSvg(A, 50, ['Start']);
+  s += shapeSvg('io', A, 140, 210, 56) + textSvg(A, 140, ['Receive sick call']);
+  s += shapeSvg('decision', A, 270, 190, 114) + textSvg(A, 270, ['Is a backup', 'available?']);
+  s += shapeSvg('process', A, 410, 180, 52) + textSvg(A, 410, ['Book the backup']);
+  s += shapeSvg('terminator', A, 510, 120, 44) + textSvg(A, 510, ['End']);
+  s += shapeSvg('process', B, 270, 204, 56) + textSvg(B, 270, ['Ask the next station', 'for cover']);
+  s += shapeSvg('decision', B, 410, 190, 114) + textSvg(B, 410, ['Has cover', 'been agreed?']);
+  s += shapeSvg('terminator', B, 550, 120, 44) + textSvg(B, 550, ['End']);
+  // route labels
+  s += routeLabelSvg(A, 352, 'Yes') + routeLabelSvg(371, 270, 'No');
+  s += routeLabelSvg(B, 494, 'Yes') + routeLabelSvg(690, 340, 'No');
+  document.getElementById('chart').innerHTML = s;
+
+  // key: only the shape types this chart uses
+  document.getElementById('key').innerHTML = ['terminator', 'io', 'process', 'decision'].map((t) => {
+    const big = t === 'decision';
+    return `<span><svg width="34" height="22" viewBox="0 0 34 22">${shapeSvg(t, 17, 11, big ? 26 : 30, big ? 20 : 16)}</svg>${SHAPES[t].name}</span>`;
+  }).join('');
+</script>
+</body>
+</html>

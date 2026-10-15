@@ -1,0 +1,143 @@
+<!doctype html>
+<!--
+  Design mock-up (not app code): the List screen for the example in
+  SPEC.md §4 — a table on a computer, a stack of cards at ≤720px. Static:
+  nothing here is editable. Open from disk after `npm ci`; screenshot at
+  1200px and at 390px.
+-->
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flowcharter: List screen mock-up</title>
+<link rel="stylesheet" href="../src/styles/organic.css">
+<link rel="stylesheet" href="../src/styles/global.css">
+<style>
+  @font-face { font-family: 'Caprasimo'; font-weight: 400; src: url('../node_modules/@fontsource/caprasimo/files/caprasimo-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 400; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 600; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-600-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 700; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-700-normal.woff2') format('woff2'); }
+  .col { width: 100%; max-width: 1100px; margin: 0 auto; }
+  .head { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); flex-wrap: wrap; }
+  .actions { margin-left: auto; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .actions .btn-secondary, .actions .btn-primary { padding: 8px 16px; font-size: 13.5px; white-space: nowrap; }
+  .screen { padding: 0 var(--space-6) var(--space-6); }
+  .muted { color: var(--color-neutral-700); }
+  .num { font-size: 13px; color: var(--color-neutral-700); white-space: nowrap; }
+  .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid var(--color-text); flex: none; }
+  .typecell { display: flex; align-items: center; gap: 8px; }
+  select.input { padding: 3px 10px; font-size: 13px; width: auto; }
+  .small { font-size: 12px; }
+  .route td { padding-top: 2px; padding-bottom: 2px; }
+  .route .num { padding-left: 14px; }
+  .goes { display: flex; align-items: center; gap: 8px; }
+  .loop { font-size: 11px; }
+  .routes-input { width: 52px; text-align: center; }
+  .hint { margin-top: var(--space-3); font-size: 12.5px; }
+  .phone { display: none; }
+  .card-route { display: flex; align-items: center; gap: 8px; margin: 6px 0 0 22px; padding-top: 6px; border-top: 1px dashed var(--color-divider); }
+  .card-route .plain-input { width: 84px; flex: none; }
+  .card-route select.input { flex: 1; min-width: 0; }
+  @media (max-width: 720px) {
+    .computer { display: none; }
+    .phone { display: block; }
+    .screen { padding: 0 var(--space-4) var(--space-6); }
+    .head { padding: var(--space-3) var(--space-4); }
+    .actions { margin-left: 0; }
+    select.input { font-size: 16px; min-height: 36px; }
+  }
+</style>
+</head>
+<body>
+<div class="nav" style="padding: var(--space-3) var(--space-6); background: var(--color-surface); flex-wrap: wrap">
+  <span class="nav-brand">Flowcharter</span>
+  <button class="nav-menu-toggle" aria-label="Open menu">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+  <button class="btn btn-primary" style="padding: 7px 16px; font-size: 13.5px; margin-left: auto">New chart</button>
+  <div class="nav-panel">
+    <a href="#">Library</a><a href="#" aria-current="page">List</a><a href="#">Chart</a><a href="#">Guide</a>
+    <span class="tag tag-neutral mono">saved just now</span>
+  </div>
+</div>
+<div class="col">
+  <div class="head">
+    <div>
+      <div class="card-kicker">Flowchart</div>
+      <h2 style="margin: 1px 0 0; line-height: 1.05">Backup newsreader</h2>
+    </div>
+    <span class="tag tag-neutral mono">8 items · 2 decisions</span>
+    <div class="actions">
+      <button class="btn btn-ghost" style="color: var(--color-accent-700)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add item
+      </button>
+      <button class="btn btn-secondary">Duplicate</button>
+      <button class="btn btn-primary">Done</button>
+    </div>
+  </div>
+  <div class="screen">
+    <table class="table computer" id="table"></table>
+    <div class="phone"><div class="list-cards" id="cards"></div>
+      <button class="btn btn-secondary" style="width: 100%; margin-top: var(--space-2); color: var(--color-accent-700)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add item
+      </button>
+    </div>
+    <p class="hint muted computer">Each row leads on to the next one unless you choose otherwise. A decision's answers appear
+      underneath it; pick where each one goes. Choosing an earlier item makes a loop.</p>
+  </div>
+</div>
+<script src="shapes.js"></script>
+<script>
+  // The example chart (SPEC.md §4). `to` is an item number in the mock-up;
+  // the real app stores item ids so numbers can change underneath.
+  const ITEMS = [
+    { text: 'Start', type: 'terminator' },
+    { text: 'Receive sick call', type: 'io' },
+    { text: 'Is a backup available?', type: 'decision', routes: [{ label: 'Yes', to: 4 }, { label: 'No', to: 6 }] },
+    { text: 'Book the backup', type: 'process' },
+    { text: 'End', type: 'terminator', end: true },
+    { text: 'Ask the next station for cover', type: 'process' },
+    { text: 'Has cover been agreed?', type: 'decision', routes: [{ label: 'Yes', to: 8 }, { label: 'No', to: 6 }] },
+    { text: 'End', type: 'terminator', end: true },
+  ];
+  const GRIP = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>';
+  const TRASH = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>';
+  const typeSelect = (t) => `<span class="typecell"><span class="swatch" style="background:${SHAPES[t].fill}"></span>`
+    + `<select class="input">${Object.entries(SHAPES).map(([k, s]) => `<option ${k === t ? 'selected' : ''}>${s.name}</option>`).join('')}</select></span>`;
+  const goesSelect = (to, from) => `<select class="input"><option>${to} · ${ITEMS[to - 1].text}</option></select>`
+    + (to <= from ? ' <span class="tag tag-accent loop">loops back</span>' : '');
+  const leads = (it, n) => it.type === 'decision'
+    ? `<input class="plain-input outlined-input routes-input mono" value="${it.routes.length}"> <span class="muted small">routes</span>`
+    : it.end ? '<span class="muted small">ends here</span>'
+    : '<span class="muted small">then</span> <select class="input"><option>next</option></select>';
+
+  let rows = `<thead><tr><th style="width:26px"></th><th style="width:44px">#</th><th style="width:400px">Item</th>
+    <th style="width:220px">Type</th><th style="width:200px">Routes</th><th style="width:30px"></th></tr></thead><tbody>`;
+  ITEMS.forEach((it, i) => {
+    const n = i + 1;
+    rows += `<tr><td class="muted" style="padding-right:0">${GRIP}</td><td class="num mono">${n}</td>
+      <td><input class="plain-input" style="font-weight:600" value="${it.text}"></td>
+      <td>${typeSelect(it.type)}</td><td>${leads(it, n)}</td><td class="muted">${TRASH}</td></tr>`;
+    (it.routes || []).forEach((r, j) => {
+      rows += `<tr class="route"><td></td><td class="num mono">↳ ${n}${'abcdef'[j]}</td>
+        <td><input class="plain-input outlined-input" style="width:160px" value="${r.label}"></td>
+        <td colspan="2"><span class="goes"><span class="muted small">goes to</span>${goesSelect(r.to, n)}</span></td><td></td></tr>`;
+    });
+  });
+  document.getElementById('table').innerHTML = rows + '</tbody>';
+
+  document.getElementById('cards').innerHTML = ITEMS.map((it, i) => {
+    const n = i + 1;
+    const routes = (it.routes || []).map((r, j) => `<div class="card-route"><span class="num mono">${n}${'abcdef'[j]}</span>
+      <input class="plain-input outlined-input" value="${r.label}"><span class="muted small">→</span>`
+      + `<select class="input"><option>${r.to} · ${ITEMS[r.to - 1].text}</option></select></div>`
+      + (r.to <= n ? `<div style="margin: 4px 0 0 52px"><span class="tag tag-accent loop">loops back</span></div>` : '')).join('');
+    return `<div class="list-card">
+      <div class="list-card-row"><span class="list-card-grip">${GRIP}</span><span class="num mono">${n}</span>
+        <input class="plain-input" style="font-weight:600; flex:1" value="${it.text}"><span class="muted">${TRASH}</span></div>
+      <div class="list-card-row" style="margin-top:6px; padding-left:24px">${typeSelect(it.type)}<span style="margin-left:auto; white-space:nowrap">${leads(it, n)}</span></div>
+      ${routes}</div>`;
+  }).join('');
+</script>
+</body>
+</html>

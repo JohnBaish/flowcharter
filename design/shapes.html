@@ -1,0 +1,61 @@
+<!doctype html>
+<!--
+  Design preview (not app code): the eight Flowcharter shapes in their
+  proposed colours. Open from disk after `npm ci` (fonts load from
+  node_modules by path, as in clockwheel's design/og-*.html). Screenshot at
+  1200px wide. See SPEC.md §6.
+-->
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Flowcharter: shapes and colours</title>
+<link rel="stylesheet" href="../src/styles/organic.css">
+<link rel="stylesheet" href="../src/styles/global.css">
+<style>
+  @font-face { font-family: 'Caprasimo'; font-weight: 400; src: url('../node_modules/@fontsource/caprasimo/files/caprasimo-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 400; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 600; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-600-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 700; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-700-normal.woff2') format('woff2'); }
+  body { width: 1200px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: var(--space-6); }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); margin-top: var(--space-4); }
+  .tile { background: var(--color-neutral-100); border-radius: var(--radius-md); padding: var(--space-3) var(--space-3) var(--space-4); }
+  .tile svg { display: block; width: 100%; height: auto; }
+  .tile h4 { margin: var(--space-2) 0 2px; font-size: 18px; }
+  .tile p { margin: 0; font-size: 13px; color: var(--color-neutral-700); line-height: 1.45; }
+  .hex { font-size: 11px; color: var(--color-neutral-600); margin-top: 6px; }
+  .note { margin-top: var(--space-6); display: flex; gap: var(--space-6); align-items: center; }
+  .note p { margin: 0; font-size: 13.5px; color: var(--color-neutral-700); max-width: 640px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="card-kicker">Flowcharter · design preview</div>
+  <h2 style="margin: 2px 0 0">Shapes and colours</h2>
+  <div class="grid" id="grid"></div>
+  <div class="note">
+    <svg id="arrow-sample" width="300" height="70" viewBox="0 0 300 70"></svg>
+    <p>Arrows are plain ink lines with a solid head. A decision's answers are written <em>on</em> its arrows,
+      on a cream label so the line doesn't run through the words. Outlines and text are dark ink on every shape,
+      so a chart still reads when printed in black and white.</p>
+  </div>
+</div>
+<script src="shapes.js"></script>
+<script>
+  const SAMPLE = {
+    terminator: ['Start'], process: ['Book the backup'], decision: ['Backup', 'available?'],
+    io: ['Receive sick call'], predefined: ['Arrange cover'], document: ['Rota'],
+    delay: ['Wait 30 minutes'], connector: ['A'],
+  };
+  const SIZE = { decision: [170, 96], connector: [44, 44], terminator: [150, 50] };
+  document.getElementById('grid').innerHTML = Object.entries(SHAPES).map(([type, s]) => {
+    const [w, h] = SIZE[type] || [180, 60];
+    return `<div class="tile">
+      <svg viewBox="0 0 230 120">${shapeSvg(type, 115, 60, w, h)}${textSvg(115, type === 'document' ? 56 : 60, SAMPLE[type])}</svg>
+      <h4>${s.name}</h4><p>${s.meaning}</p><div class="hex mono">${s.fill}</div></div>`;
+  }).join('');
+  document.getElementById("arrow-sample").innerHTML = `<defs>${ARROW_DEFS}</defs>`
+    + lineSvg([[10, 35], [288, 35]]) + routeLabelSvg(150, 35, 'Yes');
+</script>
+</body>
+</html>
