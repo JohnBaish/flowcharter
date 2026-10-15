@@ -221,7 +221,10 @@ Used for the seed chart (§7) and the mock-ups:
   parallelogram, the curve of a Start/End) rather than its surrounding box.
 - Answers are drawn **on their arrows**, in Figtree 700 12.5px on a small cream
   pill so the line doesn't run through the words. They are never drawn as
-  boxes.
+  boxes. Each sits on the first stretch of its arrow, where it leaves the
+  question, so question and answer read together; if that stretch is too short
+  (shorter than the label plus 12px either side) it goes on the next stretch
+  that's long enough (John, 2026-10-15).
 - Text inside shapes is Figtree 400 14px, wrapped to fit: about 200px wide for
   boxes. For diamonds the text is narrower and the diamond is sized so the
   text block fits inside it.
