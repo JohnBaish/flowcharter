@@ -104,8 +104,8 @@ export function ChartScreen() {
     <div style={{ padding: '0 var(--space-4) var(--space-6)' }}>
       <div className="print-only print-title">{chart.name}</div>
       <div className="chart-toolbar" data-noprint="1">
-        <span className="list-muted" style={{ fontSize: 13 }}>Direction</span>
-        <div className="seg" role="radiogroup" aria-label="Direction">
+        <span className="chart-toolbar-label" id="direction-label">Direction:</span>
+        <div className="seg" role="radiogroup" aria-labelledby="direction-label">
           {options.map((o) => (
             <label
               key={o.value} className="seg-opt"

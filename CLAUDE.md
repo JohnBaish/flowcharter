@@ -390,3 +390,5 @@ real iPhone.
 **Fourth change (preview), at John's suggestion:** the Direction switch has two buttons, not three: "Automatic · Down" + "Across", or "Automatic · Across" + "Down". The second is always the direction Automatic didn't pick, and forces it (`options`/`selected` in `ChartScreen.tsx`). Saved values are unchanged (`auto`/`down`/`across`); a chart forced to the direction Automatic picks anyway shows as Automatic. Trade-off accepted: you can no longer pin the direction Automatic currently picks so it stays put on another screen size or on paper.
 
 **Verified:** in Chromium at 1200px (example: "Automatic · Across | Down"; Down redraws down and survives reload; Automatic returns to across; a chart forced Across shows as Automatic) and 390px touch ("Automatic · Down | Across", same checks); no errors, no sideways scroll; build, lint, checks as before.
+
+**Fifth change, then merged at John's say-so:** "Direction:" now has a colon, is bold and ink-coloured, and sits 8px from its switch (`.chart-toolbar-label`; option B of three mock-ups shown to John). `tidy-header` merged into `main`.
