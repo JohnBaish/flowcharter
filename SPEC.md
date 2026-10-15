@@ -274,9 +274,9 @@ Confirmed by John on 2026-10-15.
 ### Direction
 
 - **Automatic** (the default for a new chart) lays the chart out both ways and
-  picks the one that better fits the space available. A short line says which
-  it chose ("Automatic is showing it top to bottom, which fits this chart
-  best.").
+  picks the one that better fits the space available. Its button says which
+  it picks — "Automatic · Down" or "Automatic · Across" — whichever button is
+  selected (replacing an earlier separate sentence; preview for John, 2026-10-15).
 - **Down** and **Across** force the direction.
 - The choice is saved with each chart.
 

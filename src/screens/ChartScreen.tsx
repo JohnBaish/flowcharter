@@ -83,10 +83,13 @@ export function ChartScreen() {
 
   const layouts = drawn && 'layouts' in drawn ? drawn.layouts : null;
   const failed = drawn && 'error' in drawn && drawn.items === items;
+  // What Automatic picks for this chart in this space — shown on its button
+  // whichever direction is selected, so it's clear what choosing it would do.
+  const automatic = layouts ? chooseDirection(layouts.down, layouts.across, space.width, space.height) : null;
   const layout = layouts
     ? chart.direction === 'down' ? layouts.down
       : chart.direction === 'across' ? layouts.across
-        : chooseDirection(layouts.down, layouts.across, space.width, space.height)
+        : automatic
     : null;
   const minScale = isNarrow ? MIN_SCALE_PHONE : MIN_SCALE;
   const scale = layout ? Math.max(minScale, Math.min(1, space.width / layout.width)) : 1;
@@ -99,21 +102,19 @@ export function ChartScreen() {
         <span className="list-muted" style={{ fontSize: 13 }}>Direction</span>
         <div className="seg" role="radiogroup" aria-label="Direction">
           {DIRECTIONS.map((d) => (
-            <label key={d.value} className="seg-opt">
+            <label
+              key={d.value} className="seg-opt"
+              title={d.value === 'auto' ? 'Top to bottom or left to right, whichever fits this chart better on this screen' : undefined}
+            >
               <input
                 type="radio" name="chart-direction" value={d.value}
                 checked={chart.direction === d.value}
                 onChange={() => setDirection(chart.id, d.value)}
               />
-              {d.label}
+              {d.value === 'auto' && automatic ? `Automatic · ${automatic.direction === 'down' ? 'Down' : 'Across'}` : d.label}
             </label>
           ))}
         </div>
-        {chart.direction === 'auto' && layout && (
-          <span className="list-muted chart-toolbar-note">
-            Automatic is showing it {layout.direction === 'down' ? 'top to bottom' : 'left to right'}, which fits this chart best.
-          </span>
-        )}
       </div>
       <div ref={frame} className="chart-frame">
         {failed ? (
