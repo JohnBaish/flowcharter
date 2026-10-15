@@ -1,7 +1,7 @@
 import { SHAPES, SHAPE_ORDER, type ShapeType } from '../data/shapes.ts';
 import type { ChartLayout, LayoutNode, Point } from '../lib/layout.ts';
 import {
-  FONT_SIZE, LABEL_FONT_SIZE, LINE_HEIGHT, shapeInnerLines, shapePath, type DrawnShape,
+  FONT_SIZE, LABEL_FONT_SIZE, LINE_HEIGHT, keyIcon, shapeInnerLines, shapePath, type DrawnShape,
 } from '../lib/shapes.ts';
 
 // The chart is drawn in the house ink and cream (HOUSE-STYLE §2) with each
@@ -25,7 +25,10 @@ function Shape({ n }: { n: LayoutNode }) {
   const top = n.h / 2 + n.textDy - ((n.lines.length - 1) * LINE_HEIGHT) / 2;
   return (
     <g transform={`translate(${n.x} ${n.y})`}>
-      <path d={shapePath(n.type, n.w, n.h)} fill={fillOf(n.type)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round" />
+      <path
+        d={shapePath(n.type, n.w, n.h)} fill={fillOf(n.type)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round"
+        className={n.type === 'stub' ? 'chart-paper-fill' : undefined}
+      />
       {inner && <path d={inner} fill="none" stroke={INK} strokeWidth={STROKE} />}
       {n.lines.length > 0 && (
         <text textAnchor="middle" dominantBaseline="central" fontFamily={FONT_FAMILY} fontSize={FONT_SIZE} fill={INK}>
@@ -45,6 +48,7 @@ export function FlowChart({ layout, scale, title }: { layout: ChartLayout; scale
       height={Math.floor(layout.height * scale)}
       role="img"
       aria-label={`Flowchart: ${title}`}
+      data-direction={layout.direction}
       style={{ display: 'block', margin: '0 auto', maxWidth: 'none' }}
     >
       <defs>
@@ -59,7 +63,7 @@ export function FlowChart({ layout, scale, title }: { layout: ChartLayout; scale
       {layout.nodes.map((n) => <Shape key={n.id} n={n} />)}
       {layout.edges.map((e) => e.label && (
         <g key={`${e.id}-label`}>
-          <rect x={e.label.x} y={e.label.y} width={e.label.w} height={e.label.h} rx={e.label.h / 2} fill={CREAM} />
+          <rect className="chart-paper-fill" x={e.label.x} y={e.label.y} width={e.label.w} height={e.label.h} rx={e.label.h / 2} fill={CREAM} />
           <text
             x={e.label.x + e.label.w / 2} y={e.label.y + e.label.h / 2}
             textAnchor="middle" dominantBaseline="central"
@@ -80,14 +84,13 @@ export function ShapeKey({ types }: { types: ShapeType[] }) {
   return (
     <div className="chart-key" aria-label="Key to the shapes">
       {used.map((t) => {
-        const w = t === 'connector' ? 18 : t === 'decision' ? 28 : 30;
-        const h = t === 'connector' ? 18 : t === 'decision' ? 20 : 17;
+        const { w, h, path: d, inner } = keyIcon(t);
         return (
           <span key={t} className="chart-key-item">
             <svg width={32} height={22} viewBox="0 0 32 22" aria-hidden="true">
               <g transform={`translate(${(32 - w) / 2} ${(22 - h) / 2})`}>
-                <path d={shapePath(t, w, h)} fill={SHAPES[t].fill} stroke={INK} strokeWidth={1.2} strokeLinejoin="round" />
-                {shapeInnerLines(t, w, h) && <path d={`M3.5 0 V${h} M${w - 3.5} 0 V${h}`} fill="none" stroke={INK} strokeWidth={1.2} />}
+                <path d={d} fill={SHAPES[t].fill} stroke={INK} strokeWidth={1.2} strokeLinejoin="round" />
+                {inner && <path d={inner} fill="none" stroke={INK} strokeWidth={1.2} />}
               </g>
             </svg>
             {SHAPES[t].name}

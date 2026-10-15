@@ -36,14 +36,18 @@ Key points from the house style, repeated because they matter most:
   - `state/store.tsx`: app state, `localStorage` (`flowcharter-state-v1`), and
     thin wrappers over `chartOps`.
   - `screens/`, `components/`: Library, List and Chart screens, Nav, and
-    `EditorHeader` (shared by List and Chart). `GuideScreen` is a placeholder
-    until Stage 3. `components/FlowChart.tsx` draws a laid-out chart as SVG
+    `EditorHeader` (shared by List and Chart). `GuideScreen` holds John's
+    editable Guide text. `components/FlowChart.tsx` draws a laid-out chart as SVG
     (colours written out, not CSS variables, so Stage 3 can save it as an
     image) plus the shape key.
   - `lib/shapes.ts`: each shape's outline, its size for its text, and where a
     line meets it (`outlineInset`). `lib/textWrap.ts`: measuring and wrapping
     text in the real font. `lib/layout.ts`: list → elkjs graph → positions
     (`layoutChart`), and Automatic's choice (`chooseDirection`).
+  - `lib/exportImage.ts`: Copy image (one standalone SVG — name, chart, key —
+    with the fonts embedded as data URLs, drawn to a PNG). `lib/print.ts`: sets
+    the paper's direction and the chart's maximum height just before printing;
+    the rest of printing is `@media print` in `global.css`.
   - `lib/`: also `icons.tsx`, `responsive.ts`, `useDragReorder.ts` (copied from
     clockwheel), `time.ts`, and `focus.ts` (focusing a row's box, plus
     `isTouch`/`selectAllSoon` from clockwheel's `timeInput.ts`).
@@ -58,7 +62,8 @@ Key points from the house style, repeated because they matter most:
   Flowcharter export of test charts (straight line, three and five answers,
   rejoining paths, every shape, unfinished answers, John's newsreaders tree,
   30 rows). Import it on the Library to look at them.
-- `design/`: mock-ups and design sources, not app code. Open the HTML files
+- `design/`: mock-ups and design sources, not app code. (`og-flowcharter.html`
+  makes the link-preview image; `favicon-options*` are the favicon candidates.) Open the HTML files
   from disk after `npm ci` (fonts load from `node_modules` by path).
   `previews/` holds their renders. `shapes.js` is the prototype shape
   geometry. `layout-spike.cjs` is the elkjs test (SPEC §5; needs `npm i elkjs`).
@@ -273,3 +278,55 @@ Across: the example 1, every-shape 1, the 30-row list 9), none after. That count
 is now one of the layout checks (`npm run check`: 22 + 11). Re-drew every test
 chart in Chromium at 1200px (Automatic and Across) and 390px — no errors, no
 sideways page scroll; looked at the example and every-shape Across views.
+
+### 2026-10-15 — Stage 2 merged; Stage 3 (part 1): Print, Copy image, Guide (branch `stage-3-launch`)
+
+**Merged:** `stage-2-chart` into `main` at John's say-so; production build green.
+
+**What:** Print on the List and Chart headers; Copy image on the Chart header; the
+Guide screen (draft words for John to edit). Favicon and link-preview image are
+made and shown to John **but not wired in yet** (HOUSE-STYLE §10: show images and
+icons for approval first). `public/` has no favicon and `index.html` has no
+favicon or `og:` tags until he chooses; when he does, copy his favicon option to
+`public/favicon.svg`, render `design/og-flowcharter.html` to
+`public/og-flowcharter.png` (1200×630, `node` + Playwright, as clockwheel does),
+and add `<link rel="icon">`, `og:`/`twitter:` tags to `index.html` (title
+"Flowcharter", description "Create a flowchart from a list", image/URL on
+`https://flowcharter.baish.net/`).
+
+**Why these choices** (behaviour in SPEC §5/§6 "Details settled while building
+Stage 3"; mechanics here):
+
+- Copy image builds one standalone SVG (title, the chart's own `<svg>` cloned at
+  full size, key) because an SVG drawn as an image can't see the page's fonts. The
+  font files are fetched once and embedded as data URLs, as clockwheel's
+  `exportImage.ts` now does for the clock (its fix, commit `3f381b7`). The chart's
+  colours were written out in `FlowChart.tsx` from the start, so no CSS variables
+  need inlining.
+- Paper direction can't be set from a stylesheet per chart, so `printScreen` adds
+  a short-lived `<style>` (`@page` size, the chart's max height) and removes it
+  after printing. The chart's own `<svg>` carries `data-direction` so Print knows
+  which way Automatic chose.
+- A text box can't wrap long wording, so the List's item text and answers are
+  drawn twice: the box (hidden when printing) and a plain `<span class="print-only">`.
+- Print rules live in `global.css` (`@media print`): nav and buttons hidden,
+  name shown, chart full width, label pills white, List as a plain table.
+
+**Left alone:** the favicon and link-preview wiring (awaiting John); the
+`flowcharter.baish.net` domain and the card on baish.net's landing page (a change
+in the clockwheel repo, which John must OK).
+
+**Verified:** `npm run build` clean; `npm run lint` only the two known warnings;
+`npm run check` 22 + 11. In Chromium at 1200px and 390px with touch: Copy image
+read back from the clipboard for four charts (the example, every-shape, the
+newsreaders tree, the 30-row list), with the real Caprasimo/Figtree visible, and
+the download fallback with its file name; Print made into real A4 PDFs from the
+page's print rules for five charts (one page each, portrait/landscape as
+expected) and the List (1 page for the example, 5 for 30 rows); the Guide and the
+busier headers at both widths — no errors, no sideways scroll, every button 44px
+on the phone. All earlier checks still pass (the one old check that expected the
+Chart placeholder is obsolete).
+
+**Couldn't be checked:** an actual printer or the browser's own print dialog (only
+the PDF the print rules produce), Safari's clipboard and print behaviour, and a
+real iPhone.

@@ -135,6 +135,14 @@ export function shapeInnerLines(type: DrawnShape, w: number, h: number): string 
   return `M9 0 V${f(h)} M${f(w - 9)} 0 V${f(h)}`;
 }
 
+/** A shape drawn small for a key (32×22 box): its outline, and any inner lines.
+ *  Shared by the on-screen key and the saved image's key. */
+export function keyIcon(type: ShapeType): { w: number; h: number; path: string; inner: string | null } {
+  const w = type === 'connector' ? 18 : type === 'decision' ? 28 : 30;
+  const h = type === 'connector' ? 18 : type === 'decision' ? 20 : 17;
+  return { w, h, path: shapePath(type, w, h), inner: type === 'predefined' ? `M3.5 0 V${h} M${w - 3.5} 0 V${h}` : null };
+}
+
 const circleInset = (r: number, along: number) => r - Math.sqrt(Math.max(0, r * r - (along - r) * (along - r)));
 
 /** How far inside its bounding box a shape's outline is, at a point on one side

@@ -94,6 +94,7 @@ export function ChartScreen() {
 
   return (
     <div style={{ padding: '0 var(--space-4) var(--space-6)' }}>
+      <div className="print-only print-title">{chart.name}</div>
       <div className="chart-toolbar" data-noprint="1">
         <span className="list-muted" style={{ fontSize: 13 }}>Direction</span>
         <div className="seg" role="radiogroup" aria-label="Direction">

@@ -1,10 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { useApp } from '../state/store.tsx';
 import { summary } from '../lib/chartOps.ts';
 import { focusItemText } from '../lib/focus.ts';
 import { MAX_NAME } from '../data/charts.ts';
-import { IconPlus } from '../lib/icons.tsx';
+import { copyChartImage, slug } from '../lib/exportImage.ts';
+import { printScreen } from '../lib/print.ts';
+import { IconPlus, IconPrint } from '../lib/icons.tsx';
 
 /** Header for the List and Chart screens — two views of the same chart, as List
  *  and Clock are in Clockmaker: the chart's name, a count of its items, and the
@@ -12,6 +14,7 @@ import { IconPlus } from '../lib/icons.tsx';
 export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
   const { chart, renameChart, duplicateChart, openChart, setScreen, addItem, clearItems } = useApp();
   const nameInput = useRef<HTMLTextAreaElement | null>(null);
+  const [imageStatus, setImageStatus] = useState<'idle' | 'copied' | 'downloaded' | 'failed'>('idle');
 
   // The name is a textarea so a long one wraps; keep it exactly as tall as its text.
   useEffect(() => {
@@ -27,6 +30,22 @@ export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
     let id = '';
     flushSync(() => { id = addItem(null); });
     focusItemText(id);
+  };
+
+  // Copies the chart as a picture (name, chart and key) — or downloads it if the
+  // browser won't put images on the clipboard.
+  const copyImage = async () => {
+    const svg = document.querySelector<SVGSVGElement>('.chart-frame svg[role="img"]');
+    if (!svg) return;
+    try {
+      const types = [...new Set(chart.items.map((it) => it.type))];
+      setImageStatus(await copyChartImage(svg, chart.name, types, `${slug(chart.name)}.png`));
+      setTimeout(() => setImageStatus('idle'), 1500);
+    } catch (err) {
+      console.error('Flowcharter could not make the image', err);
+      setImageStatus('failed');
+      setTimeout(() => setImageStatus('idle'), 3000);
+    }
   };
 
   // Clearing has no undo, so it asks first and says exactly what will go.
@@ -75,6 +94,9 @@ export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
             </button>
           </>
         )}
+        <button className="btn btn-ghost" onClick={() => printScreen(mode === 'chart')} style={{ color: 'var(--color-accent-700)' }}>
+          <IconPrint size={15} />Print
+        </button>
         <button
           className="btn btn-secondary"
           onClick={() => openChart(duplicateChart(chart.id))}
@@ -82,6 +104,16 @@ export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
         >
           Duplicate
         </button>
+        {mode === 'chart' && (
+          <button
+            onClick={copyImage}
+            disabled={chart.items.length === 0}
+            className="btn btn-secondary"
+            style={{ padding: '8px 16px', fontSize: '13.5px', whiteSpace: 'nowrap' }}
+          >
+            {imageStatus === 'copied' ? 'Copied!' : imageStatus === 'downloaded' ? 'Downloaded' : imageStatus === 'failed' ? "Couldn't copy" : 'Copy image'}
+          </button>
+        )}
         <button onClick={() => setScreen('lib')} className="btn btn-primary" style={{ padding: '8px 18px', fontSize: '13.5px', whiteSpace: 'nowrap' }}>Done</button>
       </div>
     </div>

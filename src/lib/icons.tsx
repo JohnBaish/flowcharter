@@ -1,4 +1,4 @@
-import { GripVertical, Menu, Plus, Trash2, X, type LucideProps } from 'lucide-react';
+import { GripVertical, Menu, Plus, Printer, Trash2, X, type LucideProps } from 'lucide-react';
 
 const STROKE_WIDTH = 2.75;
 
@@ -11,5 +11,6 @@ function withStroke(Icon: React.ComponentType<LucideProps>) {
 export const IconGrip = withStroke(GripVertical);
 export const IconPlus = withStroke(Plus);
 export const IconTrash = withStroke(Trash2);
+export const IconPrint = withStroke(Printer);
 export const IconMenu = withStroke(Menu);
 export const IconClose = withStroke(X);
