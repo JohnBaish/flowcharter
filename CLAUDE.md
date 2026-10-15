@@ -54,8 +54,9 @@ for John's approval: the eight shapes in their colours, and the List
 - Layout uses elkjs. A spike showed two required settings, model-order cycle
   breaking and ports on decisions (SPEC §5).
 
-**Still to confirm with John:** the "then →" choice on ordinary rows (SPEC §4),
-the small Start/End-word addition to type guessing, and the footer and
+**Agreed later the same day:** the "then →" choice on ordinary rows (SPEC §4).
+
+**Still to confirm with John:** the small Start/End-word addition to type guessing, and the footer and
 library wording (SPEC §9).
 
 **Left alone:** no app code yet. Nothing in clockwheel was changed.

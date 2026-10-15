@@ -108,8 +108,7 @@ so changing it back restores them.
 - **Only decisions branch** (agreed). Every other row has exactly one way
   out, or none.
 - An ordinary row leads to the **next** row unless its **then →** says
-  otherwise. **(to confirm)** This "then →" choice was added while drafting,
-  and John hasn't agreed it yet. It's needed so that a path can rejoin the main
+  otherwise. (Added while drafting; agreed by John 2026-10-15.) It's needed so that a path can rejoin the main
   flow further down, or skip the rows that belong to another answer. Without
   it, in the example below, "Book the backup" could only ever lead into
   whatever row happens to come next.
