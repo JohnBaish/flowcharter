@@ -128,3 +128,17 @@ asks for `/favicon.ico` and gets a 404. Nothing in clockwheel was changed. The
 drop-down and scrolling behaviour); dragging a card by touch (only a mouse at
 phone width was tried — `useDragReorder` is clockwheel's, unchanged); Vercel
 itself (the build there, Analytics, the preview link).
+
+### 2026-10-15 — John's verdict on the Stage 1 preview, and requests
+
+John tried the Vercel preview on a computer and a phone: "looks really good on
+the desktop and on the phone", with some tweaking possible later. The Vercel
+project now exists and builds `stage-1-list` successfully. `main` still shows a
+red production build because it has no app yet; it turns green when Stage 1 is
+merged (not yet — waiting for John to say so).
+
+**Requested, not yet built:** a **Clear** button on the List screen. Proposed
+design, for John to confirm: it removes every row of the open chart (the name and
+direction stay), after a `window.confirm` saying how many items will be lost; text
+style button in `--color-neutral-700` in the header's action row (HOUSE-STYLE §5);
+hidden or disabled when the list is already empty; also reachable on a phone.
