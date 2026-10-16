@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { flushSync } from 'react-dom';
 import { useApp, type Screen } from '../state/store.tsx';
 import { relativeTime, useNow } from '../lib/time.ts';
 import { IconClose, IconMenu } from '../lib/icons.tsx';
@@ -22,13 +21,11 @@ export function Nav({ screen, onNavigate }: { screen: Screen; onNavigate: (s: Sc
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = (s: Screen) => { onNavigate(s); setMenuOpen(false); };
 
-  // A new chart opens on the List with its name box ready to type over. Focus
-  // happens here, inside the tap, so a phone's keyboard opens too.
+  // A new chart opens on the step-by-step cards, whose first card asks whether
+  // to go step by step or start with a blank list (John, 2026-10-16).
   const handleNewChart = () => {
-    flushSync(() => { createChart(); });
+    createChart('steps');
     setMenuOpen(false);
-    const name = document.getElementById('chart-name-input') as HTMLTextAreaElement | null;
-    if (name) { name.focus(); name.select(); }
   };
 
   return (

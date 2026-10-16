@@ -4,8 +4,9 @@ import type { ShapeType } from '../data/shapes.ts';
 import * as ops from '../lib/chartOps.ts';
 import { exportJson, sanitiseLibrary, type Library } from '../lib/exchange.ts';
 
-export type Screen = 'lib' | 'list' | 'chart' | 'guide';
-const SCREENS: Screen[] = ['lib', 'list', 'chart', 'guide'];
+// 'steps' is the step-by-step cards (Stage 5), a third way of working on the open chart.
+export type Screen = 'lib' | 'list' | 'chart' | 'guide' | 'steps';
+const SCREENS: Screen[] = ['lib', 'list', 'chart', 'guide', 'steps'];
 
 // Saved in the browser (localStorage) under this key. NEVER rename it once the
 // site is live: every visitor's saved flowcharts would silently disappear
@@ -49,7 +50,8 @@ interface AppContextValue extends PersistedState {
   chart: Chart | null;
   setScreen: (screen: Screen) => void;
   openChart: (id: string) => void;
-  createChart: () => string;
+  /** Makes a new chart and opens it on `screen` (the List unless told otherwise). */
+  createChart: (screen?: Screen) => string;
   /** Copies a chart into a new one, placed after it, and returns the new id. */
   duplicateChart: (id: string) => string;
   removeChart: (id: string) => void;
@@ -71,6 +73,11 @@ interface AppContextValue extends PersistedState {
   setRouteTo: (itemId: ItemId, routeId: string, to: ItemId | null) => void;
   /** Adds a blank row at the end for this answer to lead to; returns its id. */
   addStepForAnswer: (itemId: ItemId, routeId: string) => ItemId;
+  /** The step-by-step cards: add a step at a loose end, join a loose end to an
+   *  existing step, and set a question's answers (see chartOps). */
+  appendStep: (slot: ops.Slot, type: ShapeType, text: string) => ItemId;
+  linkSlot: (slot: ops.Slot, to: ItemId) => void;
+  setAnswers: (itemId: ItemId, labels: string[]) => void;
 
   exportState: () => string;
   /** Replaces the whole library with an already-checked one (see parseImport). */
@@ -112,10 +119,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     chart: state.openChartId ? state.charts[state.openChartId] ?? null : null,
     setScreen: (screen) => setState((s) => ({ ...s, screen })),
     openChart: (id) => setState((s) => (s.charts[id] ? { ...s, openChartId: id, screen: 'list' } : s)),
-    createChart: () => {
+    createChart: (screen = 'list') => {
       const chart = newChart();
       setEdited((s) => ({
-        ...s, screen: 'list', openChartId: chart.id,
+        ...s, screen, openChartId: chart.id,
         charts: { ...s.charts, [chart.id]: chart }, chartOrder: [...s.chartOrder, chart.id],
       }));
       return chart.id;
@@ -166,6 +173,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setRouteCount: (itemId, count) => editItems((items) => ops.setRouteCount(items, itemId, count)),
     setRouteLabel: (itemId, routeId, label) => editItems((items) => ops.setRouteLabel(items, itemId, routeId, label)),
     setRouteTo: (itemId, routeId, to) => editItems((items) => ops.setRouteTo(items, itemId, routeId, to)),
+    appendStep: (slot, type, text) => {
+      const id = uid();
+      editItems((items) => ops.appendStep(items, slot, id, type, text));
+      return id;
+    },
+    linkSlot: (slot, to) => editItems((items) => ops.linkSlot(items, slot, to)),
+    setAnswers: (itemId, labels) => editItems((items) => ops.setAnswers(items, itemId, labels)),
     addStepForAnswer: (itemId, routeId) => {
       const id = uid();
       editItems((items) => ops.addStepForAnswer(items, itemId, routeId, id));

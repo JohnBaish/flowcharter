@@ -409,8 +409,36 @@ computer and `.list-cards` on a phone. Light theme only.
   `og:`/`twitter:` tags, and a card on the baish.net landing page. The landing
   page lives in the clockwheel repo, so that's a small separate change there.
 
+## 10b. Step by step (Stage 5, agreed with John 2026-10-16)
+
+A third way of working on the open chart, beside the List and the Chart: a
+series of cards in conversational English (mock-ups: `design/mock-cards.html`).
+
+- **New chart** always opens a card: "How would you like to make it?" — **Step
+  by step** or **Start with a blank list**. The List's header also has a **Step
+  by step** button, so you can switch back to the cards whenever the chart has
+  something unfinished (it's hidden on a finished chart).
+- The cards ask the chart's name, add Start, then ask "What happens first?" /
+  "After *X*, what happens next?" with plain-English choices: **Something gets
+  done** (Action), **We ask a question** (Question), **Information comes in or
+  goes out** (Data in/out), **That's the end** (adds End); under **More**: **We
+  wait** (Delay), **A document is made or used** (Document), **We follow a
+  standard routine** (Standard routine), **It goes back to an earlier step**
+  (pick a step: loops and rejoining paths). Each kind then gets its own prompt
+  and example.
+- A question gets an answers card (Yes / No filled in, up to six). The cards
+  follow the first answer's path to its end, then come back: "Now back to *Q*.
+  If the answer is *No*, what happens next?" ("That's the *Yes* path finished.")
+- Every answer writes a real row into the List straight away (new rows at the
+  bottom, as "+ New step"). Switching to the cards picks up at the first loose
+  end: an answer with no destination, else a last step that leads nowhere;
+  if there are none, "That's every path covered."
+- **Back** returns to the previous card with what you wrote, to change it; it
+  doesn't delete. (To remove a step, use the List.)
+- Every card has **Switch to building in List mode**. On a computer the chart
+  so far is drawn beside the card; on a phone, **Peek at the chart** shows it.
+
 ## 11. Not in this version
 
 Swimlanes (not now, possibly never). Share links. Automatic connector pairs
-for long lines. Dark mode. The step-by-step card walkthrough is now planned
-as Stage 5 (PLAN.md). Moving boxes by hand is parked.
+for long lines. Dark mode. The step-by-step cards are §10b. Moving boxes by hand is parked.

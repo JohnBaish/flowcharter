@@ -101,7 +101,7 @@ which adds the row and points the answer at it); after a decision, move the
 cursor to its first answer; mark unfinished answers more clearly. List rules
 go in `lib/chartOps.ts`, as always. Branch: `stage-4-answers`.
 
-### Stage 5 — a step-by-step card walkthrough (after Stage 4)
+### Stage 5 — a step-by-step card walkthrough (built 2026-10-16; SPEC §10b)
 
 **John's idea:** a set of cards, like Backtimer's walkthrough
 (`BacktimerWalkthrough.tsx` in clockwheel), that leads people through making a

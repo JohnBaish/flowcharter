@@ -8,7 +8,7 @@
 // is edited, and only until they pick a type themselves.
 
 import {
-  MAX_ITEM_TEXT, MAX_ROUTES, MIN_ROUTES, uid,
+  MAX_ITEM_TEXT, MAX_LABEL, MAX_ROUTES, MIN_ROUTES, uid,
   type Item, type ItemId, type Next, type Route,
 } from '../data/charts.ts';
 import type { ShapeType } from '../data/shapes.ts';
@@ -168,6 +168,74 @@ export function addStepForAnswer(items: Item[], decisionId: ItemId, routeId: str
   const type = guessType('', at);
   out = [...out, { id: newId, text: '', type, typeChosen: false, then: defaultThen(type, at), routes: [] }];
   return setRouteTo(out, decisionId, routeId, newId);
+}
+
+// — the step-by-step cards (Stage 5) —
+// The cards build the same list as typing does, through these functions. A
+// "slot" is a loose end the next step can be attached to: after an ordinary row
+// that leads nowhere yet, or a question's answer that has no destination.
+
+export type Slot = { kind: 'after'; id: ItemId } | { kind: 'answer'; id: ItemId; routeId: string };
+
+/** The first loose end, for the cards to ask about: an answer with no
+ *  destination (questions in list order, answers in order), else a last row
+ *  that leads nowhere yet. Null when every path is finished. */
+export function nextOpenSlot(items: Item[]): Slot | null {
+  for (const it of items) {
+    if (it.type !== 'decision') continue;
+    const r = it.routes.find((route) => route.to === null || !items.some((x) => x.id === route.to));
+    if (r) return { kind: 'answer', id: it.id, routeId: r.id };
+  }
+  const i = items.length - 1;
+  const last = items[i];
+  if (last && last.type !== 'decision' && last.then.kind === 'next' && !(last.type === 'terminator' && i > 0)) {
+    return { kind: 'after', id: last.id };
+  }
+  return null;
+}
+
+/** A question's first answer that has no destination yet. */
+export function openAnswer(items: Item[], id: ItemId): Slot | null {
+  const it = items.find((x) => x.id === id);
+  if (!it || it.type !== 'decision') return null;
+  const r = it.routes.find((route) => route.to === null || !items.some((x) => x.id === route.to));
+  return r ? { kind: 'answer', id, routeId: r.id } : null;
+}
+
+/** Adds a new row at the bottom of the list and attaches it to `slot`. As with
+ *  "+ New step", the row that was last keeps ending where it did. */
+export function appendStep(items: Item[], slot: Slot, newId: ItemId, type: ShapeType, text: string): Item[] {
+  const prevLast = items[items.length - 1];
+  let out = items;
+  if (prevLast && prevLast.type !== 'decision' && prevLast.then.kind === 'next' && !(slot.kind === 'after' && slot.id === prevLast.id)) {
+    out = setThen(out, prevLast.id, { kind: 'end' });
+  }
+  const at = out.length;
+  const fresh: Item = {
+    id: newId, text: text.slice(0, MAX_ITEM_TEXT), type, typeChosen: true,
+    then: defaultThen(type, at), routes: type === 'decision' ? withMinimumRoutes([], null) : [],
+  };
+  out = [...out, fresh];
+  if (slot.kind === 'answer') return setRouteTo(out, slot.id, slot.routeId, newId);
+  // An ordinary row: "next" if the new row now follows it directly, else point at it.
+  const before = out[at - 1];
+  return setThen(out, slot.id, before && before.id === slot.id ? { kind: 'next' } : { kind: 'item', to: newId });
+}
+
+/** "It goes back to an earlier step": joins a loose end to an existing row. */
+export function linkSlot(items: Item[], slot: Slot, to: ItemId): Item[] {
+  return slot.kind === 'answer' ? setRouteTo(items, slot.id, slot.routeId, to) : setThen(items, slot.id, { kind: 'item', to });
+}
+
+/** The answers card: sets a question's answers to these words (2–6 of them),
+ *  keeping the destinations of answers that stay. */
+export function setAnswers(items: Item[], id: ItemId, labels: string[]): Item[] {
+  const n = Math.max(MIN_ROUTES, Math.min(MAX_ROUTES, labels.length));
+  let out = setRouteCount(items, id, n);
+  const it = out.find((x) => x.id === id);
+  if (!it) return out;
+  it.routes.forEach((r, i) => { out = setRouteLabel(out, id, r.id, (labels[i] ?? '').slice(0, MAX_LABEL)); });
+  return out;
 }
 
 // — read-only helpers the screens (and the chart drawing) share —

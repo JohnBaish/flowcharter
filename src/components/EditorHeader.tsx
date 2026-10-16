@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { useApp } from '../state/store.tsx';
 import { focusItemText } from '../lib/focus.ts';
-import { summary } from '../lib/chartOps.ts';
+import { nextOpenSlot, summary } from '../lib/chartOps.ts';
 import { MAX_NAME } from '../data/charts.ts';
 import { copyChartImage, slug } from '../lib/exportImage.ts';
 import { printScreen } from '../lib/print.ts';
@@ -106,6 +106,13 @@ export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
             >
               Clear
             </button>
+            {/* Only while there's a loose end for the cards to ask about — on a
+                finished chart they'd have nothing to do (John, 2026-10-16). */}
+            {(chart.items.length === 0 || nextOpenSlot(chart.items) !== null) && (
+              <button className="btn btn-ghost" onClick={() => setScreen('steps')} style={{ color: 'var(--color-accent-700)' }}>
+                Step by step
+              </button>
+            )}
           </>
         )}
         {mode === 'chart' && (
