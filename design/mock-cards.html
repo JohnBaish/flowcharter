@@ -1,0 +1,173 @@
+<!doctype html>
+<!--
+  Design mock-up (not app code): the step-by-step cards (PLAN.md Stage 5),
+  using the worked example. Static. Open from disk after `npm ci`, add
+  ?card=start|next|question|answers|back|done, and screenshot at 1200px and
+  390px. The part-built charts beside the cards are real renders from the app
+  (design/previews/cards/chart-*.png).
+-->
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flowcharter: step-by-step cards mock-up</title>
+<link rel="stylesheet" href="../src/styles/organic.css">
+<link rel="stylesheet" href="../src/styles/global.css">
+<style>
+  @font-face { font-family: 'Caprasimo'; font-weight: 400; src: url('../node_modules/@fontsource/caprasimo/files/caprasimo-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 400; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 600; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-600-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 700; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-700-normal.woff2') format('woff2'); }
+  body { margin: 0; }
+  .nav-mock { display: flex; align-items: center; gap: 22px; padding: 13px 26px; background: var(--color-surface); }
+  .nav-mock .brand { font: 400 20px var(--font-heading); margin-right: auto; }
+  .nav-mock a { color: var(--color-text); text-decoration: none; font-size: 15px; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 26px 18px 40px; display: grid; grid-template-columns: minmax(0, 560px) minmax(0, 1fr); gap: 32px; align-items: start; }
+  .wiz { background: var(--color-surface); border-radius: 26px; padding: 28px 30px 22px; box-shadow: 0 1px 0 rgba(0,0,0,.04); }
+  .kicker { font: 700 11px var(--font-body); letter-spacing: .09em; text-transform: uppercase; color: var(--color-accent-700); }
+  .wiz h2 { font: 400 27px/1.15 var(--font-heading); margin: 6px 0 8px; }
+  .wiz h2 em { font-style: normal; color: var(--color-accent-700); }
+  .wiz p { margin: 0 0 16px; color: var(--color-neutral-700); font-size: 15px; line-height: 1.5; }
+  .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .choice { display: flex; align-items: center; gap: 12px; text-align: left; padding: 14px 16px; min-height: 64px;
+    border: 1.5px solid var(--color-divider); border-radius: 18px; background: var(--color-bg); font: 600 15.5px/1.25 var(--font-body); color: var(--color-text); cursor: pointer; }
+  .choice svg { flex: none; }
+  .more-label { margin: 16px 0 8px; font: 700 11px var(--font-body); letter-spacing: .09em; text-transform: uppercase; color: var(--color-neutral-700); }
+  .more { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; min-height: 40px; border: 1.5px solid var(--color-divider); border-radius: 999px; background: var(--color-bg); font: 600 14px var(--font-body); color: var(--color-text); }
+  .field { width: 100%; box-sizing: border-box; font: 600 17px var(--font-body); padding: 12px 14px; border-radius: 14px; border: 1.5px solid var(--color-accent); background: var(--color-bg); color: var(--color-text); }
+  .hint { font-size: 13px; color: var(--color-neutral-700); margin: 8px 2px 0; }
+  .answers { display: grid; gap: 8px; }
+  .answer { display: flex; align-items: center; gap: 10px; }
+  .answer .n { width: 22px; color: var(--color-neutral-700); font-size: 13px; }
+  .answer input { flex: 1; font: 600 16px var(--font-body); padding: 10px 12px; border-radius: 12px; border: 1.5px solid var(--color-divider); background: var(--color-bg); color: var(--color-text); }
+  .foot { display: flex; align-items: center; gap: 8px; margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--color-divider); }
+  .foot .count { font-size: 12.5px; color: var(--color-neutral-700); margin-right: auto; }
+  .foot .btn { padding: 8px 16px; font-size: 13.5px; }
+  .side h3 { font: 700 11px var(--font-body); letter-spacing: .09em; text-transform: uppercase; color: var(--color-neutral-700); margin: 6px 0 12px; }
+  .side img { max-width: 100%; max-height: 640px; display: block; margin: 0 auto; }
+  .big { display: grid; gap: 12px; }
+  .big .choice { min-height: 84px; font-size: 17px; }
+  .big .choice small { display: block; font-weight: 400; font-size: 13.5px; color: var(--color-neutral-700); margin-top: 3px; }
+  @media (max-width: 720px) {
+    .wrap { grid-template-columns: 1fr; padding: 14px 12px 30px; }
+    .side { display: none; }
+    .wiz { padding: 22px 18px 16px; border-radius: 22px; }
+    .wiz h2 { font-size: 24px; }
+    .choices { grid-template-columns: 1fr; }
+    .choice { min-height: 56px; }
+    .nav-mock a { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="nav-mock"><span class="brand">Flowcharter</span><a class="btn btn-primary" style="color:#fff;padding:7px 16px;font-size:13.5px">New chart</a><a>Library</a><a>Guide</a></div>
+<div class="wrap">
+  <div class="wiz" id="card"></div>
+  <div class="side" id="side"></div>
+</div>
+<script>
+const INK = '#201e1d';
+// Small shape pictures, in each type's own fill (src/data/shapes.ts).
+const ICON = {
+  action: `<rect x="1" y="3" width="32" height="18" fill="#d2def2" stroke="${INK}" stroke-width="1.4"/>`,
+  question: `<path d="M17 1 L33 12 L17 23 L1 12 Z" fill="#f4dd8e" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>`,
+  data: `<path d="M7 3 H33 L27 21 H1 Z" fill="#e4d3f0" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>`,
+  end: `<rect x="1" y="3" width="32" height="18" rx="9" fill="#d8e6bd" stroke="${INK}" stroke-width="1.4"/>`,
+  wait: `<path d="M1 3 H24 A9 9 0 0 1 24 21 H1 Z" fill="#f7cba9" stroke="${INK}" stroke-width="1.4"/>`,
+  doc: `<path d="M1 3 H33 V18 C25 14 9 24 1 18 Z" fill="#f3cfd6" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>`,
+  routine: `<rect x="1" y="3" width="32" height="18" fill="#bfe3e1" stroke="${INK}" stroke-width="1.4"/><path d="M5 3 V21 M29 3 V21" stroke="${INK}" stroke-width="1.4"/>`,
+  back: `<path d="M28 18 H10 V6 M10 6 L5 11 M10 6 L15 11" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`,
+};
+const icon = (k, w = 34, h = 24) => `<svg width="${w}" height="${h}" viewBox="0 0 34 24" aria-hidden="true">${ICON[k]}</svg>`;
+const smallIcon = (k) => icon(k, 24, 17);
+
+const choices = `
+  <div class="choices">
+    <button class="choice">${icon('action')}Something gets done</button>
+    <button class="choice">${icon('question')}We ask a question</button>
+    <button class="choice">${icon('data')}Information comes in or goes out</button>
+    <button class="choice">${icon('end')}That's the end</button>
+  </div>
+  <div class="more-label">More</div>
+  <div class="more">
+    <span class="pill">${smallIcon('wait')}We wait</span>
+    <span class="pill">${smallIcon('doc')}A document is made or used</span>
+    <span class="pill">${smallIcon('routine')}We follow a standard routine</span>
+    <span class="pill">${smallIcon('back')}It goes back to an earlier step</span>
+  </div>`;
+
+const foot = (count, back = true) => `
+  <div class="foot">
+    <span class="count">${count}</span>
+    ${back ? '<button class="btn btn-ghost" style="color:var(--color-neutral-700)">Back</button>' : ''}
+    <button class="btn btn-ghost" style="color:var(--color-neutral-700)">Finish in the List</button>
+  </div>`;
+
+const CARDS = {
+  start: {
+    html: `<div class="kicker">New chart</div>
+      <h2>How would you like to make it?</h2>
+      <p>You can switch to the other way at any time.</p>
+      <div class="big">
+        <button class="choice">${icon('question')}<span>Step by step<small>Answer a few questions and the chart builds itself. Good for a first go.</small></span></button>
+        <button class="choice">${icon('action')}<span>Start with a blank list<small>Type the steps in yourself, one row at a time.</small></span></button>
+      </div>`,
+    chart: null,
+  },
+  next: {
+    html: `<div class="kicker">Step by step · Backup newsreader</div>
+      <h2>After <em>Receive sick call</em>, what happens next?</h2>
+      ${choices}${foot('2 steps so far')}`,
+    chart: 'a',
+  },
+  question: {
+    html: `<div class="kicker">Step by step · Backup newsreader</div>
+      <h2>What's the question?</h2>
+      <p>Write it the way you'd ask it, so it can be answered simply — usually yes or no.</p>
+      <input class="field" value="Is a backup available?">
+      <div class="hint">e.g. <em>Has cover been agreed?</em></div>
+      <div class="foot"><span class="count">2 steps so far</span>
+        <button class="btn btn-ghost" style="color:var(--color-neutral-700)">Back</button>
+        <button class="btn btn-primary">Next</button></div>`,
+    chart: 'a',
+  },
+  answers: {
+    html: `<div class="kicker">Step by step · Backup newsreader</div>
+      <h2>What are the possible answers to <em>Is a backup available?</em></h2>
+      <p>Change the words if you need to. Most questions just need Yes and No.</p>
+      <div class="answers">
+        <div class="answer"><span class="n">1</span><input value="Yes"></div>
+        <div class="answer"><span class="n">2</span><input value="No"></div>
+      </div>
+      <button class="btn btn-ghost" style="color:var(--color-accent-700);margin-top:8px;padding-left:0">+ Add another answer</button>
+      <div class="foot"><span class="count">3 steps so far</span>
+        <button class="btn btn-ghost" style="color:var(--color-neutral-700)">Back</button>
+        <button class="btn btn-primary">Next</button></div>`,
+    chart: 'c',
+  },
+  back: {
+    html: `<div class="kicker">Step by step · Backup newsreader</div>
+      <h2>Now back to <em>Is a backup available?</em> If the answer is <em>No</em>, what happens next?</h2>
+      <p>That's the <em style="font-style:normal;font-weight:700;color:var(--color-text)">Yes</em> path finished.</p>
+      ${choices}${foot('5 steps so far')}`,
+    chart: 'd',
+  },
+  done: {
+    html: `<div class="kicker">Step by step · Backup newsreader</div>
+      <h2>That's every path covered.</h2>
+      <p>Your flowchart has 8 steps. You can change anything in the List, and see it drawn on the Chart.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" style="padding:10px 20px">See your chart</button>
+        <button class="btn btn-secondary" style="padding:10px 20px">Go to the List</button>
+      </div>`,
+    chart: 'e',
+  },
+};
+const key = new URLSearchParams(location.search).get('card') || 'next';
+const c = CARDS[key];
+document.getElementById('card').innerHTML = c.html;
+document.getElementById('side').innerHTML = c.chart ? `<h3>Your chart so far</h3><img src="previews/cards/chart-${c.chart}.png" alt="" onload="this.style.width=(this.naturalWidth/2)+'px'">` : '';
+</script>
+</body>
+</html>
