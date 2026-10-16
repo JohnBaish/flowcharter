@@ -445,3 +445,5 @@ real iPhone.
 **Change at John's request (same branch):** "That's the Yes path finished." now sits above "Now back to …" (between the kicker and the heading, in the small context style), so it reads in the order things happen.
 
 **Fix (same branch):** John found "Peek at the chart" seemed not to work on his iPhone. The chart was drawn below the card, out of sight. It now opens over the whole screen (`.wiz-peek`) with a **Back to the questions** button.
+
+**Fix (same branch):** John noticed Peek showed the chart without the step being typed. The chart beside the card and in Peek now draws a preview (`preview` in `StepsScreen.tsx`) that includes the words on the current card (and the answers on the answers card) without saving them; Next still saves.

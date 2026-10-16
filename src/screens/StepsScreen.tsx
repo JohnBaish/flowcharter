@@ -3,7 +3,9 @@ import { flushSync } from 'react-dom';
 import { useApp } from '../state/store.tsx';
 import { MAX_ITEM_TEXT, MAX_LABEL, MAX_NAME, MAX_ROUTES, MIN_ROUTES, type Item, type ItemId } from '../data/charts.ts';
 import { SHAPES, type ShapeType } from '../data/shapes.ts';
-import { itemLabel, leadsTo, nextOpenSlot, openAnswer, type Slot } from '../lib/chartOps.ts';
+import {
+  appendStep as withStep, itemLabel, leadsTo, nextOpenSlot, openAnswer, setAnswers as withAnswers, setText as withText, setType as withType, type Slot,
+} from '../lib/chartOps.ts';
 import { useIsNarrow } from '../lib/responsive.ts';
 import { LiveChart } from '../components/LiveChart.tsx';
 
@@ -252,6 +254,18 @@ export function StepsScreen() {
     return i === 0 && it?.type === 'terminator' ? 'The first step' : `After ${words(it)}`;
   };
 
+  // The chart drawn beside the card (or in Peek) includes what's being typed on
+  // this card, before Next saves it, so it's never a step behind (John).
+  const preview = ((): Item[] => {
+    if (card.t === 'text' && text.trim()) {
+      const type = TYPE[card.kind];
+      if (card.row && byId(card.row)) return withType(withText(items, card.row, text), card.row, type);
+      return withStep(items, card.slot, '__draft__', type, text.trim());
+    }
+    if (card.t === 'answers') return withAnswers(items, card.row, labels.map((l) => l.trim()));
+    return items;
+  })();
+
   const count = `${items.length} step${items.length === 1 ? '' : 's'} so far`;
   const kicker = <div className="wiz-kicker">Step by step · {chart.name.trim() || 'Untitled'}</div>;
   const canBack = history.length > 1;
@@ -426,7 +440,7 @@ export function StepsScreen() {
       {!isNarrow && items.length > 0 && (
         <div className="wiz-side">
           <h3>Your chart so far</h3>
-          <LiveChart items={items} title={chart.name} />
+          <LiveChart items={preview} title={chart.name} />
         </div>
       )}
       {/* On a phone the chart opens over the whole screen: below the card it was
@@ -437,7 +451,7 @@ export function StepsScreen() {
             <h3>Your chart so far</h3>
             <button className="btn btn-primary" onClick={() => setPeek(false)}>Back to the questions</button>
           </div>
-          <LiveChart items={items} title={chart.name} />
+          <LiveChart items={preview} title={chart.name} />
         </div>
       )}
     </div>
