@@ -1,7 +1,7 @@
 import { SHAPES, SHAPE_ORDER, type ShapeType } from '../data/shapes.ts';
 import { shapePath, shapeInnerLines } from '../lib/shapes.ts';
 
-// The words on this screen are a first draft for John to edit (SPEC §9).
+// The words on this screen are a second draft (2026-10-16, after Stage 5) for John to edit (SPEC §9).
 
 const INK = '#201e1d';
 
@@ -47,46 +47,69 @@ export function GuideScreen() {
 
       <div className="card" style={section}>
         <p style={{ ...body, margin: 0 }}>
-          Flowcharter turns a list into a flowchart. You write your steps one row at a time, say what kind of step each
-          one is, and the chart is drawn for you. There's no dragging boxes about. (You can return to this intro page at any time via “Guide”.)
+          Flowcharter turns a list into a flowchart. Answer a few questions one step at a time, or type your steps as a
+          list, and the chart is drawn for you. There's no dragging boxes about. (You can return to this intro page at
+          any time via “Guide”.)
         </p>
       </div>
 
       <div className="card" style={section}>
-        <div className="card-kicker">Step by step</div>
-        <h3 className="card-title" style={heading}>Making a flowchart</h3>
-        <ol style={{ ...body, paddingLeft: 22, display: 'grid', gap: 'var(--space-2)' }}>
-          <li>Press <strong>New chart</strong> and give it a name.</li>
+        <div className="card-kicker">Getting started</div>
+        <h3 className="card-title" style={heading}>Two ways to build a chart</h3>
+        <p style={body}>
+          Press <strong>New chart</strong> and choose <strong>Step by step</strong> or <strong>Start with a blank
+          list</strong>. Both build the same chart, and you can swap between them whenever you like.
+        </p>
+        <p style={body}>
+          <strong>Step by step</strong> asks what happens next, in plain English: something gets done, you ask a
+          question, information comes in or goes out, or it's the end. Write the step, and it's added to your chart.
+          When you ask a question, the cards follow each answer in turn until every path has an ending. On a computer
+          the chart grows beside the cards; on a phone, tap <strong>Peek at the chart</strong>. Press{' '}
+          <strong>Back</strong> to change what you've just written.
+        </p>
+        <p style={{ ...body, margin: 0 }}>
+          <strong>Switch to building in List mode</strong> takes you to the List at any point, and the List's{' '}
+          <strong>Step by step</strong> button brings you back to the cards while anything is still unfinished.
+        </p>
+      </div>
+
+      <div className="card" style={section}>
+        <div className="card-kicker">The List</div>
+        <h3 className="card-title" style={heading}>Writing the steps yourself</h3>
+        <ul style={{ ...body, paddingLeft: 22, display: 'grid', gap: 'var(--space-2)', margin: 0 }}>
           <li>
-            On the <strong>List</strong>, add one row for each step. Press <strong>Add item</strong>, or press Enter in a
-            box. Keep each step short, and start it with a verb: "Book the backup".
+            Add one row for each step: press <strong>+ Add item</strong>, or press Enter in a box.
           </li>
           <li>
-            Check the <strong>Type</strong> of each row, because the type decides its shape. Flowcharter guesses (the
-            first row is the start, and a row ending in a question mark is a question), and you can change any of them.
+            The <strong>Type</strong> decides the step's shape. Flowcharter guesses (the first row is the start, and a
+            row ending in a question mark is a question), and you can change it.
           </li>
           <li>
-            A <strong>question</strong> has answers, which appear underneath it. Write what each answer is called
-            ("Yes", "No"), and use <strong>goes to</strong> to say which step it leads to. Pointing back at an earlier
-            step makes a loop. The number box changes how many answers there are, from 2 to 6.
+            A question's answers appear underneath it. Use <strong>goes to</strong> to say where each one leads: pick
+            a step, or <strong>+ New step</strong> to add one. Pointing back at an earlier step makes a loop.
           </li>
           <li>
-            Every other row leads on to the next row. To skip ahead, go back, or stop, change its <strong>then</strong>{' '}
-            box.
+            Every other row leads on to the next one. To skip ahead, go back or stop, change its{' '}
+            <strong>then</strong> box.
           </li>
-          <li>
-            Open the <strong>Chart</strong>. <strong>Automatic</strong> picks top-to-bottom or left-to-right, whichever
-            fits better, and <strong>Down</strong> and <strong>Across</strong> let you choose. Then <strong>Print</strong>{' '}
-            it, or use <strong>Copy image</strong> to paste it into something else.
-          </li>
-        </ol>
+        </ul>
+      </div>
+
+      <div className="card" style={section}>
+        <div className="card-kicker">The Chart</div>
+        <h3 className="card-title" style={heading}>Seeing and sharing it</h3>
+        <p style={{ ...body, margin: 0 }}>
+          Use the <strong>List | Chart</strong> switch at the top to see your chart. <strong>Automatic</strong> draws it
+          top to bottom or left to right, whichever fits your screen better; the other button lets you choose the
+          other way. <strong>Print</strong> it, or use <strong>Copy image</strong> to paste it into something else.
+        </p>
       </div>
 
       <div className="card" style={section}>
         <div className="card-kicker">The key</div>
         <h3 className="card-title" style={heading}>The shapes</h3>
         <p style={body}>
-          Each type of step has its own shape and its own colour. Most flowcharts only need the first four.
+          Each type of step has its own shape and its own colour.
         </p>
         <div className="guide-shapes">
           {SHAPE_ORDER.map((t) => (
@@ -98,9 +121,8 @@ export function GuideScreen() {
           ))}
         </div>
         <p style={{ ...body, margin: 'var(--space-3) 0 0', fontSize: 13.5, color: 'var(--color-neutral-700)' }}>
-          The arrows join the steps in order, and a question's answers are written on its arrows. The shapes follow the
-          usual flowchart conventions (the international standard is ISO 5807). The colours are Flowcharter's own: the
-          shapes and the wording carry the meaning too, so a chart still makes sense printed in black and white.
+          The shapes follow the usual flowchart conventions (ISO 5807). The colours are Flowcharter's own, and a chart
+          still makes sense printed in black and white.
         </p>
       </div>
 
@@ -108,11 +130,10 @@ export function GuideScreen() {
         <div className="card-kicker">Making it clear</div>
         <h3 className="card-title" style={heading}>Tips</h3>
         <ul style={{ ...body, paddingLeft: 22, display: 'grid', gap: 'var(--space-2)', margin: 0 }}>
-          <li>Stick to Start / End, Action, Question and Data in/out unless another shape really adds meaning.</li>
-          <li>Start each step with a verb: "Send reminder", not "Reminder".</li>
-          <li>Write each question so it has short answers, such as Yes or No, and label every answer.</li>
-          <li>Keep the flow going one way, top to bottom or left to right. Flowcharter does this for you.</li>
+          <li>Start each action with a verb: "Send reminder", not "Reminder".</li>
+          <li>Write questions that have short answers, such as Yes or No.</li>
           <li>Keep the wording short. Long text makes big boxes and a chart that's harder to read.</li>
+          <li>Use the rarer shapes only when they add something; most charts need just the first four.</li>
         </ul>
       </div>
 
