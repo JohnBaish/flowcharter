@@ -457,3 +457,7 @@ real iPhone.
 **John asked** for a redraft reflecting the changes since the first draft, shorter where sensible, to go live for his second pass. **Changed** (`src/screens/GuideScreen.tsx`): the intro mentions both ways of building (his "(You can return … via “Guide”.)" kept); "Making a flowchart" replaced by **Two ways to build a chart** (New chart → Step by step / blank list; how the cards work; Peek; Back; switching between cards and List), **Writing the steps yourself** (the List, incl. "+ New step"), and **Seeing and sharing it** (List | Chart switch, the two-button Direction, Print, Copy image); the shapes' footnote shortened; tips cut from five to four; "Where they're kept" unchanged (agreed wording). Shape names and meanings come from `data/shapes.ts`, so they're already the new ones.
 
 **Verified:** build clean; in Chromium at 1200px and 390px touch the Guide shows on a first visit, no errors, no sideways scroll.
+
+### 2026-10-16 — Flowcharter on the baish.net landing page (in `JohnBaish/clockwheel`)
+
+At John's say-so: a fourth card in clockwheel's `landing.html`, third in the list (after Clockmaker, before John's Blog): **Flowcharter** — "Create a flowchart from a list, or build it step by step." Built on clockwheel branch `landing-flowcharter`, logged in clockwheel's CLAUDE.md, merged to its `main` (Vercel production build green). John still plans a rethink of the Guide's length and look.

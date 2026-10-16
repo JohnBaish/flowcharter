@@ -118,8 +118,7 @@ comes back. Branch: `stage-5-walkthrough`.
   (Stages 4 and 5). Step 6 still says "Open the Chart"; it should mention the
   List | Chart switch.
 - **The Flowcharter card on baish.net** (`landing.html` in
-  `JohnBaish/clockwheel`): only when John says it's ready for semi-public
-  release, not while it's being tested by a few people.
+  `JohnBaish/clockwheel`): done 2026-10-16, at John's say-so.
 
 ### Parked: moving boxes by hand (was Stage 4)
 
