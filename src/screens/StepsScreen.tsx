@@ -310,8 +310,9 @@ export function StepsScreen() {
     body = (
       <>
         {kicker}
+        {/* Read first: the path just finished, then the question that comes back. */}
+        {c.note && <div className="wiz-context">{c.note}</div>}
         <h2>{slotTitle(c)}</h2>
-        {c.note && <p>{c.note}</p>}
         {made && <p>You chose <strong>{words(made)}</strong> here. Pick again to change it.</p>}
         <div className="wiz-choices">
           {MAIN.map((m) => (

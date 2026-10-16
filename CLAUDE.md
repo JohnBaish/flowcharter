@@ -441,3 +441,5 @@ real iPhone.
 **Verified:** build clean; lint the two known warnings; checks 29 + 12. In Chromium at 1200px and at 390px with touch: New chart → Step by step → name → the whole worked example made through the cards (Data in/out, a question with Yes/No, Back to fix a typo with the words kept, That's the end, "Now back to … No" with "That's the Yes path finished.", a second question, its No looping back to step 6 via the pick card) gives exactly the example's eight rows and links; the cards' box is focused on each text card; the List's Step by step button resumes at an answer cleared in the List; Switch to building in List mode; New chart → blank list focuses the name; Peek at the chart on the phone; no errors (only Vercel's analytics script 404s locally), no sideways scroll.
 
 **Couldn't be checked:** a real iPhone (keyboard opening as each card appears; the cards' height with the keyboard up).
+
+**Change at John's request (same branch):** "That's the Yes path finished." now sits above "Now back to …" (between the kicker and the heading, in the small context style), so it reads in the order things happen.
