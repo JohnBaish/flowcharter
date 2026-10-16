@@ -106,6 +106,9 @@ export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
             >
               Clear
             </button>
+            <button className="btn btn-ghost" onClick={() => setScreen('steps')} style={{ color: 'var(--color-accent-700)' }}>
+              Step by step
+            </button>
           </>
         )}
         {mode === 'chart' && (

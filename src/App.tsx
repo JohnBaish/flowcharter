@@ -5,12 +5,13 @@ import { LibraryScreen } from './screens/LibraryScreen.tsx';
 import { ListScreen } from './screens/ListScreen.tsx';
 import { ChartScreen } from './screens/ChartScreen.tsx';
 import { GuideScreen } from './screens/GuideScreen.tsx';
+import { StepsScreen } from './screens/StepsScreen.tsx';
 
 function Shell() {
   const { screen, chart, setScreen } = useApp();
   // List and Chart show the open chart; with none (everything deleted) there's
   // nothing to show, so say so rather than render a broken screen.
-  const needsChart = (screen === 'list' || screen === 'chart') && !chart;
+  const needsChart = (screen === 'list' || screen === 'chart' || screen === 'steps') && !chart;
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -25,6 +26,8 @@ function Shell() {
         {screen === 'guide' && <GuideScreen />}
         {screen === 'list' && chart && <><EditorHeader mode="list" /><ListScreen /></>}
         {screen === 'chart' && chart && <><EditorHeader mode="chart" /><ChartScreen /></>}
+        {/* Keyed by chart, so opening another chart starts its cards afresh. */}
+        {screen === 'steps' && chart && <StepsScreen key={chart.id} />}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@
 import assert from 'node:assert/strict';
 import { seedChart, newChart, type Item } from '../src/data/charts.ts';
 import {
-  addItem, addStepForAnswer, countReferences, guessType, leadsTo, removeItem, reorderItems, setRouteCount, setRouteLabel,
+  addItem, addStepForAnswer, appendStep, countReferences, linkSlot, nextOpenSlot, openAnswer, setAnswers, guessType, leadsTo, removeItem, reorderItems, setRouteCount, setRouteLabel,
   setRouteTo, setText, setThen, setType, summary,
 } from '../src/lib/chartOps.ts';
 import { exportFilename, exportJson, parseImport, sanitiseChart } from '../src/lib/exchange.ts';
@@ -274,6 +274,48 @@ test('a saved Connector (removed 2026-10-16) comes back as an Action, keeping it
   assert.equal(c.items.length, 2);
   assert.equal(c.items[1].type, 'process');
   assert.equal(c.items[1].text, 'A');
+});
+
+test('the cards build the worked example, path by path', () => {
+  const start: Item = { id: 's', text: 'Start', type: 'terminator', typeChosen: true, then: { kind: 'next' }, routes: [] };
+  let items: Item[] = [start];
+  assert.deepEqual(nextOpenSlot(items), { kind: 'after', id: 's' });
+  items = appendStep(items, { kind: 'after', id: 's' }, 'call', 'io', 'Receive sick call');
+  items = appendStep(items, { kind: 'after', id: 'call' }, 'q', 'decision', 'Is a backup available?');
+  assert.equal(leadsTo(items, 0), 'call');
+  assert.equal(leadsTo(items, 1), 'q');
+  items = setAnswers(items, 'q', ['Yes', 'No']);
+  const yes = openAnswer(items, 'q')!;
+  assert.equal(yes.kind, 'answer');
+  items = appendStep(items, yes, 'book', 'process', 'Book the backup');
+  items = appendStep(items, { kind: 'after', id: 'book' }, 'end1', 'terminator', 'End');
+  // The Yes path is finished; the next loose end is the No answer.
+  const no = nextOpenSlot(items)!;
+  assert.deepEqual(no, { kind: 'answer', id: 'q', routeId: items[2].routes[1].id });
+  items = appendStep(items, no, 'ask', 'process', 'Ask the next station for cover');
+  assert.deepEqual(items[4].then, { kind: 'end' }, 'End still ends');
+  items = appendStep(items, { kind: 'after', id: 'ask' }, 'q2', 'decision', 'Has cover been agreed?');
+  items = setAnswers(items, 'q2', ['Yes', 'No']);
+  items = appendStep(items, openAnswer(items, 'q2')!, 'end2', 'terminator', 'End');
+  items = linkSlot(items, openAnswer(items, 'q2')!, 'ask');
+  assert.equal(nextOpenSlot(items), null, 'every path covered');
+  assert.equal(items.length, 8);
+  assert.equal(items[6].routes[1].to, 'ask', 'the No answer loops back');
+});
+
+test('the answers card keeps destinations and caps at six', () => {
+  let items = seedChart().items;
+  items = setAnswers(items, 's3', ['Definitely', 'Not today', 'Maybe']);
+  assert.deepEqual(items[2].routes.map((r) => r.label), ['Definitely', 'Not today', 'Maybe']);
+  assert.equal(items[2].routes[0].to, 's4');
+  assert.equal(items[2].routes[2].to, null);
+  assert.equal(setAnswers(items, 's3', Array(9).fill('x'))[2].routes.length, 6);
+});
+
+test('appending after a row that already leads somewhere points it at the new row', () => {
+  const items = appendStep(seedChart().items, { kind: 'after', id: 's2' }, 'n', 'process', 'New');
+  assert.deepEqual(items[1].then, { kind: 'item', to: 'n' });
+  assert.deepEqual(items[7].then, { kind: 'end' }, 'the old last row (End) is unchanged');
 });
 
 console.log(`${passed} checks passed`);

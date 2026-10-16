@@ -35,7 +35,8 @@ Key points from the house style, repeated because they matter most:
     browser's saved copy, import files) and the export format.
   - `state/store.tsx`: app state, `localStorage` (`flowcharter-state-v1`), and
     thin wrappers over `chartOps`.
-  - `screens/`, `components/`: Library, List and Chart screens, Nav, and
+  - `screens/`, `components/`: Library, List, Chart and Steps (the step-by-step
+    cards, Stage 5; `components/LiveChart.tsx` draws the chart beside them) screens, Nav, and
     `EditorHeader` (shared by List and Chart). `GuideScreen` holds John's
     editable Guide text. `components/FlowChart.tsx` draws a laid-out chart as SVG
     (colours written out, not CSS variables, so Stage 3 can save it as an
@@ -430,3 +431,13 @@ real iPhone.
 **Agreed with John so far:** the cards follow one path to its end, then come back for each unfinished answer; each card first asks what kind of step comes next in plain English ("Something gets done", "We ask a question", "Information comes in or goes out", "That's the end"; under More: "We wait", "A document is made or used", "We follow a standard routine", "It goes back to an earlier step"), then a box with a prompt suited to that kind; the first card offers the buttons too. **Proposed, not yet agreed:** New chart asks "Step by step / Start with a blank list"; the part-built chart beside the card on a computer; "Finish in the List" on every card; cards for new charts only (no resuming).
 
 **Made:** `design/mock-cards.html` (`?card=start|next|question|answers|back|done`; static) and renders in `design/previews/cards/` at 1200px and 390px. The charts beside the cards are real renders from the app (`chart-*.png`). No app code changed.
+
+### 2026-10-16 — Stage 5: the step-by-step cards (branch `stage-5-walkthrough`, not merged)
+
+**John agreed** (on the mock-ups): "Switch to building in List mode" on every card; the chart beside the card on a computer; **Peek at the chart** on a phone; New chart offers Step by step / blank list every time; **Back revisits** (Option 2: returns to the previous card with what was written, to change it; it never deletes); and switching back from the List to the cards, picking up at the first loose end.
+
+**What:** a new screen `'steps'` (`screens/StepsScreen.tsx`). New chart now opens it (`createChart('steps')`); its first card asks Step by step / Start with a blank list. The List header has a **Step by step** button. The rules live in `chartOps` like everything else: `Slot` (a loose end: after an ordinary row that leads nowhere, or an answer without a destination), `nextOpenSlot`, `openAnswer`, `appendStep` (new row at the bottom, attached to a slot; the old last row keeps ending, as "+ New step"), `linkSlot` ("It goes back to an earlier step"), `setAnswers`. The screen keeps a history of cards (for Back) in component state; a card that made a row remembers it, so choosing again there changes that row rather than adding another. Changes are made inside `flushSync` and the next card is worked out from the fresh rows (`itemsRef`), because what comes next depends on what the change produced. `LiveChart` lays the chart out top to bottom and shrinks it to fit its column (not below 45%). Three new checks (29 + 12), including building the whole worked example through the card rules.
+
+**Verified:** build clean; lint the two known warnings; checks 29 + 12. In Chromium at 1200px and at 390px with touch: New chart → Step by step → name → the whole worked example made through the cards (Data in/out, a question with Yes/No, Back to fix a typo with the words kept, That's the end, "Now back to … No" with "That's the Yes path finished.", a second question, its No looping back to step 6 via the pick card) gives exactly the example's eight rows and links; the cards' box is focused on each text card; the List's Step by step button resumes at an answer cleared in the List; Switch to building in List mode; New chart → blank list focuses the name; Peek at the chart on the phone; no errors (only Vercel's analytics script 404s locally), no sideways scroll.
+
+**Couldn't be checked:** a real iPhone (keyboard opening as each card appears; the cards' height with the keyboard up).
