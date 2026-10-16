@@ -260,9 +260,7 @@ export function StepsScreen() {
     <div className="wiz-foot">
       <span className="wiz-count">{count}</span>
       {isNarrow && items.length > 0 && (
-        <button className="btn btn-ghost wiz-quiet" onClick={() => setPeek((p) => !p)}>
-          {peek ? 'Hide the chart' : 'Peek at the chart'}
-        </button>
+        <button className="btn btn-ghost wiz-quiet" onClick={() => setPeek(true)}>Peek at the chart</button>
       )}
       <button className="btn btn-ghost wiz-quiet" onClick={() => setScreen('list')}>Switch to building in List mode</button>
       {canBack && <button className="btn btn-ghost wiz-quiet" onClick={back}>Back</button>}
@@ -431,8 +429,14 @@ export function StepsScreen() {
           <LiveChart items={items} title={chart.name} />
         </div>
       )}
+      {/* On a phone the chart opens over the whole screen: below the card it was
+          out of sight, so "Peek" seemed to do nothing (John, on his iPhone). */}
       {isNarrow && peek && items.length > 0 && (
-        <div className="wiz-side">
+        <div className="wiz-peek" role="dialog" aria-label="Your chart so far">
+          <div className="wiz-peek-head">
+            <h3>Your chart so far</h3>
+            <button className="btn btn-primary" onClick={() => setPeek(false)}>Back to the questions</button>
+          </div>
           <LiveChart items={items} title={chart.name} />
         </div>
       )}

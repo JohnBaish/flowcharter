@@ -443,3 +443,5 @@ real iPhone.
 **Couldn't be checked:** a real iPhone (keyboard opening as each card appears; the cards' height with the keyboard up).
 
 **Change at John's request (same branch):** "That's the Yes path finished." now sits above "Now back to …" (between the kicker and the heading, in the small context style), so it reads in the order things happen.
+
+**Fix (same branch):** John found "Peek at the chart" seemed not to work on his iPhone. The chart was drawn below the card, out of sight. It now opens over the whole screen (`.wiz-peek`) with a **Back to the questions** button.
