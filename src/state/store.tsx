@@ -69,6 +69,8 @@ interface AppContextValue extends PersistedState {
   setRouteCount: (itemId: ItemId, count: number) => void;
   setRouteLabel: (itemId: ItemId, routeId: string, label: string) => void;
   setRouteTo: (itemId: ItemId, routeId: string, to: ItemId | null) => void;
+  /** Adds a blank row at the end for this answer to lead to; returns its id. */
+  addStepForAnswer: (itemId: ItemId, routeId: string) => ItemId;
 
   exportState: () => string;
   /** Replaces the whole library with an already-checked one (see parseImport). */
@@ -164,6 +166,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setRouteCount: (itemId, count) => editItems((items) => ops.setRouteCount(items, itemId, count)),
     setRouteLabel: (itemId, routeId, label) => editItems((items) => ops.setRouteLabel(items, itemId, routeId, label)),
     setRouteTo: (itemId, routeId, to) => editItems((items) => ops.setRouteTo(items, itemId, routeId, to)),
+    addStepForAnswer: (itemId, routeId) => {
+      const id = uid();
+      editItems((items) => ops.addStepForAnswer(items, itemId, routeId, id));
+      return id;
+    },
 
     exportState: () => exportJson({ charts: state.charts, chartOrder: state.chartOrder, openChartId: state.openChartId }),
     replaceLibrary: (library) => setEdited((s) => ({ ...s, ...library, screen: 'lib' })),

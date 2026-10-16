@@ -10,11 +10,12 @@ import { useIsNarrow } from '../lib/responsive.ts';
 import { IconGrip, IconPlus, IconTrash } from '../lib/icons.tsx';
 
 const NARROW = 720;
+const NEW_STEP = '__new-step__';
 
 export function ListScreen() {
   const {
     chart, addItem, removeItem, reorderItems, setItemText, setItemType, setItemThen,
-    setRouteCount, setRouteLabel, setRouteTo,
+    setRouteCount, setRouteLabel, setRouteTo, addStepForAnswer,
   } = useApp();
   const items = chart?.items ?? [];
   const isNarrow = useIsNarrow(NARROW);
@@ -153,9 +154,16 @@ export function ListScreen() {
       className="input"
       value={route.to ?? ''}
       aria-label={`Where answer ${label} goes`}
-      onChange={(e) => setRouteTo(item.id, route.id, e.target.value || null)}
+      onChange={(e) => {
+        if (e.target.value !== NEW_STEP) { setRouteTo(item.id, route.id, e.target.value || null); return; }
+        // A new row at the end for this answer, with the cursor in it ready to type.
+        let id = '';
+        flushSync(() => { id = addStepForAnswer(item.id, route.id); });
+        focusItemText(id);
+      }}
     >
       <option value="">Choose…</option>
+      <option value={NEW_STEP}>+ New step</option>
       {items.map((it, i) => <option key={it.id} value={it.id}>{itemLabel(items, i)}</option>)}
     </select>
   );

@@ -5,7 +5,7 @@
 import assert from 'node:assert/strict';
 import { seedChart, newChart, type Item } from '../src/data/charts.ts';
 import {
-  addItem, countReferences, guessType, leadsTo, removeItem, reorderItems, setRouteCount, setRouteLabel,
+  addItem, addStepForAnswer, countReferences, guessType, leadsTo, removeItem, reorderItems, setRouteCount, setRouteLabel,
   setRouteTo, setText, setThen, setType, summary,
 } from '../src/lib/chartOps.ts';
 import { exportFilename, exportJson, parseImport, sanitiseChart } from '../src/lib/exchange.ts';
@@ -244,6 +244,29 @@ test('saved box positions (Stage 4) survive a reload; bad ones are dropped', () 
 
 test('export file name carries local date and time, like Clockmaker', () => {
   assert.equal(exportFilename(new Date(2026, 9, 5, 9, 7)), 'flowcharter-library-2026-10-05-0907.json');
+});
+
+test('"+ New step" on an answer adds a row at the end and points the answer at it', () => {
+  // The worked example without its last two rows: 1 Start … 5 End, 6 Ask the next station.
+  const items = seedChart().items.slice(0, 6);
+  const out = addStepForAnswer(items, 's3', 's3b', 'n1');
+  assert.equal(out.length, 7);
+  assert.equal(out[6].id, 'n1');
+  assert.equal(out[6].text, '');
+  assert.equal(out[2].routes[1].to, 'n1', 'No now goes to the new row');
+  // Row 6 used to end the chart ("next" with nothing after); it still does.
+  assert.deepEqual(out[5].then, { kind: 'end' });
+  assert.equal(leadsTo(out, 5), null);
+});
+
+test('"+ New step" straight after a question at the end of the list', () => {
+  const items = seedChart().items.slice(0, 3); // … 3 Is a backup available? (last)
+  const a = addStepForAnswer(items, 's3', 's3a', 'y');
+  const b = addStepForAnswer(a, 's3', 's3b', 'n');
+  assert.deepEqual(b.map((it) => it.id).slice(3), ['y', 'n']);
+  assert.equal(b[2].routes[0].to, 'y');
+  assert.equal(b[2].routes[1].to, 'n');
+  assert.equal(leadsTo(b, 3), null, "the Yes step doesn't flow into the No step");
 });
 
 console.log(`${passed} checks passed`);
