@@ -416,7 +416,8 @@ series of cards in conversational English (mock-ups: `design/mock-cards.html`).
 
 - **New chart** always opens a card: "How would you like to make it?" — **Step
   by step** or **Start with a blank list**. The List's header also has a **Step
-  by step** button, so you can switch back to the cards at any time.
+  by step** button, so you can switch back to the cards whenever the chart has
+  something unfinished (it's hidden on a finished chart).
 - The cards ask the chart's name, add Start, then ask "What happens first?" /
   "After *X*, what happens next?" with plain-English choices: **Something gets
   done** (Action), **We ask a question** (Question), **Information comes in or

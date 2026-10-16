@@ -447,3 +447,5 @@ real iPhone.
 **Fix (same branch):** John found "Peek at the chart" seemed not to work on his iPhone. The chart was drawn below the card, out of sight. It now opens over the whole screen (`.wiz-peek`) with a **Back to the questions** button.
 
 **Fix (same branch):** John noticed Peek showed the chart without the step being typed. The chart beside the card and in Peek now draws a preview (`preview` in `StepsScreen.tsx`) that includes the words on the current card (and the answers on the answers card) without saving them; Next still saves.
+
+**Change at John's request (same branch):** the List's **Step by step** button only shows while the chart has a loose end (or is empty); on a finished chart the cards would have nothing to ask, so it's hidden. It comes back as soon as something is left unfinished (e.g. an answer set to "Choose…", or a new last row).
