@@ -251,6 +251,13 @@ Not yet seen by John; easy to change.
 - The layout library loads only when a chart is first drawn, so the List and
   Library stay quick.
 
+### "+ New step" (Stage 4, agreed with John 2026-10-16)
+
+Each answer's "goes to" box offers **+ New step** under "Choose…". It adds a
+blank row at the bottom of the list, points the answer at it and puts the
+cursor in it. The row that was last keeps ending where it did. The row added
+straight after a question still becomes its first answer's destination.
+
 ### Details settled while building Stage 3 (2026-10-15)
 
 Confirmed by John on 2026-10-15.

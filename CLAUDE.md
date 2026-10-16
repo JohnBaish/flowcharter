@@ -416,3 +416,5 @@ real iPhone.
 **Verified so far:** in Chromium at 1200px and 390px touch, typing the worked example from scratch: "+ New step" on "No" adds row 6, focuses it, "No" shows "6 · Ask the next station for cover", row 5 shows "ends here", the chart draws as the example; no errors, no sideways scroll. The drop-down list in the screenshots for John is drawn by hand (browsers' own lists don't appear in screenshots).
 
 **Couldn't be checked:** on a real iPhone, whether the keyboard opens for the new row after picking from the drop-down (iOS may only open it after a direct tap).
+
+**John approved (2026-10-16):** wording "+ New step", new rows at the bottom of the list; tried on his iPhone and the keyboard opens for the new row. SPEC updated. Merged into `main`.

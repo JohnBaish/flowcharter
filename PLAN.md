@@ -87,7 +87,7 @@ Branch: `stage-3-launch`
 Stages 1–3 are live at `flowcharter.baish.net`, being tried by about three
 people. What comes next, in this order:
 
-### Stage 4 — smoother answers for a decision on the List (next)
+### Stage 4 — smoother answers for a decision on the List (done 2026-10-16: "+ New step")
 
 **John's note:** when you type something that leads to choices, the List
 should prompt for the choices that come out of the Yes / No more smoothly. At
