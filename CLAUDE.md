@@ -449,3 +449,11 @@ real iPhone.
 **Fix (same branch):** John noticed Peek showed the chart without the step being typed. The chart beside the card and in Peek now draws a preview (`preview` in `StepsScreen.tsx`) that includes the words on the current card (and the answers on the answers card) without saving them; Next still saves.
 
 **Change at John's request (same branch):** the List's **Step by step** button only shows while the chart has a loose end (or is empty); on a finished chart the cards would have nothing to ask, so it's hidden. It comes back as soon as something is left unfinished (e.g. an answer set to "Choose…", or a new last row).
+
+**Merged:** `stage-5-walkthrough` into `main` at John's say-so (2026-10-16).
+
+### 2026-10-16 — Guide redrafted (branch `guide-redraft`)
+
+**John asked** for a redraft reflecting the changes since the first draft, shorter where sensible, to go live for his second pass. **Changed** (`src/screens/GuideScreen.tsx`): the intro mentions both ways of building (his "(You can return … via “Guide”.)" kept); "Making a flowchart" replaced by **Two ways to build a chart** (New chart → Step by step / blank list; how the cards work; Peek; Back; switching between cards and List), **Writing the steps yourself** (the List, incl. "+ New step"), and **Seeing and sharing it** (List | Chart switch, the two-button Direction, Print, Copy image); the shapes' footnote shortened; tips cut from five to four; "Where they're kept" unchanged (agreed wording). Shape names and meanings come from `data/shapes.ts`, so they're already the new ones.
+
+**Verified:** build clean; in Chromium at 1200px and 390px touch the Guide shows on a first visit, no errors, no sideways scroll.
