@@ -461,3 +461,9 @@ real iPhone.
 ### 2026-10-16 — Flowcharter on the baish.net landing page (in `JohnBaish/clockwheel`)
 
 At John's say-so: a fourth card in clockwheel's `landing.html`, third in the list (after Clockmaker, before John's Blog): **Flowcharter** — "Create a flowchart from a list, or build it step by step." Built on clockwheel branch `landing-flowcharter`, logged in clockwheel's CLAUDE.md, merged to its `main` (Vercel production build green). John still plans a rethink of the Guide's length and look.
+
+### 2026-10-16 — Guide trimmed to John's wording (branch `guide-trim`)
+
+**Kept first:** the previous Guide, in `design/guide-archive/` (`guide-2026-10-16.md`, its text as shown on the page; `GuideScreen-2026-10-16.tsx.txt`, the code), so John can reuse its phrasing.
+
+**Changed, word for word as John gave it:** the intro card is now just "*You can return to this intro page at any time via “Guide”.*" (italic); "Getting started" is cut to the Step by step sentence and "Alternatively you can write the steps yourself.", then the List bullets (the separate "The List" card is gone, its bullets folded in), then "You can switch between the two building modes at any time until your chart is complete, then you can edit it further in List mode."; the Chart card drops its middle sentence about Automatic; the tips keep only the middle two. Standard routine's meaning (`data/shapes.ts`, shown in the Guide's shape tiles) is now "A procedure that has its own separate routine set of steps."

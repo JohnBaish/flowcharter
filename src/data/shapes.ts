@@ -26,7 +26,7 @@ export const SHAPES: Record<ShapeType, ShapeInfo> = {
   process: { name: 'Action', fill: '#d2def2', meaning: 'Something that gets done. The wording usually starts with a verb.' },
   decision: { name: 'Question', fill: '#f4dd8e', meaning: 'A question. Each arrow leaving it is labelled with an answer.' },
   io: { name: 'Data in/out', fill: '#e4d3f0', meaning: 'Information coming in to, or going out of, the process.' },
-  predefined: { name: 'Standard routine', fill: '#bfe3e1', meaning: 'A routine that has its own separate flowchart elsewhere.' },
+  predefined: { name: 'Standard routine', fill: '#bfe3e1', meaning: 'A procedure that has its own separate routine set of steps.' },
   document: { name: 'Document', fill: '#f3cfd6', meaning: 'A document or report is produced or used.' },
   delay: { name: 'Delay', fill: '#f7cba9', meaning: 'A waiting period where nothing happens.' },
 };

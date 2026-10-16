@@ -1,7 +1,8 @@
 import { SHAPES, SHAPE_ORDER, type ShapeType } from '../data/shapes.ts';
 import { shapePath, shapeInnerLines } from '../lib/shapes.ts';
 
-// The words on this screen are a second draft (2026-10-16, after Stage 5) for John to edit (SPEC §9).
+// The words on this screen are John's (third draft, 2026-10-16). The previous draft is kept in
+// design/guide-archive/ in case its phrasing is wanted again.
 
 const INK = '#201e1d';
 
@@ -47,9 +48,7 @@ export function GuideScreen() {
 
       <div className="card" style={section}>
         <p style={{ ...body, margin: 0 }}>
-          Flowcharter turns a list into a flowchart. Answer a few questions one step at a time, or type your steps as a
-          list, and the chart is drawn for you. There's no dragging boxes about. (You can return to this intro page at
-          any time via “Guide”.)
+          <em>You can return to this intro page at any time via “Guide”.</em>
         </p>
       </div>
 
@@ -57,26 +56,11 @@ export function GuideScreen() {
         <div className="card-kicker">Getting started</div>
         <h3 className="card-title" style={heading}>Two ways to build a chart</h3>
         <p style={body}>
-          Press <strong>New chart</strong> and choose <strong>Step by step</strong> or <strong>Start with a blank
-          list</strong>. Both build the same chart, and you can swap between them whenever you like.
+          “Step by step” asks what happens next, in plain English. On a computer the chart grows beside the cards; on a
+          phone, tap “Peek at the chart”.
         </p>
-        <p style={body}>
-          <strong>Step by step</strong> asks what happens next, in plain English: something gets done, you ask a
-          question, information comes in or goes out, or it's the end. Write the step, and it's added to your chart.
-          When you ask a question, the cards follow each answer in turn until every path has an ending. On a computer
-          the chart grows beside the cards; on a phone, tap <strong>Peek at the chart</strong>. Press{' '}
-          <strong>Back</strong> to change what you've just written.
-        </p>
-        <p style={{ ...body, margin: 0 }}>
-          <strong>Switch to building in List mode</strong> takes you to the List at any point, and the List's{' '}
-          <strong>Step by step</strong> button brings you back to the cards while anything is still unfinished.
-        </p>
-      </div>
-
-      <div className="card" style={section}>
-        <div className="card-kicker">The List</div>
-        <h3 className="card-title" style={heading}>Writing the steps yourself</h3>
-        <ul style={{ ...body, paddingLeft: 22, display: 'grid', gap: 'var(--space-2)', margin: 0 }}>
+        <p style={body}>Alternatively you can write the steps yourself.</p>
+        <ul style={{ ...body, paddingLeft: 22, display: 'grid', gap: 'var(--space-2)' }}>
           <li>
             Add one row for each step: press <strong>+ Add item</strong>, or press Enter in a box.
           </li>
@@ -93,15 +77,18 @@ export function GuideScreen() {
             <strong>then</strong> box.
           </li>
         </ul>
+        <p style={{ ...body, margin: 0 }}>
+          You can switch between the two building modes at any time until your chart is complete, then you can edit it
+          further in List mode.
+        </p>
       </div>
 
       <div className="card" style={section}>
         <div className="card-kicker">The Chart</div>
         <h3 className="card-title" style={heading}>Seeing and sharing it</h3>
         <p style={{ ...body, margin: 0 }}>
-          Use the <strong>List | Chart</strong> switch at the top to see your chart. <strong>Automatic</strong> draws it
-          top to bottom or left to right, whichever fits your screen better; the other button lets you choose the
-          other way. <strong>Print</strong> it, or use <strong>Copy image</strong> to paste it into something else.
+          Use the <strong>List | Chart</strong> switch at the top to see your chart. <strong>Print</strong> it, or use{' '}
+          <strong>Copy image</strong> to paste it into something else.
         </p>
       </div>
 
@@ -130,10 +117,8 @@ export function GuideScreen() {
         <div className="card-kicker">Making it clear</div>
         <h3 className="card-title" style={heading}>Tips</h3>
         <ul style={{ ...body, paddingLeft: 22, display: 'grid', gap: 'var(--space-2)', margin: 0 }}>
-          <li>Start each action with a verb: "Send reminder", not "Reminder".</li>
           <li>Write questions that have short answers, such as Yes or No.</li>
           <li>Keep the wording short. Long text makes big boxes and a chart that's harder to read.</li>
-          <li>Use the rarer shapes only when they add something; most charts need just the first four.</li>
         </ul>
       </div>
 
