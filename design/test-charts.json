@@ -654,8 +654,8 @@
           },
           {
             "id": "shapes-7",
-            "text": "A",
-            "type": "connector",
+            "text": "Send the goods",
+            "type": "process",
             "typeChosen": true,
             "then": {
               "kind": "item",

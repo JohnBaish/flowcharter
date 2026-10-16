@@ -418,3 +418,9 @@ real iPhone.
 **Couldn't be checked:** on a real iPhone, whether the keyboard opens for the new row after picking from the drop-down (iOS may only open it after a direct tap).
 
 **John approved (2026-10-16):** wording "+ New step", new rows at the bottom of the list; tried on his iPhone and the keyboard opens for the new row. SPEC updated. Merged into `main`.
+
+### 2026-10-16 — Shape names changed; Connector removed (branch `shape-names`)
+
+**John decided** (and asked for it to go live without another check): Process → **Action**, Decision → **Question**, Input / Output → **Data in/out**, Predefined process → **Standard routine**, and **Connector removed**. Changed everywhere people see them: the Type drop-down, the key, Copy image, the Guide (its wording too, though the Guide is still a draft), the count tag ("2 questions"), the List's hint and labels, SPEC §3–4 and §7. Meanings reworded for Action and Standard routine. The saved ids are unchanged (`process`, `decision`, `io`, `predefined`), so nothing saved breaks; `sanitiseItems` turns a saved `connector` into an Action, keeping its words (new check: 26 + 12). Connector's geometry is gone from `lib/shapes.ts`; the open circle for an unfinished answer (`stub`) stays. The test chart "every shape" now has an Action where its Connector was.
+
+**Verified:** build clean, lint the two known warnings, checks 26 + 12. In Chromium at 1200px and 390px touch: the Type drop-down lists the seven new names; the key, the Guide's shape tiles and the Library show them; the "every shape" chart draws with no Connector; a saved chart containing a Connector loads with an Action in its place; no errors, no sideways scroll.

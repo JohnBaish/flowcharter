@@ -31,8 +31,8 @@ test('type guessing follows SPEC §4', () => {
 });
 
 test('the seed chart summarises as in the mock-up', () => {
-  assert.equal(summary(seedChart().items), '8 items · 2 decisions');
-  assert.equal(summary([]), '0 items · 0 decisions');
+  assert.equal(summary(seedChart().items), '8 items · 2 questions');
+  assert.equal(summary([]), '0 items · 0 questions');
 });
 
 test('typing a question makes a decision with Yes/No; removing the ? hides the answers but keeps them', () => {
@@ -267,6 +267,13 @@ test('"+ New step" straight after a question at the end of the list', () => {
   assert.equal(b[2].routes[0].to, 'y');
   assert.equal(b[2].routes[1].to, 'n');
   assert.equal(leadsTo(b, 3), null, "the Yes step doesn't flow into the No step");
+});
+
+test('a saved Connector (removed 2026-10-16) comes back as an Action, keeping its words', () => {
+  const c = sanitiseChart({ id: 'x', items: [{ id: 'a', type: 'terminator', text: 'Start' }, { id: 'b', type: 'connector', text: 'A' }] })!;
+  assert.equal(c.items.length, 2);
+  assert.equal(c.items[1].type, 'process');
+  assert.equal(c.items[1].text, 'A');
 });
 
 console.log(`${passed} checks passed`);

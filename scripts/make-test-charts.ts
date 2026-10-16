@@ -72,7 +72,7 @@ const charts: Chart[] = [
     ['Is it in stock?', 'decision', [['Yes', 5], ['No', 8]]],
     ['Print the invoice', 'document'],
     ['Wait for payment', 'delay'],
-    ['A', 'connector', undefined, 9],
+    ['Send the goods', 'process', undefined, 9],
     ['Order more stock', 'process', undefined, 3],
     ['End', 'terminator'],
   ]),

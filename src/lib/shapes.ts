@@ -28,7 +28,6 @@ const DIAMOND_PAD = 6;
 /** Text wider than this wraps onto another line. */
 export function textMaxWidth(type: DrawnShape): number {
   if (type === 'decision') return 120;
-  if (type === 'connector') return 40;
   return 180;
 }
 
@@ -54,10 +53,6 @@ export function shapeBox(type: DrawnShape, tw: number, th: number): ShapeBox {
   switch (type) {
     case 'stub':
       return { w: STUB_SIZE, h: STUB_SIZE, textDx: 0, textDy: 0 };
-    case 'connector': {
-      const d = Math.max(tw + 16, th + 12, 36);
-      return { w: d, h: d, textDx: 0, textDy: 0 };
-    }
     case 'decision': {
       // The smallest diamond whose inside holds the text block: its corners
       // (tw/2+p, th/2+p) sit exactly on the diamond's edges when each half-width
@@ -117,7 +112,6 @@ export function shapePath(type: DrawnShape, w: number, h: number): string {
       const r = h / 2;
       return `M0 0 H${f(w - r)} A${f(r)} ${f(r)} 0 0 1 ${f(w - r)} ${f(h)} H0 Z`;
     }
-    case 'connector':
     case 'stub': {
       const r = w / 2;
       return `M0 ${f(r)} A${f(r)} ${f(r)} 0 1 0 ${f(w)} ${f(r)} A${f(r)} ${f(r)} 0 1 0 0 ${f(r)} Z`;
@@ -129,7 +123,7 @@ export function shapePath(type: DrawnShape, w: number, h: number): string {
   }
 }
 
-/** Extra lines drawn inside a shape (the predefined process's double sides). */
+/** Extra lines drawn inside a shape (the standard routine's double sides). */
 export function shapeInnerLines(type: DrawnShape, w: number, h: number): string | null {
   if (type !== 'predefined') return null;
   return `M9 0 V${f(h)} M${f(w - 9)} 0 V${f(h)}`;
@@ -138,8 +132,8 @@ export function shapeInnerLines(type: DrawnShape, w: number, h: number): string 
 /** A shape drawn small for a key (32×22 box): its outline, and any inner lines.
  *  Shared by the on-screen key and the saved image's key. */
 export function keyIcon(type: ShapeType): { w: number; h: number; path: string; inner: string | null } {
-  const w = type === 'connector' ? 18 : type === 'decision' ? 28 : 30;
-  const h = type === 'connector' ? 18 : type === 'decision' ? 20 : 17;
+  const w = type === 'decision' ? 28 : 30;
+  const h = type === 'decision' ? 20 : 17;
   return { w, h, path: shapePath(type, w, h), inner: type === 'predefined' ? `M3.5 0 V${h} M${w - 3.5} 0 V${h}` : null };
 }
 
@@ -177,7 +171,6 @@ export function outlineInset(type: DrawnShape, w: number, h: number, side: Side,
       if (ns && t > w - r) return circleInset(r, t - (w - 2 * r));
       return 0;
     }
-    case 'connector':
     case 'stub':
       return circleInset(w / 2, t);
     default:

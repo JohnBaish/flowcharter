@@ -38,7 +38,7 @@ Hamburger at ≤720px.
 | Screen | What's on it |
 |---|---|
 | **Library** | All saved charts as cards (name, number of items, last edited). Open, Duplicate, Delete (with `window.confirm`). **Import** / **Export** of the whole library. The footer notice (§9). |
-| **List** | The open chart's rows (§4). Header: on the left the kicker "Flowchart", the chart name (edit in place) and a tag "8 items · 2 decisions" beneath it; centred, a **List \| Chart** switch (the only way between the two); on the right, in one line as in Backtimer, **Print** (ghost), **+ Add item** (ghost), **Clear** (ghost, grey). No Duplicate (it's on the Library's cards) and no Done (the nav's Library link does that). |
+| **List** | The open chart's rows (§4). Header: on the left the kicker "Flowchart", the chart name (edit in place) and a tag "8 items · 2 questions" beneath it; centred, a **List \| Chart** switch (the only way between the two); on the right, in one line as in Backtimer, **Print** (ghost), **+ Add item** (ghost), **Clear** (ghost, grey). No Duplicate (it's on the Library's cards) and no Done (the nav's Library link does that). |
 | **Chart** | The drawn flowchart (§5). Same header, with actions **Print** (ghost) and **Copy image**. A **Direction** switch: Automatic · Down · Across. A key underneath showing only the shape types this chart uses. |
 | **Guide** | What Flowcharter is, how to fill in the list, the full key of shapes with their meanings, and tips for a clear chart, taken from John's guide. |
 
@@ -48,19 +48,22 @@ Clockmaker. Mock-ups: `design/mock-list.html`, `design/mock-chart.html`
 
 ## 3. Shape types
 
-Eight types: the four core shapes from the guide plus four extras John chose.
+Seven types: the four core shapes from the guide plus three extras John chose.
+On 2026-10-16 John renamed four (Process → Action, Decision → Question,
+Input / Output → Data in/out, Predefined process → Standard routine) and removed
+Connector. The saved ids (`process`, `decision`, `io`, `predefined`) are unchanged;
+a saved Connector loads as an Action.
 (The fifth core symbol, the arrow, is drawn automatically.)
 
 | Type (as shown in the list) | Shape | Fill |
 |---|---|---|
 | Start / End | Rectangle with fully rounded ends | `#d8e6bd` sage |
-| Process | Plain rectangle | `#d2def2` pale blue |
-| Decision | Diamond | `#f4dd8e` butter |
-| Input / Output | Parallelogram | `#e4d3f0` lavender |
-| Predefined process | Rectangle with a double line down each side | `#bfe3e1` pale teal |
+| Action | Plain rectangle | `#d2def2` pale blue |
+| Question | Diamond | `#f4dd8e` butter |
+| Data in/out | Parallelogram | `#e4d3f0` lavender |
+| Standard routine | Rectangle with a double line down each side | `#bfe3e1` pale teal |
 | Document | Rectangle with a wavy bottom edge | `#f3cfd6` pale rose |
 | Delay | "D" shape: flat left, rounded right | `#f7cba9` peach |
-| Connector | Small circle (holds a letter or number) | `#d4c9b6` stone |
 
 - Every shape has a 1.5px ink (`#201e1d`) outline and ink text, so the chart
   still reads printed in black and white, as the guide advises ("don't rely on
@@ -70,8 +73,8 @@ Eight types: the four core shapes from the guide plus four extras John chose.
   the others. Don't change one without re-checking.
 - Geometry is prototyped in `design/shapes.js`; preview in
   `design/previews/shapes.png`.
-- Connectors: in this version a Connector is just a shape you can choose. The
-  tool does not yet replace long lines with connector pairs on its own.
+- Connector was removed (2026-10-16): Flowcharter routes every line itself, so
+  it never needs one.
 
 ## 4. The list
 
@@ -83,7 +86,7 @@ Eight types: the four core shapes from the guide plus four extras John chose.
 | **#** | Item number, 1, 2, 3…, for reference within the list only. **Never drawn on the chart.** Recalculated whenever rows move. |
 | **Item** | The text drawn inside the shape. Edit in place (`.plain-input`). Up to 80 characters. |
 | **Type** | Dropdown of the eight types, with a small colour swatch of that type's fill beside it. |
-| **Routes** | For a **Decision**: a number box, how many answers (2–6, default 2). For anything else: **then →** a dropdown, **next** (default), any item by number, or **ends here**. |
+| **Routes** | For a **Question**: a number box, how many answers (2–6, default 2). For anything else: **then →** a dropdown, **next** (default), any item by number, or **ends here**. |
 | (bin) | Delete the row. |
 
 ### Answer rows (a decision's routes)
@@ -129,8 +132,8 @@ After that it's never changed for you.
 1. Row 1 → **Start / End**.
 2. The text is just "Start", "End", "Finish" or "Stop" (any capitals, ignoring a
    final full stop) → **Start / End**. (Added while building; confirmed by John.)
-3. The text ends with "?" → **Decision** (with 2 routes, Yes/No).
-4. Otherwise → **Process**.
+3. The text ends with "?" → **Question** (with 2 routes, Yes/No).
+4. Otherwise → **Action**.
 
 ### Keyboard and phones
 
@@ -189,14 +192,14 @@ Used for the seed chart (§7) and the mock-ups:
 | # | Item | Type | Routes |
 |---|---|---|---|
 | 1 | Start | Start / End | then → next |
-| 2 | Receive sick call | Input / Output | then → next |
-| 3 | Is a backup available? | Decision | 2 |
+| 2 | Receive sick call | Data in/out | then → next |
+| 3 | Is a backup available? | Question | 2 |
 | ↳ 3a | *Yes* | | goes to 4 |
 | ↳ 3b | *No* | | goes to 6 |
-| 4 | Book the backup | Process | then → next |
+| 4 | Book the backup | Action | then → next |
 | 5 | End | Start / End | ends here |
-| 6 | Ask the next station for cover | Process | then → next |
-| 7 | Has cover been agreed? | Decision | 2 |
+| 6 | Ask the next station for cover | Action | then → next |
+| 7 | Has cover been agreed? | Question | 2 |
 | ↳ 7a | *Yes* | | goes to 8 |
 | ↳ 7b | *No* | | goes to 6 (loops back) |
 | 8 | End | Start / End | ends here |
@@ -346,7 +349,7 @@ Down on a phone, because the screen is tall and narrow.
 
 ```ts
 type ShapeType = 'terminator' | 'process' | 'decision' | 'io'
-  | 'predefined' | 'document' | 'delay' | 'connector';
+  | 'predefined' | 'document' | 'delay';
 
 type ItemId = string;
 type Next = { kind: 'next' } | { kind: 'item'; to: ItemId } | { kind: 'end' };
