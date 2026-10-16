@@ -153,6 +153,23 @@ export function setRouteTo(items: Item[], id: ItemId, routeId: string, to: ItemI
   return editRoute(items, id, routeId, { to });
 }
 
+/** "+ New step" in an answer's "goes to" box (Stage 4): adds a blank row at the
+ *  end of the list and points the answer at it, so a branch can be started
+ *  without first adding its row by hand. The row that was last keeps ending
+ *  where it did — a "next" there meant "ends here" (nothing came after it), and
+ *  it mustn't start flowing into the new branch. */
+export function addStepForAnswer(items: Item[], decisionId: ItemId, routeId: string, newId: ItemId): Item[] {
+  const last = items[items.length - 1];
+  let out = items;
+  if (last && last.id !== decisionId && last.type !== 'decision' && last.then.kind === 'next') {
+    out = items.map((it) => (it.id === last.id ? { ...it, then: { kind: 'end' } } : it));
+  }
+  const at = out.length;
+  const type = guessType('', at);
+  out = [...out, { id: newId, text: '', type, typeChosen: false, then: defaultThen(type, at), routes: [] }];
+  return setRouteTo(out, decisionId, routeId, newId);
+}
+
 // — read-only helpers the screens (and the chart drawing) share —
 
 /** Where an ordinary (non-decision) row leads: the id of the row it flows into,

@@ -408,3 +408,11 @@ real iPhone.
 **John asked** (from his phone) for space between the bottom of the chart and the key. Screen: 17.6px → 35.2px (`.chart-key` padding, `--space-8`); print: `--space-3` → `--space-6`; Copy image: 14px → 32px (`KEY_SPACE` in `exportImage.ts`).
 
 **Verified:** in Chromium at 1200px and 390px touch, the chart-to-key gap measures 35px; the cousin chart still prints on one A4 page; build, lint, checks (23 + 12) as before; no errors.
+
+### 2026-10-16 — Stage 4 first draft: "+ New step" in an answer's "goes to" box (branch `stage-4-answers`, not merged)
+
+**For John to judge** (PLAN.md Stage 4: answers needed rows to exist before they could point anywhere). Each answer's "goes to" box now has **+ New step** under "Choose…". Picking it adds a blank row at the end of the list, points the answer at it and puts the cursor in it (`chartOps.addStepForAnswer`, `store.addStepForAnswer`). The row that was last keeps ending where it did: if it was an ordinary row on "next" (which, with nothing after it, meant "ends here") it's set to "ends here", so it doesn't start flowing into the new branch. The existing rule stays: the row added straight after a question becomes its first answer's destination. Two new checks (25 + 12).
+
+**Verified so far:** in Chromium at 1200px and 390px touch, typing the worked example from scratch: "+ New step" on "No" adds row 6, focuses it, "No" shows "6 · Ask the next station for cover", row 5 shows "ends here", the chart draws as the example; no errors, no sideways scroll. The drop-down list in the screenshots for John is drawn by hand (browsers' own lists don't appear in screenshots).
+
+**Couldn't be checked:** on a real iPhone, whether the keyboard opens for the new row after picking from the drop-down (iOS may only open it after a direct tap).
