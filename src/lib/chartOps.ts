@@ -16,7 +16,7 @@ import type { ShapeType } from '../data/shapes.ts';
 const END_WORDS = ['start', 'end', 'finish', 'stop'];
 
 /** SPEC §4 "Type guessing": row 1 → Start/End; the words Start/End/Finish/Stop
- *  → Start/End; ends with "?" → Decision; otherwise Process. */
+ *  → Start/End; ends with "?" → Question; otherwise Action. */
 export function guessType(text: string, index: number): ShapeType {
   if (index === 0) return 'terminator';
   const trimmed = text.trim();
@@ -188,10 +188,10 @@ export function decisionCount(items: Item[]): number {
   return items.filter((it) => it.type === 'decision').length;
 }
 
-/** "8 items · 2 decisions" */
+/** "8 items · 2 questions" */
 export function summary(items: Item[]): string {
   const d = decisionCount(items);
-  return `${items.length} item${items.length === 1 ? '' : 's'} · ${d} decision${d === 1 ? '' : 's'}`;
+  return `${items.length} item${items.length === 1 ? '' : 's'} · ${d} question${d === 1 ? '' : 's'}`;
 }
 
 /** How an item reads in a "goes to" dropdown: "4 · Book the backup". */

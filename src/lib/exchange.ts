@@ -29,7 +29,9 @@ function sanitiseItems(raw: unknown): Item[] {
   // First pass: the rows themselves, each kept beside the record it came from.
   const seen = new Set<string>();
   const rows: { item: Item; rec: Record<string, unknown> }[] = [];
-  for (const rec of raw) {
+  for (const raw0 of raw) {
+    // Connector was removed on 2026-10-16; a saved one becomes an Action.
+    const rec = isObject(raw0) && raw0.type === 'connector' ? { ...raw0, type: 'process' } : raw0;
     if (!isObject(rec) || !isShapeType(rec.type)) continue;
     let id = typeof rec.id === 'string' && rec.id ? rec.id : uid();
     if (seen.has(id)) id = uid();

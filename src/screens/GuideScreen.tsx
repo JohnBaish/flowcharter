@@ -14,7 +14,6 @@ const SAMPLES: Record<ShapeType, { w: number; h: number; text: string[] }> = {
   predefined: { w: 130, h: 44, text: ['Arrange cover'] },
   document: { w: 118, h: 50, text: ['Rota'] },
   delay: { w: 124, h: 44, text: ['Wait an hour'] },
-  connector: { w: 40, h: 40, text: ['A'] },
 };
 
 function ShapeSample({ type }: { type: ShapeType }) {
@@ -64,10 +63,10 @@ export function GuideScreen() {
           </li>
           <li>
             Check the <strong>Type</strong> of each row, because the type decides its shape. Flowcharter guesses (the
-            first row is the start, and a row ending in a question mark is a decision), and you can change any of them.
+            first row is the start, and a row ending in a question mark is a question), and you can change any of them.
           </li>
           <li>
-            A <strong>decision</strong> is a question. Its answers appear underneath it. Write what each answer is called
+            A <strong>question</strong> has answers, which appear underneath it. Write what each answer is called
             ("Yes", "No"), and use <strong>goes to</strong> to say which step it leads to. Pointing back at an earlier
             step makes a loop. The number box changes how many answers there are, from 2 to 6.
           </li>
@@ -99,7 +98,7 @@ export function GuideScreen() {
           ))}
         </div>
         <p style={{ ...body, margin: 'var(--space-3) 0 0', fontSize: 13.5, color: 'var(--color-neutral-700)' }}>
-          The arrows join the steps in order, and a decision's answers are written on its arrows. The shapes follow the
+          The arrows join the steps in order, and a question's answers are written on its arrows. The shapes follow the
           usual flowchart conventions (the international standard is ISO 5807). The colours are Flowcharter's own: the
           shapes and the wording carry the meaning too, so a chart still makes sense printed in black and white.
         </p>
@@ -109,9 +108,9 @@ export function GuideScreen() {
         <div className="card-kicker">Making it clear</div>
         <h3 className="card-title" style={heading}>Tips</h3>
         <ul style={{ ...body, paddingLeft: 22, display: 'grid', gap: 'var(--space-2)', margin: 0 }}>
-          <li>Stick to Start / End, Process, Decision and Input / Output unless another shape really adds meaning.</li>
+          <li>Stick to Start / End, Action, Question and Data in/out unless another shape really adds meaning.</li>
           <li>Start each step with a verb: "Send reminder", not "Reminder".</li>
-          <li>Write each decision as a question with a short answer, such as Yes or No, and label every answer.</li>
+          <li>Write each question so it has short answers, such as Yes or No, and label every answer.</li>
           <li>Keep the flow going one way, top to bottom or left to right. Flowcharter does this for you.</li>
           <li>Keep the wording short. Long text makes big boxes and a chart that's harder to read.</li>
         </ul>

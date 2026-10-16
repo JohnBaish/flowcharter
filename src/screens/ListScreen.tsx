@@ -128,7 +128,7 @@ export function ListScreen() {
         <input
           className="plain-input outlined-input mono list-routes-input"
           inputMode="numeric"
-          aria-label={`Number of routes from ${item.text.trim() || 'this decision'}`}
+          aria-label={`Number of routes from ${item.text.trim() || 'this question'}`}
           value={draft ?? String(item.routes.length)}
           onFocus={(e) => selectAllSoon(e.currentTarget)}
           onChange={(e) => {
@@ -271,7 +271,7 @@ export function ListScreen() {
           ))}
         </table>
         <p className="list-muted" style={{ marginTop: 'var(--space-3)', fontSize: 12.5 }} data-noprint="1">
-          Each row leads on to the next one unless you choose otherwise. A decision's answers appear underneath it; pick
+          Each row leads on to the next one unless you choose otherwise. A question's answers appear underneath it; pick
           where each one goes. Choosing an earlier item makes a loop.
         </p>
       </div>
