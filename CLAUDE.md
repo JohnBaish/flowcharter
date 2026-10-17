@@ -639,3 +639,32 @@ he can discuss them by number; section 9 refers to 7.1–7.4 and its coverage
 line includes them. The PDF was rebuilt and resent. The fresh-look method now
 requires this numbering in every report: `SKILL.md`, `report-template.html`
 and `HOUSE-STYLE.md` re-copied from clockwheel (commit `c86369d`).
+
+### 2026-10-17 — Cards: naming an ending (branch `end-names`, live)
+
+**John asked** whether the cards could name the End shape, as the List can. They
+couldn't: "That's the end" added "End" and moved straight on. He chose option
+(a), with my wording, Start left as it is, and asked for it to go live once
+thoroughly tested. **Now:** "That's the end" opens a text card like the other
+kinds: "How does this path end?" / "Leave it as “End”, or say what the outcome
+is." / box with "End" filled in and selected / "e.g. Cover arranged". Next
+keeps "End" (one extra tap); typing replaces it; blank falls back to "End".
+After Next, the path finishes as before ("That's the Yes path finished."). Back
+returns to it with the name, to rename. Changing an ending into another kind
+still starts with an empty box (2.2). Code: `'end'` is now a `Kind` in
+`StepsScreen.tsx` (type `terminator`, its own `PROMPT`); `chooseKind` no longer
+adds the End itself; `textNext` finishes the path for a terminator. SPEC's
+Step-by-step section updated.
+
+**Verified:** build clean, lint the two known warnings, checks 30 + 12. In
+Chromium at 1200px and 390px touch: the card appears with "End" selected;
+typing "Backup booked" names it (and the chart beside the card shows it as
+typed); Next → "Now back to … No" with "That's the Yes path finished."; a
+second ending kept as "End" with one Next; Back shows the name and renaming
+works; Back to the kind card says "You chose *name* here"; changing to "Something
+gets done" gives an empty box; a blank name gives "End". The Stage 5 run-through
+(worked example), 2.3, quick-fix and optional-item run-throughs all pass (each
+updated for the extra Next). No page errors, no sideways scroll. Before/after
+sheet sent to John.
+
+**Couldn't be checked:** a real iPhone (keyboard opening with "End" selected).

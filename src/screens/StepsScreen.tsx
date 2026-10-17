@@ -15,7 +15,7 @@ import { LiveChart } from '../components/LiveChart.tsx';
 // away, through the same rules as typing (chartOps), so the cards and the List
 // are two ways of working on the same chart. All wording is John's to change.
 
-type Kind = 'action' | 'question' | 'data' | 'wait' | 'doc' | 'routine';
+type Kind = 'action' | 'question' | 'data' | 'wait' | 'doc' | 'routine' | 'end';
 /** The answer whose path the cards are following, for "That's the Yes path finished." */
 type Branch = { q: string; a: string } | null;
 
@@ -29,10 +29,10 @@ type Card =
   | { t: 'done' };
 
 const TYPE: Record<Kind, ShapeType> = {
-  action: 'process', question: 'decision', data: 'io', wait: 'delay', doc: 'document', routine: 'predefined',
+  action: 'process', question: 'decision', data: 'io', wait: 'delay', doc: 'document', routine: 'predefined', end: 'terminator',
 };
 
-const MAIN: { kind: Kind | 'end'; label: string; type: ShapeType }[] = [
+const MAIN: { kind: Kind; label: string; type: ShapeType }[] = [
   { kind: 'action', label: 'Something gets done', type: 'process' },
   { kind: 'question', label: 'We ask a question', type: 'decision' },
   { kind: 'data', label: 'Information comes in or goes out', type: 'io' },
@@ -52,6 +52,8 @@ const PROMPT: Record<Kind, { title: string; help?: string; example: string }> = 
   wait: { title: 'What are you waiting for?', example: 'Wait for the results' },
   doc: { title: 'Which document is made or used?', example: 'Send the updated rota' },
   routine: { title: 'Which standard routine?', help: 'One that has its own flowchart elsewhere.', example: 'Arrange cover' },
+  // An ending can say what the outcome is; "End" is filled in, so Next keeps it (John, 2026-10-17).
+  end: { title: 'How does this path end?', help: 'Leave it as “End”, or say what the outcome is.', example: 'Cover arranged' },
 };
 
 const INK = '#201e1d';
@@ -100,10 +102,12 @@ export function StepsScreen() {
   useLayoutEffect(() => {
     const now = itemsRef.current;
     if (card.t === 'name') setText(chart && chart.name !== 'New chart' ? chart.name : '');
-    // A step being changed from an End starts empty, not with the word "End" (fresh look 2.2).
+    // An ending starts as "End" (or its name, after Back); any other step changed
+    // from an End starts empty, not with the word "End" (fresh look 2.2).
     if (card.t === 'text') {
       const row = card.row ? now.find((it) => it.id === card.row) : undefined;
-      setText(row && row.type !== 'terminator' ? row.text : '');
+      if (card.kind === 'end') setText(row && row.type === 'terminator' ? row.text : 'End');
+      else setText(row && row.type !== 'terminator' ? row.text : '');
     }
     if (card.t === 'answers') setLabels(now.find((it) => it.id === card.row)?.routes.map((r) => r.label) ?? ['Yes', 'No']);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -174,25 +178,15 @@ export function StepsScreen() {
     show(slot ? { t: 'kind', slot, branch: branchFor(slot) } : { t: 'done' });
   };
 
-  const chooseKind = (c: Extract<Card, { t: 'kind' }>, kind: Kind | 'end' | 'back') => {
+  const chooseKind = (c: Extract<Card, { t: 'kind' }>, kind: Kind | 'back') => {
     const made = c.made && byId(c.made) ? c.made : undefined;
     if (kind === 'back') { show({ t: 'pick', slot: c.slot, branch: c.branch }); return; }
-    if (kind === 'end') {
-      let row = made ?? '';
-      flushSync(() => {
-        if (made) { setItemType(made, 'terminator'); setItemText(made, 'End'); }
-        else row = appendStep(c.slot, 'terminator', 'End');
-      });
-      // Remember what this card made, so Back here changes it rather than adding another.
-      setHistory((h) => [...h.slice(0, -1), { ...c, made: row }]);
-      pathEnded(c.branch);
-      return;
-    }
     show({ t: 'text', slot: c.slot, branch: c.branch, kind, row: made });
   };
 
   const textNext = (c: Extract<Card, { t: 'text' }>) => {
-    const value = text.trim().slice(0, MAX_ITEM_TEXT);
+    // An ending left blank is just "End".
+    const value = (text.trim() || (c.kind === 'end' ? 'End' : '')).slice(0, MAX_ITEM_TEXT);
     if (!value) { setError('Please type something, or press Back.'); return; }
     const type = TYPE[c.kind];
     let row = c.row && byId(c.row) ? c.row : '';
@@ -213,6 +207,7 @@ export function StepsScreen() {
       return out;
     });
     if (type === 'decision') show({ t: 'answers', row, branch: c.branch });
+    else if (type === 'terminator') pathEnded(c.branch);
     else carryOn(row, c.branch);
   };
 
