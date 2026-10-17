@@ -442,6 +442,13 @@ series of cards in conversational English (mock-ups: `design/mock-cards.html`).
 - **Back** returns to the previous card with what you wrote, to change it; it
   doesn't delete. (To remove a step, use the List.) Changing an End into
   another kind of step starts its box empty, not with "End".
+- Back to a question whose answers already lead to steps: only **We ask a
+  question** (outlined) can be chosen, to reword it or change its answers; the
+  card says "*Q* already has answers leading to N steps. To reword the question
+  or change its answers, choose We ask a question below. To make it a different
+  kind of step, change it in List mode, where you can decide what happens to its
+  answers." (John's wording) with a **Change it in List mode** button that opens
+  the List at that step's Type box.
 - On a phone, **Back** and the card's main button share the first line of the
   card's foot; **Peek at the chart** and **Switch to building in List mode**
   sit beneath.

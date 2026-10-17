@@ -356,9 +356,9 @@ export function StepsScreen() {
         {made && locked && (
           <div className="wiz-locked">
             <p>
-              <strong>{words(made)}</strong> already has answers leading to {ledTo} step{ledTo === 1 ? '' : 's'}. To change
-              its words or its answers, choose <strong>We ask a question</strong> below. To make it a different kind of
-              step, change it in List mode, where you can see what happens to its answers.
+              <strong>{words(made)}</strong> already has answers leading to {ledTo} step{ledTo === 1 ? '' : 's'}. To reword
+              the question or change its answers, choose <strong>We ask a question</strong> below. To make it a different
+              kind of step, change it in List mode, where you can decide what happens to its answers.
             </p>
             <button className="btn btn-secondary" onClick={() => changeInList(made.id)}>Change it in List mode</button>
           </div>

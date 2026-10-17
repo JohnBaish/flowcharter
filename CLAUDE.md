@@ -503,7 +503,7 @@ Before/after sheet sent to John.
 
 **Couldn't be checked:** a real iPhone (the new foot with the keyboard up).
 
-### 2026-10-17 — Fresh look 2.3: changing a question via Back (branch `question-change`, awaiting John's approval)
+### 2026-10-17 — Fresh look 2.3: changing a question via Back (branch `question-change`, live)
 
 **John chose option (a).** Pressing Back to a question whose answers already
 lead to steps now shows: "*Q* already has answers leading to N steps, so here
@@ -530,3 +530,8 @@ step, change it in List mode, where you can see what happens to its answers.",
 and that choice has an orange outline (`.wiz-choice-open`). Re-checked at both
 sizes, with the same results. Screenshots of the card and of the rewording card
 it leads to were sent to John.
+
+**Approved and merged (same day)** with John's final wording: "… To reword the
+question or change its answers, choose We ask a question below. To make it a
+different kind of step, change it in List mode, where you can decide what
+happens to its answers." SPEC's Step-by-step section updated.
