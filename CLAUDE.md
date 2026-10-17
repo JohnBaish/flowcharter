@@ -678,7 +678,7 @@ wants others to reuse the work: MIT for code, optionally CC BY for the Guide
 text and images. Making the repos private is the option if the notes should
 not be readable. No change made.
 
-### 2026-10-17 — Fresh look 6.1: the phone's Back, one step (branch `back-step`, awaiting John's try on the preview)
+### 2026-10-17 — Fresh look 6.1: the phone's Back, one step (branch `back-step`, live)
 
 **John's concern:** sites that fill your history with their own addresses are
 annoying. Asked about a "you're about to leave" warning instead: explained it's
@@ -712,3 +712,6 @@ run-throughs (Stage 5, 2.3, optional items, ending names) all pass.
 
 **Couldn't be checked:** the real gestures on an iPhone (swipe back) and
 Android (back button). That's why John is trying the branch's preview first.
+
+**John tried the preview on his phone (2026-10-17):** "All works." Merged into
+`main` at his say-so.
