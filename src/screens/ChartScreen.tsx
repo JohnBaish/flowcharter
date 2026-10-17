@@ -13,6 +13,9 @@ const NARROW = 720;
 // does). Phones get a larger minimum: their screens are small already.
 const MIN_SCALE = 0.6;
 const MIN_SCALE_PHONE = 0.75;
+// …but a chart only a little too wide for a phone may shrink as far as this to
+// fit completely, rather than scroll a few boxes out of sight (fresh look 5.1).
+const FIT_SCALE_PHONE = 0.65;
 
 const NAMES = { down: 'Down', across: 'Across' } as const;
 
@@ -97,7 +100,8 @@ export function ChartScreen() {
     : [{ value: 'auto', label: 'Automatic' }];
   const selected = chart.direction === other ? other : 'auto';
   const minScale = isNarrow ? MIN_SCALE_PHONE : MIN_SCALE;
-  const scale = layout ? Math.max(minScale, Math.min(1, space.width / layout.width)) : 1;
+  const fit = layout ? space.width / layout.width : 1;
+  const scale = Math.min(1, isNarrow && fit >= FIT_SCALE_PHONE ? fit : Math.max(minScale, fit));
   const usedTypes = [...new Set(items.map((it) => it.type))];
 
   return (

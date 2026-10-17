@@ -155,6 +155,7 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
 .list-card-answer .plain-input { width: 84px; flex: none; }
 .list-card-answer select.input { flex: 1; min-width: 0; }
 .list-card-note { margin: 4px 0 0 52px; }
+.list-stray { margin-top: 4px; }
 
 /* — Chart screen — */
 .chart-toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 0 0 var(--space-3); }
@@ -238,6 +239,7 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
 .wiz-foot .btn { padding: 8px 14px; font-size: 13.5px; }
 .wiz-count { font-size: 12.5px; color: var(--color-neutral-700); margin-right: auto; }
 .wiz-quiet { color: var(--color-neutral-700); }
+.wiz-foot-links, .wiz-foot-main { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
 .wiz-side h3 { font: 700 11px var(--font-body); letter-spacing: .09em; text-transform: uppercase; color: var(--color-neutral-700); margin: 6px 0 12px; }
 @media (max-width: 720px) {
   .wiz-wrap { grid-template-columns: 1fr; padding: var(--space-3) var(--space-3) var(--space-6); gap: var(--space-4); }
@@ -247,7 +249,9 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
   .wiz-choice { min-height: 56px; }
   .wiz-pill, .wiz-foot .btn, .wiz-answer .btn { min-height: 44px; }
   .wiz-field, .wiz-answer input { font-size: 16px; min-height: 44px; }
-  .wiz-count { flex-basis: 100%; }
+  .wiz-count { flex: 1; }
+  .wiz-foot-main { order: 1; }
+  .wiz-foot-links { order: 2; flex-basis: 100%; margin-left: -14px; }
 }
 .wiz-peek { position: fixed; inset: 0; z-index: 50; overflow: auto; background: var(--color-bg); padding: var(--space-3) var(--space-3) var(--space-8); }
 .wiz-peek-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); margin-bottom: var(--space-4); }

@@ -28,6 +28,25 @@ function firstVisit(): PersistedState {
   return { screen: 'guide', charts: {}, chartOrder: [], openChartId: null, lastEditedAt: Date.now() };
 }
 
+// The screens that work on the open chart.
+const EDITING: Screen[] = ['list', 'chart', 'steps'];
+
+/** A chart made with New chart and then left untouched: still called "New
+ *  chart" and with no rows. Nothing would be lost by removing it. */
+const isAbandoned = (c: Chart | undefined) => !!c && c.items.length === 0 && c.name === 'New chart';
+
+/** Removes abandoned charts other than `keep`, so leaving New chart without
+ *  doing anything doesn't leave an empty card in the Library (fresh look 3.1). */
+function withoutAbandoned(s: PersistedState, keep: string | null): PersistedState {
+  const gone = s.chartOrder.filter((id) => id !== keep && isAbandoned(s.charts[id]));
+  if (!gone.length) return s;
+  const charts = { ...s.charts };
+  gone.forEach((id) => { delete charts[id]; });
+  const chartOrder = s.chartOrder.filter((id) => !gone.includes(id));
+  const openChartId = s.openChartId && charts[s.openChartId] ? s.openChartId : (chartOrder[0] ?? null);
+  return { ...s, charts, chartOrder, openChartId };
+}
+
 function loadInitial(): PersistedState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -35,11 +54,13 @@ function loadInitial(): PersistedState {
     const saved = JSON.parse(raw) as Record<string, unknown>;
     const library = sanitiseLibrary(saved);
     if (!library) return firstVisit();
-    return {
+    const loaded: PersistedState = {
       ...library,
       screen: SCREENS.includes(saved.screen as Screen) ? (saved.screen as Screen) : 'lib',
       lastEditedAt: typeof saved.lastEditedAt === 'number' ? saved.lastEditedAt : Date.now(),
     };
+    // Also tidies away any left over from before this rule existed.
+    return withoutAbandoned(loaded, EDITING.includes(loaded.screen) ? loaded.openChartId : null);
   } catch {
     return firstVisit();
   }
@@ -117,14 +138,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const value = useMemo<AppContextValue>(() => ({
     ...state,
     chart: state.openChartId ? state.charts[state.openChartId] ?? null : null,
-    setScreen: (screen) => setState((s) => ({ ...s, screen })),
-    openChart: (id) => setState((s) => (s.charts[id] ? { ...s, openChartId: id, screen: 'list' } : s)),
+    setScreen: (screen) => setState((s) => withoutAbandoned({ ...s, screen }, EDITING.includes(screen) ? s.openChartId : null)),
+    openChart: (id) => setState((s) => (s.charts[id] ? withoutAbandoned({ ...s, openChartId: id, screen: 'list' }, id) : s)),
     createChart: (screen = 'list') => {
       const chart = newChart();
-      setEdited((s) => ({
-        ...s, screen, openChartId: chart.id,
-        charts: { ...s.charts, [chart.id]: chart }, chartOrder: [...s.chartOrder, chart.id],
-      }));
+      setEdited((prev) => {
+        const s = withoutAbandoned(prev, null);
+        return { ...s, screen, openChartId: chart.id, charts: { ...s.charts, [chart.id]: chart }, chartOrder: [...s.chartOrder, chart.id] };
+      });
       return chart.id;
     },
     duplicateChart: (id) => {

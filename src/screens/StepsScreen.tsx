@@ -100,7 +100,11 @@ export function StepsScreen() {
   useLayoutEffect(() => {
     const now = itemsRef.current;
     if (card.t === 'name') setText(chart && chart.name !== 'New chart' ? chart.name : '');
-    if (card.t === 'text') setText(card.row ? now.find((it) => it.id === card.row)?.text ?? '' : '');
+    // A step being changed from an End starts empty, not with the word "End" (fresh look 2.2).
+    if (card.t === 'text') {
+      const row = card.row ? now.find((it) => it.id === card.row) : undefined;
+      setText(row && row.type !== 'terminator' ? row.text : '');
+    }
     if (card.t === 'answers') setLabels(now.find((it) => it.id === card.row)?.routes.map((r) => r.label) ?? ['Yes', 'No']);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cardKey]);
@@ -108,6 +112,8 @@ export function StepsScreen() {
   if (!chart) return null;
 
   const byId = (id: ItemId) => items.find((it) => it.id === id);
+  /** The steps a loose end could go back to: any but the step it comes from. */
+  const backTargets = (slot: Slot) => items.filter((it) => !(slot.kind === 'after' && it.id === slot.id));
 
   /** Shows a card, rendering it at once so its box can be focused inside the
    *  tap — the only way a phone opens its keyboard. */
@@ -271,14 +277,20 @@ export function StepsScreen() {
   const canBack = history.length > 1;
 
   const foot = (primary?: { label: string; go: () => void }) => (
+    // On a phone, Back and the main button share the first line, with the
+    // quieter links beneath (fresh look 2.4); on a computer it's all one line.
     <div className="wiz-foot">
       <span className="wiz-count">{count}</span>
-      {isNarrow && items.length > 0 && (
-        <button className="btn btn-ghost wiz-quiet" onClick={() => setPeek(true)}>Peek at the chart</button>
-      )}
-      <button className="btn btn-ghost wiz-quiet" onClick={() => setScreen('list')}>Switch to building in List mode</button>
-      {canBack && <button className="btn btn-ghost wiz-quiet" onClick={back}>Back</button>}
-      {primary && <button className="btn btn-primary" onClick={primary.go}>{primary.label}</button>}
+      <div className="wiz-foot-links">
+        {isNarrow && items.length > 0 && (
+          <button className="btn btn-ghost wiz-quiet" onClick={() => setPeek(true)}>Peek at the chart</button>
+        )}
+        <button className="btn btn-ghost wiz-quiet" onClick={() => setScreen('list')}>Switch to building in List mode</button>
+      </div>
+      <div className="wiz-foot-main">
+        {canBack && <button className="btn btn-ghost wiz-quiet" onClick={back}>Back</button>}
+        {primary && <button className="btn btn-primary" onClick={primary.go}>{primary.label}</button>}
+      </div>
     </div>
   );
 
@@ -340,12 +352,15 @@ export function StepsScreen() {
               <ShapeIcon type={m.type} small />{m.label}
             </button>
           ))}
-          <button
-            className="wiz-pill" onClick={() => chooseKind(c, 'back')} disabled={!!made}
-            title={made ? `To remove “${words(made)}”, use List mode` : undefined}
-          >
-            <ShapeIcon type="back" small />It goes back to an earlier step
-          </button>
+          {/* Not on the very first step: there's nothing earlier to go back to (fresh look 2.1). */}
+          {backTargets(c.slot).length > 0 && (
+            <button
+              className="wiz-pill" onClick={() => chooseKind(c, 'back')} disabled={!!made}
+              title={made ? `To remove “${words(made)}”, use List mode` : undefined}
+            >
+              <ShapeIcon type="back" small />It goes back to an earlier step
+            </button>
+          )}
         </div>
         {foot()}
       </>
@@ -409,9 +424,9 @@ export function StepsScreen() {
         <h2>Which step does it go back to?</h2>
         <p>Choose the step it loops back to, or joins up with.</p>
         <div className="wiz-picks">
-          {items.map((it, i) => (c.slot.kind === 'after' && it.id === c.slot.id ? null : (
-            <button key={it.id} className="wiz-pill" onClick={() => pick(c, it.id)}>{itemLabel(items, i)}</button>
-          )))}
+          {backTargets(c.slot).map((it) => (
+            <button key={it.id} className="wiz-pill" onClick={() => pick(c, it.id)}>{itemLabel(items, items.indexOf(it))}</button>
+          ))}
         </div>
         {foot()}
       </>
