@@ -668,3 +668,12 @@ updated for the extra Next). No page errors, no sideways scroll. Before/after
 sheet sent to John.
 
 **Couldn't be checked:** a real iPhone (keyboard opening with "End" selected).
+
+### 2026-10-17 — Licence: none, deliberately (notes only)
+
+John asked whether to use CC BY 4.0. Agreed: no licence for now. Both repos are
+public, and without a licence normal copyright applies (nobody may reuse the
+code or words without asking). CC BY suits content, not code. If John later
+wants others to reuse the work: MIT for code, optionally CC BY for the Guide
+text and images. Making the repos private is the option if the notes should
+not be readable. No change made.
