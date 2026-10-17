@@ -28,6 +28,7 @@ Backtimer — long, and mostly about those apps. Read it only for the
 | `src/lib/useDragReorder.ts` | Drag-to-reorder by a grip handle, mouse and touch. Only if needed. |
 | `public/favicon*.svg` | Favicon style to adapt (see §7). |
 | `design/og-clockmaker.html` | Link-preview image source; use it as the template for a new tool (see §7). |
+| `HOUSE-STYLE.md` and `.claude/skills/fresh-look/` | This file, and the "fresh look" review procedure with its PDF template and script (see §11). Copy both into every project, new or existing. |
 
 Dependencies these rely on: `@fontsource/caprasimo`, `@fontsource/figtree`,
 `lucide-react`, React. Stack is **Vite + React + TypeScript**, `oxlint`
@@ -232,3 +233,36 @@ and add its tags. Nothing else needs fixing or remaking first.
 - Keep a dated entry in the project's `CLAUDE.md` for every change: what,
   why, what was deliberately left alone, how it was verified.
 - Ask before anything destructive or outside the repo.
+
+## 11. Fresh look (a full review)
+
+When John asks for a **fresh look** (or types `/fresh-look`), give the whole
+project a long, careful review on a computer and a phone, and report back
+**without changing anything**. The full procedure is in
+`.claude/skills/fresh-look/SKILL.md`. Claude Code loads it as the
+`/fresh-look` command in any repo that has the file on `main`. In short:
+
+- Read the notes first, so agreed decisions aren't reported as faults.
+  Review the live `main`.
+- Use it like a real person at 1200px and at 390px with touch: first visit,
+  every screen, realistic and extreme content, abandoning and going back.
+  Run an automatic sweep for errors, sideways scrolling and small tap targets.
+  Look at every screenshot.
+- Read the code for suspects, then prove or drop each one with a targeted
+  test. Report nothing unconfirmed without saying so.
+- Report in numbered sections and sub-sections. Start with the overall verdict.
+  Then for each area give faults first, then usability points, each with
+  **size · priority**, "What happens" and "Recommendation" (options where it's a
+  choice). Then "Looked at and would leave alone", "What I couldn't check" and
+  "Suggested order". Plain English, British spelling.
+- "Suggested order" must place **every** numbered item: quick fixes,
+  decisions, optional items, or left alone, ending with a coverage line.
+  Check this before sending.
+- Send the report as an A5 PDF too, in the brand fonts, so John can read it on
+  his phone alongside Claude (`report-template.html` and `make-pdf.mjs` sit
+  beside the skill).
+- Build nothing until John picks. Then log the findings and his decisions in
+  `CLAUDE.md`.
+
+Clockwheel holds the master copy of the skill, like this file. If it
+changes, re-copy it to the other projects.

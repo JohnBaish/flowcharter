@@ -8,9 +8,11 @@ Read these first, in this order:
 1. `SPEC.md`: what Flowcharter is and does (agreed with John).
 2. `PLAN.md`: the staged build. Work one stage at a time, on its branch.
 3. `HOUSE-STYLE.md`: the shared look and ways of working. Copied from
-   `JohnBaish/clockwheel` on 2026-10-15 (at clockwheel commit `f62a1b1`).
-   Clockwheel holds the master copy. If it has changed since, re-copy it and
-   note that here.
+   `JohnBaish/clockwheel` on 2026-10-15 (at clockwheel commit `f62a1b1`), and
+   re-copied 2026-10-17 with §11 added (clockwheel commit `6705ca7`; merged
+   to both repos' `main` the same day). Clockwheel holds the master copy. If it has changed since,
+   re-copy it and note that here. The same goes for
+   `.claude/skills/fresh-look/SKILL.md` (the `/fresh-look` review).
 
 Key points from the house style, repeated because they matter most:
 
@@ -468,6 +470,50 @@ At John's say-so: a fourth card in clockwheel's `landing.html`, third in the lis
 
 **Changed, word for word as John gave it:** the intro card is now just "*You can return to this intro page at any time via “Guide”.*" (italic); "Getting started" is cut to the Step by step sentence and "Alternatively you can write the steps yourself.", then the List bullets (the separate "The List" card is gone, its bullets folded in), then "You can switch between the two building modes at any time until your chart is complete, then you can edit it further in List mode."; the Chart card drops its middle sentence about Automatic; the tips keep only the middle two. Standard routine's meaning (`data/shapes.ts`, shown in the Guide's shape tiles) is now "A procedure that has its own separate routine set of steps."
 
+### 2026-10-17 — Fresh look (full review), and the review written up as house style (branch `fresh-look`)
+
+**The review** (John's request: a long careful look at the whole project on
+computers and phones, report only, nothing changed). Reviewed `main` at
+`098c024` in Chromium at 1200px and 390px with touch, using the test charts and
+charts built from scratch. No page errors, no sideways page scroll, no small tap
+targets. Findings, as numbered in the report:
+- 2.1 the first card's "It goes back to an earlier step" opens an empty pick list;
+  2.2 after Back from an End, choosing another kind pre-fills "End";
+  2.3 changing a question to another kind via Back leaves its answer rows stranded
+  or joined by accident (options: restrict the change, or warn);
+  2.4 the phone card footer puts Next last, below the quiet buttons;
+  2.5 a greyed-out pill explains itself only on hover.
+- 3.1 abandoned New charts pile up in the Library as empty "New chart" cards;
+  3.2 the Library card title can't be reached from the keyboard.
+- 4.1 rows nothing leads to aren't flagged in the List;
+  4.2 deleting a row is instant with no undo.
+- 5.1 phone charts only slightly too wide (382–402px in 355px) still scroll
+  sideways; 5.2 big trees are hard to see on a phone (full-screen view idea);
+  5.3 the editor header takes nearly half a phone screen.
+- 6.1 the phone's back gesture leaves the site; 6.2 the phone menu hides only two
+  links; 6.3 the live chart redraws per keystroke (fine here, untested on slow
+  phones).
+- Left alone: two tabs overwriting each other, repeated answer names, paths ending
+  without an End box, cards resuming at the first loose end.
+**John's decisions:** 9.1 quick fixes (2.1, 2.2, 2.4, 3.1, 4.1, 5.1) and 2.3
+option (a) built and live, see the entries below. Still to discuss: the optional
+items 6.1, 4.2, 5.2, 5.3 and 6.2, and the tiny extras 2.5 and 3.2. 6.3 and section 7
+are left alone for now.
+
+**The write-up:** at John's request, the way this review was done and reported
+is now part of the house style, as **fresh look**:
+`.claude/skills/fresh-look/SKILL.md` (copied from clockwheel, which holds the
+master) and `HOUSE-STYLE.md` §11. Typing `/fresh-look` in a thread runs it once
+it's on `main`. Words after the command narrow it, e.g.
+`/fresh-look phones only`. No app code changed.
+
+**Same day:** the fresh-look procedure was extended at John's request. The
+"Suggested order" section must now place every item, with a coverage line and
+a check before sending (this report's first version missed 2.5, 3.2 and 6.3;
+it was corrected and the PDF resent). The report is also always sent as an
+A5 PDF in the brand fonts (`report-template.html`, `make-pdf.mjs`). Re-copied
+from clockwheel along with `HOUSE-STYLE.md`.
+
 ### 2026-10-17 — Fresh look quick fixes (report §9.1), live (branch `quick-fixes`)
 
 **John approved** the six quick fixes from the fresh-look report and said to
@@ -535,3 +581,11 @@ it leads to were sent to John.
 question or change its answers, choose We ask a question below. To make it a
 different kind of step, change it in List mode, where you can decide what
 happens to its answers." SPEC's Step-by-step section updated.
+
+### 2026-10-17 — `fresh-look` merged into `main` (both repos)
+
+At John's say-so: `fresh-look` merged into `main` here and in
+`JohnBaish/clockwheel`, so `/fresh-look` (with its PDF template and script) and
+`HOUSE-STYLE.md` §11 are available to new threads. The only conflict was this
+log (both branches had added entries at the end); kept both, in date order. No
+app code changed.
