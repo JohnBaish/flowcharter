@@ -162,7 +162,7 @@ export function ChartScreen() {
       <div ref={frame} className="chart-frame">
         {failed ? (
           <p style={{ textAlign: 'center', color: 'var(--color-neutral-700)', padding: 'var(--space-6)' }}>
-            Sorry — this chart couldn't be drawn. Your list is safe; try changing it slightly, or tell flowcharter@baish.net.
+            Sorry — this chart couldn't be drawn. Your list is safe; try changing it slightly, or tell workshop@baish.net.
           </p>
         ) : layout ? (
           <FlowChart layout={layout} scale={scale} title={chart.name} />
