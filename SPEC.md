@@ -33,7 +33,16 @@ the thing the design is optimised for.
 
 Nav bar, as Clockmaker: brand **Flowcharter** on the left; **New chart**
 (primary button); links **Library · Guide** (List and Chart are reached from an open chart's own List | Chart switch, not the nav — John, 2026-10-15); "saved …" tag.
-Hamburger at ≤720px.
+On a phone the links stay in the bar and the "saved …" tag is hidden (no menu button, 2026-10-17).
+
+**The browser's Back (phone back gesture), agreed 2026-10-17:** opening a chart
+adds one step to the browser's history, however you then move between List,
+Chart and the cards, so Back from a chart returns to the Library and Back again
+leaves the site. Peek and Full screen each add one step while open, so Back
+closes them. Closing anything another way takes its step back off, so steps
+never pile up. The web address never changes. (A "leave site?" warning was
+considered and rejected: phones mostly don't show it, and its fixed wording
+about unsaved changes would be untrue, since everything is saved.)
 
 | Screen | What's on it |
 |---|---|

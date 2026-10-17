@@ -6,12 +6,16 @@ import { ListScreen } from './screens/ListScreen.tsx';
 import { ChartScreen } from './screens/ChartScreen.tsx';
 import { GuideScreen } from './screens/GuideScreen.tsx';
 import { StepsScreen } from './screens/StepsScreen.tsx';
+import { useBackLayer } from './lib/backLayers.ts';
 
 function Shell() {
   const { screen, chart, setScreen } = useApp();
   // List and Chart show the open chart; with none (everything deleted) there's
   // nothing to show, so say so rather than render a broken screen.
   const needsChart = (screen === 'list' || screen === 'chart' || screen === 'steps') && !chart;
+  // A chart (List, Chart or cards) adds one step to the browser's history, so
+  // the phone's Back returns to the Library instead of leaving (fresh look 6.1).
+  useBackLayer((screen === 'list' || screen === 'chart' || screen === 'steps') && !!chart, 'chart', () => setScreen('lib'));
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
