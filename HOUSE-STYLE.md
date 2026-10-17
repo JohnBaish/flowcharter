@@ -255,6 +255,8 @@ project a long, careful review on a computer and a phone, and report back
   **size · priority**, "What happens" and "Recommendation" (options where it's a
   choice). Then "Looked at and would leave alone", "What I couldn't check" and
   "Suggested order". Plain English, British spelling.
+- Number every point, never bullets, in every section, including "would
+  leave alone" and "couldn't check", so John can reply by number.
 - "Suggested order" must place **every** numbered item: quick fixes,
   decisions, optional items, or left alone, ending with a coverage line.
   Check this before sending.

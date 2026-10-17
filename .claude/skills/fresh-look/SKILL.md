@@ -88,7 +88,13 @@ For each finding decide:
 
 Write in plain English for John, who is not a developer. Use British spelling
 and no code jargon. Name files only where it helps a later thread. Use numbered
-sections and numbered sub-sections, in this order:
+sections and numbered sub-sections, in this order.
+
+**Number everything, never bullets, for anything John might want to discuss.**
+Every point in every section gets its own number (2.1, 2.2 … 7.1, 7.2 …),
+including "would leave alone" and "couldn't check", so he can reply briefly by
+number ("7.2: let's talk about this"). Bullets are fine only inside a single
+numbered item, e.g. its options (a) and (b).
 
 1. **Overall verdict.** A few lines: what's in good shape, how many genuine
    faults there are, and that **nothing was changed**. State what was reviewed
@@ -98,10 +104,10 @@ sections and numbered sub-sections, in this order:
    - a heading with **size · priority**,
    - **What happens:** steps and what you see,
    - **Recommendation:** with options if it's a decision.
-3. **Looked at and would leave alone.** With a reason each, so nobody raises them
-   again.
-4. **What I couldn't check.** A real iPhone or Safari, a real printer, slow
-   phones, the live domain, and so on.
+3. **Looked at and would leave alone.** Each point numbered (e.g. 7.1, 7.2),
+   with a reason each, so nobody raises them again by accident.
+4. **What I couldn't check.** Each point numbered (e.g. 8.1, 8.2): a real
+   iPhone or Safari, a real printer, slow phones, the live domain, and so on.
 5. **Suggested order, if you'd like to go ahead.** John likes this
    section. It's a numbered list of next steps that places **every**
    numbered item from the area sections in one of these groups:
@@ -113,13 +119,16 @@ sections and numbered sub-sections, in this order:
    - **Optional extras that could go into the quick-fix branch:** tiny
      *optional* items.
    - **Left alone for now:** *leave* items, with a word on when to revisit
-     ("unless you notice lag"), and the "would leave alone" section.
+     ("unless you notice lag"), and the "would leave alone" items by number
+     (e.g. 7.1–7.4).
 
    Leave out any group that would be empty. Finish with a **coverage line**:
-   "Every item in sections 2–N now appears in this list: 2.1–2.5, 3.1–3.2, …".
+   "Every item in sections 2–N now appears in this list: 2.1–2.5, 3.1–3.2, …,
+   7.1–7.4." (the area sections and the "would leave alone" section).
 
    **Coverage check (required before sending).** List every numbered item
-   heading in the area sections, then tick each one off against the
+   in the area sections and the "would leave alone" section, then tick each
+   one off against the
    Suggested order. Every item must appear exactly once. If any is missing
    or appears twice, fix the list before sending; don't leave it for John to
    spot. (The first Flowcharter report missed three items. That is why this

@@ -9,8 +9,8 @@ Read these first, in this order:
 2. `PLAN.md`: the staged build. Work one stage at a time, on its branch.
 3. `HOUSE-STYLE.md`: the shared look and ways of working. Copied from
    `JohnBaish/clockwheel` on 2026-10-15 (at clockwheel commit `f62a1b1`), and
-   re-copied 2026-10-17 with §11 added (clockwheel commit `6705ca7`; merged
-   to both repos' `main` the same day). Clockwheel holds the master copy. If it has changed since,
+   re-copied 2026-10-17 with §11 added (last re-copied at clockwheel commit
+   `c86369d`, the same day). Clockwheel holds the master copy. If it has changed since,
    re-copy it and note that here. The same goes for
    `.claude/skills/fresh-look/SKILL.md` (the `/fresh-look` review).
 
@@ -630,3 +630,12 @@ five answers; not the long list, drink or the example), fits 366×312 in
 **Couldn't be checked:** pinch-zoom inside Full screen on a real iPhone.
 
 **Approved by John and merged (same day)**, wording as drafted.
+
+### 2026-10-17 — Fresh look report: points numbered (docs only, straight to `main`)
+
+At John's request, section 7 ("would leave alone") of this project's
+fresh-look report is now 7.1–7.4, and section 8 ("couldn't check") 8.1–8.3, so
+he can discuss them by number; section 9 refers to 7.1–7.4 and its coverage
+line includes them. The PDF was rebuilt and resent. The fresh-look method now
+requires this numbering in every report: `SKILL.md`, `report-template.html`
+and `HOUSE-STYLE.md` re-copied from clockwheel (commit `c86369d`).
