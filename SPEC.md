@@ -405,7 +405,7 @@ computer and `.list-cards` on a phone. Light theme only.
   project by John Baish. The flowcharts you make here are not collected;
   they're only saved in your browser. We collect anonymous visit statistics
   (no cookies, no personal data) to see how the site is used. Contact:
-  flowcharter@baish.net" (confirmed by John)
+  workshop@baish.net" (confirmed by John)
 - Library note (as Clockmaker): "Your flowcharts are saved automatically, but
   only in this browser, on this device. Use Export to keep a backup or move
   them to another device." (confirmed by John)

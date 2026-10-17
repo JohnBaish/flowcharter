@@ -132,7 +132,7 @@ export function GuideScreen() {
         <p style={{ ...body, margin: 0 }}>
           The flowcharts you make here are not collected; they're only saved in your browser. We collect anonymous visit
           statistics (no cookies, no personal data) to see how the site is used. Flowcharter is a free-to-use personal
-          project by John Baish. Contact: flowcharter@baish.net
+          project by John Baish. Contact: workshop@baish.net
         </p>
       </div>
     </div>

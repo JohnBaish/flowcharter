@@ -715,3 +715,17 @@ Android (back button). That's why John is trying the branch's preview first.
 
 **John tried the preview on his phone (2026-10-17):** "All works." Merged into
 `main` at his say-so.
+
+### 2026-10-17 — Contact address now workshop@baish.net (branch `contact-email`, live)
+
+**John asked** for every flowcharter@baish.net to become workshop@baish.net,
+made live. Changed in the Library footer (`LibraryScreen.tsx`), the Guide's
+closing paragraph (`GuideScreen.tsx`), the "chart couldn't be drawn" message
+(`ChartScreen.tsx`) and SPEC §9's agreed footer wording. Left as they were: the
+old Guide kept in `design/guide-archive/` (a record of the page as it was on
+2026-10-16), and earlier log entries.
+
+**Verified:** build clean, lint the two known warnings. In Chromium at 1200px
+and 390px touch, the Guide and the Library show workshop@baish.net and no
+trace of the old address; no errors. The "couldn't be drawn" message only
+appears if drawing fails, so it was checked in the code, not on screen.
