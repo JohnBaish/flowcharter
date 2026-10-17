@@ -229,6 +229,14 @@ export function StepsScreen() {
     pathEnded(c.branch);
   };
 
+  /** Opens the List with the cursor on this step's Type box. */
+  const changeInList = (id: ItemId) => {
+    const n = itemsRef.current.findIndex((it) => it.id === id) + 1;
+    flushSync(() => setScreen('list'));
+    const select = document.querySelector<HTMLSelectElement>(`select[aria-label="Type of item ${n}"]`);
+    if (select) { select.focus(); select.scrollIntoView({ block: 'center' }); }
+  };
+
   const onEnter = (go: () => void) => (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); go(); }
   };
@@ -331,16 +339,36 @@ export function StepsScreen() {
   } else if (card.t === 'kind') {
     const c = card;
     const made = c.made ? byId(c.made) : undefined;
+    // A question whose answers already lead to steps can only be reworded here:
+    // turning it into another kind would leave those steps stranded out of
+    // sight, so that's done in the List, where they show (fresh look 2.3).
+    const ledTo = made && made.type === 'decision'
+      ? new Set(made.routes.map((r) => r.to).filter((to) => to && items.some((it) => it.id === to))).size
+      : 0;
+    const locked = ledTo > 0;
     body = (
       <>
         {kicker}
         {/* Read first: the path just finished, then the question that comes back. */}
         {c.note && <div className="wiz-context">{c.note}</div>}
         <h2>{slotTitle(c)}</h2>
-        {made && <p>You chose <strong>{words(made)}</strong> here. Pick again to change it.</p>}
+        {made && !locked && <p>You chose <strong>{words(made)}</strong> here. Pick again to change it.</p>}
+        {made && locked && (
+          <div className="wiz-locked">
+            <p>
+              <strong>{words(made)}</strong> already has answers leading to {ledTo} step{ledTo === 1 ? '' : 's'}. To reword
+              the question or change its answers, choose <strong>We ask a question</strong> below. To make it a different
+              kind of step, change it in List mode, where you can decide what happens to its answers.
+            </p>
+            <button className="btn btn-secondary" onClick={() => changeInList(made.id)}>Change it in List mode</button>
+          </div>
+        )}
         <div className="wiz-choices">
           {MAIN.map((m) => (
-            <button key={m.kind} className="wiz-choice" onClick={() => chooseKind(c, m.kind)}>
+            <button
+              key={m.kind} className={`wiz-choice${locked && m.kind === 'question' ? ' wiz-choice-open' : ''}`}
+              onClick={() => chooseKind(c, m.kind)} disabled={locked && m.kind !== 'question'}
+            >
               <ShapeIcon type={m.type} />{m.label}
             </button>
           ))}
@@ -348,7 +376,7 @@ export function StepsScreen() {
         <div className="wiz-more-label">More</div>
         <div className="wiz-more">
           {MORE.map((m) => (
-            <button key={m.kind} className="wiz-pill" onClick={() => chooseKind(c, m.kind)}>
+            <button key={m.kind} className="wiz-pill" onClick={() => chooseKind(c, m.kind)} disabled={locked}>
               <ShapeIcon type={m.type} small />{m.label}
             </button>
           ))}

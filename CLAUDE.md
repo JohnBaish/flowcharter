@@ -502,3 +502,36 @@ List) gives the same rows as before. No page errors, no sideways page scroll.
 Before/after sheet sent to John.
 
 **Couldn't be checked:** a real iPhone (the new foot with the keyboard up).
+
+### 2026-10-17 — Fresh look 2.3: changing a question via Back (branch `question-change`, live)
+
+**John chose option (a).** Pressing Back to a question whose answers already
+lead to steps now shows: "*Q* already has answers leading to N steps, so here
+you can only reword it. To make it a different kind of step, change it in List
+mode, where you can see what happens to its answers." (draft wording) and a
+**Change it in List mode** button (opens the List with that row's Type box
+focused, `changeInList` in `StepsScreen.tsx`). Only **We ask a question** stays
+active (to reword it and its answers); the other choices are greyed out. A
+question whose answers have no steps yet is unaffected. In the List, changing
+the Type hides the answers, the row flows on, and any step only they led to
+shows "nothing leads here" (4.1).
+
+**Verified:** build clean, lint the two known warnings, checks 30 + 12. In
+Chromium at 1200px and 390px touch: unanswered question: everything still open
+(only the existing "goes back" lock); answered: 7 choices greyed out, text as
+above, "We ask a question" opens the question's words; the button lands on the
+List with "Type of item 2" focused; changing it to Action gives one "nothing
+leads here". No errors, no sideways scroll. Screenshots sent to John.
+
+**Revised (same branch), after John asked where you'd reword it:** the text now
+reads "*Q* already has answers leading to N steps. To change its words or its
+answers, choose **We ask a question** below. To make it a different kind of
+step, change it in List mode, where you can see what happens to its answers.",
+and that choice has an orange outline (`.wiz-choice-open`). Re-checked at both
+sizes, with the same results. Screenshots of the card and of the rewording card
+it leads to were sent to John.
+
+**Approved and merged (same day)** with John's final wording: "… To reword the
+question or change its answers, choose We ask a question below. To make it a
+different kind of step, change it in List mode, where you can decide what
+happens to its answers." SPEC's Step-by-step section updated.
