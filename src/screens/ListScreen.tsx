@@ -3,7 +3,7 @@ import { flushSync } from 'react-dom';
 import { useApp } from '../state/store.tsx';
 import { SHAPES, SHAPE_ORDER, type ShapeType } from '../data/shapes.ts';
 import { MAX_ITEM_TEXT, MAX_LABEL, MAX_ROUTES, MIN_ROUTES, type Item, type Next, type Route } from '../data/charts.ts';
-import { countReferences, itemLabel, leadsTo, routeLetter } from '../lib/chartOps.ts';
+import { countReferences, itemLabel, leadsTo, nothingLeadsTo, routeLetter } from '../lib/chartOps.ts';
 import { focusItemText, selectAllSoon } from '../lib/focus.ts';
 import { useDragReorder } from '../lib/useDragReorder.ts';
 import { useIsNarrow } from '../lib/responsive.ts';
@@ -90,6 +90,14 @@ export function ListScreen() {
   );
 
   const loopTag = (text: string) => <span className="tag tag-accent" style={{ fontSize: 11 }}>{text}</span>;
+
+  /** A row nothing leads to (e.g. one added after an End): the Chart draws it
+   *  on its own, so say so here (fresh look 4.1). Screen only. */
+  const strayNote = (index: number, className: string) => nothingLeadsTo(items, index) && (
+    <div className={className} data-noprint="1" title="No row or answer leads here, so the Chart draws it on its own">
+      {loopTag('nothing leads here')}
+    </div>
+  );
 
   /** "then → next / ends here / a chosen item", for any row that isn't a decision. */
   const thenSelect = (item: Item, index: number) => {
@@ -234,7 +242,7 @@ export function ListScreen() {
                   <IconGrip size={14} />
                 </td>
                 <td className="list-num mono">{i + 1}</td>
-                <td>{itemInput(item, i)}</td>
+                <td>{itemInput(item, i)}{strayNote(i, 'list-stray')}</td>
                 <td>{typeSelect(item, i)}</td>
                 <td>{routesControl(item, i)}</td>
                 <td data-noprint="1">
@@ -320,6 +328,7 @@ export function ListScreen() {
                 <IconTrash size={14} />
               </button>
             </div>
+            {strayNote(i, 'list-card-note')}
             <div className="list-card-row" style={{ marginTop: 6, paddingLeft: 24 }}>
               {typeSelect(item, i)}
               {item.type === 'decision' && <span style={{ marginLeft: 'auto', flex: 'none' }}>{countBox(item)}</span>}

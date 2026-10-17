@@ -467,3 +467,38 @@ At John's say-so: a fourth card in clockwheel's `landing.html`, third in the lis
 **Kept first:** the previous Guide, in `design/guide-archive/` (`guide-2026-10-16.md`, its text as shown on the page; `GuideScreen-2026-10-16.tsx.txt`, the code), so John can reuse its phrasing.
 
 **Changed, word for word as John gave it:** the intro card is now just "*You can return to this intro page at any time via “Guide”.*" (italic); "Getting started" is cut to the Step by step sentence and "Alternatively you can write the steps yourself.", then the List bullets (the separate "The List" card is gone, its bullets folded in), then "You can switch between the two building modes at any time until your chart is complete, then you can edit it further in List mode."; the Chart card drops its middle sentence about Automatic; the tips keep only the middle two. Standard routine's meaning (`data/shapes.ts`, shown in the Guide's shape tiles) is now "A procedure that has its own separate routine set of steps."
+
+### 2026-10-17 — Fresh look quick fixes (report §9.1), live (branch `quick-fixes`)
+
+**John approved** the six quick fixes from the fresh-look report and said to
+make them live without another check:
+- **2.1** "It goes back to an earlier step" isn't offered when there's no
+  earlier step (the first card, after Start). The pick card and the pill use
+  one list (`backTargets` in `StepsScreen.tsx`).
+- **2.2** Changing an End into another kind via Back starts the box empty
+  (the text card's fill skips a terminator row's words).
+- **2.4** Phone card foot: count, then Back and the main button on the first
+  line; Peek and Switch beneath (`.wiz-foot-main` / `.wiz-foot-links`; one line
+  on a computer as before).
+- **3.1** Abandoned new charts (still "New chart", no rows) are removed on
+  leaving: `withoutAbandoned` in `store.tsx`, run by `setScreen` (unless going
+  to the List, Chart or cards), `openChart`, `createChart` and on load (which
+  also tidies any left from before).
+- **4.1** "nothing leads here" tag on rows no other row or answer leads to
+  (`chartOps.nothingLeadsTo`; a self-loop doesn't count; row 1 never). Under
+  the item's text on both layouts, screen only.
+- **5.1** On a phone a chart that fits at 65% or more shrinks to fit
+  (`FIT_SCALE_PHONE`); otherwise the 75% floor and sideways scroll stay.
+SPEC §4, §5 and the Step-by-step section updated.
+
+**Verified:** build clean; lint the two known warnings; `npm run check` 30 + 12
+(new: `nothingLeadsTo`). In Chromium at 1200px and 390px touch, before and
+after: abandoned cards 1 → 0; first-card pill 1 → 0; "End" pre-fill → empty;
+phone Back/Next on one line above the links, and Next still advances; stray
+tag 0 → 1; test charts `drink`/`unfinished`/`cousin` 382/402/391px scrolling →
+355px fitting on the phone (computer unchanged). The full Stage 5 run-through
+(the worked example through the cards, loop-back pick card, resume from the
+List) gives the same rows as before. No page errors, no sideways page scroll.
+Before/after sheet sent to John.
+
+**Couldn't be checked:** a real iPhone (the new foot with the keyboard up).

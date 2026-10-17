@@ -250,6 +250,16 @@ export function leadsTo(items: Item[], index: number): ItemId | null {
   return items[index + 1]?.id ?? null;
 }
 
+/** True when no other row leads to this one, so the chart draws it as a
+ *  separate island (e.g. a row added after an End). Row 1 is where the chart
+ *  starts, so it never counts; a row looping to itself doesn't count either. */
+export function nothingLeadsTo(items: Item[], index: number): boolean {
+  if (index === 0) return false;
+  const id = items[index].id;
+  return !items.some((it, j) => j !== index
+    && (it.type === 'decision' ? it.routes.some((r) => r.to === id) : leadsTo(items, j) === id));
+}
+
 export const routeLetter = (i: number): string => 'abcdef'[i] ?? String(i + 1);
 
 export function decisionCount(items: Item[]): number {

@@ -5,7 +5,7 @@
 import assert from 'node:assert/strict';
 import { seedChart, newChart, type Item } from '../src/data/charts.ts';
 import {
-  addItem, addStepForAnswer, appendStep, countReferences, linkSlot, nextOpenSlot, openAnswer, setAnswers, guessType, leadsTo, removeItem, reorderItems, setRouteCount, setRouteLabel,
+  addItem, addStepForAnswer, appendStep, countReferences, linkSlot, nextOpenSlot, openAnswer, setAnswers, guessType, leadsTo, nothingLeadsTo, removeItem, reorderItems, setRouteCount, setRouteLabel,
   setRouteTo, setText, setThen, setType, summary,
 } from '../src/lib/chartOps.ts';
 import { exportFilename, exportJson, parseImport, sanitiseChart } from '../src/lib/exchange.ts';
@@ -316,6 +316,17 @@ test('appending after a row that already leads somewhere points it at the new ro
   const items = appendStep(seedChart().items, { kind: 'after', id: 's2' }, 'n', 'process', 'New');
   assert.deepEqual(items[1].then, { kind: 'item', to: 'n' });
   assert.deepEqual(items[7].then, { kind: 'end' }, 'the old last row (End) is unchanged');
+});
+
+test('nothingLeadsTo: flags a row nothing leads to, such as one added after an End', () => {
+  const items = seedChart().items;
+  assert.deepEqual(items.map((_, i) => nothingLeadsTo(items, i)), items.map(() => false), 'every row of the example is reached');
+  const stray = addItem(items, 'x', 's5'); // straight after "End", which ends
+  assert.equal(nothingLeadsTo(stray, 5), true);
+  assert.equal(nothingLeadsTo(setThen(stray, 'x', { kind: 'item', to: 'x' }), 5), true, 'a loop to itself does not count');
+  assert.equal(nothingLeadsTo(setThen(stray, 's4', { kind: 'item', to: 'x' }), 5), false, 'a row pointed at it does');
+  assert.equal(nothingLeadsTo(setRouteTo(stray, 's7', 's7b', 'x'), 5), false, 'so does an answer');
+  assert.equal(nothingLeadsTo([items[0]], 0), false, 'row 1 is where the chart starts');
 });
 
 console.log(`${passed} checks passed`);

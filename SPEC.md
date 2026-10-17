@@ -161,6 +161,9 @@ Small behaviours the spec above didn't spell out. All confirmed by John on
   after it and it leads on to that row again.
 - **The "loops back" tag also appears on a "then" that points at an earlier row**,
   not only on a decision's answers.
+- **A row nothing leads to gets a "nothing leads here" tag** (e.g. a row added
+  after an End), since the Chart draws it on its own. Row 1 never gets it. The
+  tag is on screen only, not printed. (Added 2026-10-17, fresh look 4.1.)
 - **Types are guessed only when a row is created or its text is edited.** Moving
   or deleting rows never changes a row's type.
 - **Changing a row's type** resets its "then" to the new type's default (Start/End
@@ -249,8 +252,10 @@ Not yet seen by John; easy to change.
   the outside rather than crossing other lines. (Changed after John spotted a
   crossing in the Across view; the test charts now have no crossings either way.)
 - **Size:** shown at full size if it fits the width, otherwise shrunk to fit,
-  but never below 60% (75% on a phone, about 10.5px text). A chart still too
-  wide scrolls sideways inside its frame; the page scrolls up and down as usual.
+  but never below 60% (75% on a phone, about 10.5px text). On a phone, a chart
+  that would fit completely at 65% or more is shrunk to fit rather than scroll a
+  few boxes out of sight. A chart still too wide scrolls sideways inside its
+  frame; the page scrolls up and down as usual.
 - The layout library loads only when a chart is first drawn, so the List and
   Library stay quick.
 
@@ -424,8 +429,9 @@ series of cards in conversational English (mock-ups: `design/mock-cards.html`).
   goes out** (Data in/out), **That's the end** (adds End); under **More**: **We
   wait** (Delay), **A document is made or used** (Document), **We follow a
   standard routine** (Standard routine), **It goes back to an earlier step**
-  (pick a step: loops and rejoining paths). Each kind then gets its own prompt
-  and example.
+  (pick a step: loops and rejoining paths; not offered on the very first step,
+  where there's nothing earlier). Each kind then gets its own prompt and
+  example.
 - A question gets an answers card (Yes / No filled in, up to six). The cards
   follow the first answer's path to its end, then come back: "Now back to *Q*.
   If the answer is *No*, what happens next?" ("That's the *Yes* path finished.")
@@ -434,7 +440,14 @@ series of cards in conversational English (mock-ups: `design/mock-cards.html`).
   end: an answer with no destination, else a last step that leads nowhere;
   if there are none, "That's every path covered."
 - **Back** returns to the previous card with what you wrote, to change it; it
-  doesn't delete. (To remove a step, use the List.)
+  doesn't delete. (To remove a step, use the List.) Changing an End into
+  another kind of step starts its box empty, not with "End".
+- On a phone, **Back** and the card's main button share the first line of the
+  card's foot; **Peek at the chart** and **Switch to building in List mode**
+  sit beneath.
+- Pressing **New chart** and leaving without doing anything (still called "New
+  chart", no rows) doesn't leave an empty card in the Library: such a chart is
+  removed when you go to another screen or chart.
 - Every card has **Switch to building in List mode**. On a computer the chart
   so far is drawn beside the card; on a phone, **Peek at the chart** shows it.
 
