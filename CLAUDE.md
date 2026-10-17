@@ -9,7 +9,7 @@ Read these first, in this order:
 2. `PLAN.md`: the staged build. Work one stage at a time, on its branch.
 3. `HOUSE-STYLE.md`: the shared look and ways of working. Copied from
    `JohnBaish/clockwheel` on 2026-10-15 (at clockwheel commit `f62a1b1`), and
-   re-copied 2026-10-17 with §11 added (clockwheel commit `bea5b8f`, branch
+   re-copied 2026-10-17 with §11 added (clockwheel commit `6705ca7`, branch
    `fresh-look`). Clockwheel holds the master copy. If it has changed since,
    re-copy it and note that here. The same goes for
    `.claude/skills/fresh-look/SKILL.md` (the `/fresh-look` review).
@@ -503,3 +503,10 @@ is now part of the house style, as **fresh look**:
 master) and `HOUSE-STYLE.md` §11. Typing `/fresh-look` in a thread runs it once
 it's on `main`. Words after the command narrow it, e.g.
 `/fresh-look phones only`. No app code changed.
+
+**Same day:** the fresh-look procedure was extended at John's request. The
+"Suggested order" section must now place every item, with a coverage line and
+a check before sending (this report's first version missed 2.5, 3.2 and 6.3;
+it was corrected and the PDF resent). The report is also always sent as an
+A5 PDF in the brand fonts (`report-template.html`, `make-pdf.mjs`). Re-copied
+from clockwheel along with `HOUSE-STYLE.md`.

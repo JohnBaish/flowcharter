@@ -28,7 +28,7 @@ Backtimer — long, and mostly about those apps. Read it only for the
 | `src/lib/useDragReorder.ts` | Drag-to-reorder by a grip handle, mouse and touch. Only if needed. |
 | `public/favicon*.svg` | Favicon style to adapt (see §7). |
 | `design/og-clockmaker.html` | Link-preview image source; use it as the template for a new tool (see §7). |
-| `HOUSE-STYLE.md` and `.claude/skills/fresh-look/` | This file, and the "fresh look" review procedure (see §11). Copy both into every project, new or existing. |
+| `HOUSE-STYLE.md` and `.claude/skills/fresh-look/` | This file, and the "fresh look" review procedure with its PDF template and script (see §11). Copy both into every project, new or existing. |
 
 Dependencies these rely on: `@fontsource/caprasimo`, `@fontsource/figtree`,
 `lucide-react`, React. Stack is **Vite + React + TypeScript**, `oxlint`
@@ -255,6 +255,12 @@ project a long, careful review on a computer and a phone, and report back
   **size · priority**, "What happens" and "Recommendation" (options where it's a
   choice). Then "Looked at and would leave alone", "What I couldn't check" and
   "Suggested order". Plain English, British spelling.
+- "Suggested order" must place **every** numbered item: quick fixes,
+  decisions, optional items, or left alone, ending with a coverage line.
+  Check this before sending.
+- Send the report as an A5 PDF too, in the brand fonts, so John can read it on
+  his phone alongside Claude (`report-template.html` and `make-pdf.mjs` sit
+  beside the skill).
 - Build nothing until John picks. Then log the findings and his decisions in
   `CLAUDE.md`.
 

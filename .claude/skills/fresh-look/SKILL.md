@@ -1,6 +1,6 @@
 ---
 name: fresh-look
-description: A full, careful review of one of John Baish's baish.net tools (Clockmaker, Backtimer, Flowcharter, or a new one) as it really behaves on computers and phones — functional snags, usability, and recommended changes — delivered as a numbered report, changing nothing. Use when John types /fresh-look, or asks for a "fresh look", a full review, a snag hunt, or a review of the whole project. Anything typed after the command narrows the focus (e.g. "/fresh-look phones only", "/fresh-look the List screen").
+description: A full, careful review of one of John Baish's baish.net tools (Clockmaker, Backtimer, Flowcharter, or a new one) as it really behaves on computers and phones — functional snags, usability, and recommended changes — delivered as a numbered report (in chat and as a phone-friendly PDF), changing nothing. Use when John types /fresh-look, or asks for a "fresh look", a full review, a snag hunt, or a review of the whole project. Anything typed after the command narrows the focus (e.g. "/fresh-look phones only", "/fresh-look the List screen").
 ---
 
 # Fresh look
@@ -102,14 +102,61 @@ sections and numbered sub-sections, in this order:
    again.
 4. **What I couldn't check.** A real iPhone or Safari, a real printer, slow
    phones, the live domain, and so on.
-5. **Suggested order.** Group the quick fixes into one branch, list the
-   decisions John needs to make, and keep the optional bigger items separate,
-   each previewed first.
+5. **Suggested order, if you'd like to go ahead.** John likes this
+   section. It's a numbered list of next steps that places **every**
+   numbered item from the area sections in one of these groups:
+   - **Quick fixes, in one branch:** the small, low-risk *worth doing* items.
+     Promise before-and-after screenshots.
+   - **Decide on …:** each item with options (a)/(b), naming the options.
+   - **Optional, separately:** the bigger optional items, each previewed
+     first.
+   - **Optional extras that could go into the quick-fix branch:** tiny
+     *optional* items.
+   - **Left alone for now:** *leave* items, with a word on when to revisit
+     ("unless you notice lag"), and the "would leave alone" section.
 
-End by asking which items John would like built, and offer to put the report on
-a shareable page. Don't start building until he says.
+   Leave out any group that would be empty. Finish with a **coverage line**:
+   "Every item in sections 2–N now appears in this list: 2.1–2.5, 3.1–3.2, …".
 
-## 6. Afterwards
+   **Coverage check (required before sending).** List every numbered item
+   heading in the area sections, then tick each one off against the
+   Suggested order. Every item must appear exactly once. If any is missing
+   or appears twice, fix the list before sending; don't leave it for John to
+   spot. (The first Flowcharter report missed three items. That is why this
+   rule exists.)
+
+End by asking which items John would like built. Use the section numbers so
+he can reply briefly ("2.3 option a, 5.2 not now"). Don't start building until
+he says.
+
+## 6. The PDF
+
+John often reads on his phone and switches between the report and Claude, so
+always send the report as a PDF too, in the same words as the chat version
+and including everything up to and including Suggested order.
+
+1. Copy `report-template.html` (next to this file) to the scratchpad and fill
+   it in. Keep its styles: A5 pages, Caprasimo headings, Figtree text, the
+   cream "Nothing has been changed" box at the top, and size · priority in
+   terracotta after each item heading. Each item goes in a
+   `<div class="item">` so it doesn't split across pages.
+2. In a scratchpad folder with Playwright installed (`npm i playwright`; never
+   `playwright install`), copy in `make-pdf.mjs` from next to this file. It
+   must sit beside that folder's `node_modules`, or Node can't find
+   Playwright. Then run
+   `node make-pdf.mjs report.html <Project>-fresh-look-YYYY-MM-DD.pdf <repo>`.
+   It stops if the brand fonts didn't load. (Run `npm ci` in the repo first
+   if `node_modules` is missing.)
+3. Check it before sending. Turn the first and last pages into pictures
+   (`pdftoppm -r 50 -png`) and look at them: fonts, nothing cut off, page
+   numbers, the coverage line present.
+4. Send it with SendUserFile (`display: 'attach'`) with a one-line caption
+   saying what it is and how many pages. Keep the PDF in the scratchpad, not
+   the repo.
+5. If the report changes afterwards, rebuild the PDF from the same HTML, keep
+   the same file name, resend it, and say which pages changed.
+
+## 7. Afterwards
 
 Once John has replied, add a short dated entry to the project's `CLAUDE.md`
 log. Include the review's commit, the numbered findings in one line each, and
