@@ -590,7 +590,7 @@ At John's say-so: `fresh-look` merged into `main` here and in
 log (both branches had added entries at the end); kept both, in date order. No
 app code changed.
 
-### 2026-10-17 — Fresh look optional items 2.5, 3.2, 4.2, 5.2, 5.3, 6.2 (branch `optional-items`, awaiting John's approval)
+### 2026-10-17 — Fresh look optional items 2.5, 3.2, 4.2, 5.2, 5.3, 6.2 (branch `optional-items`, live)
 
 **John said yes** to all six; built for screenshots before going live. 6.1 (back
 gesture) and the section 7 items are for a later conversation.
@@ -628,3 +628,5 @@ five answers; not the long list, drink or the example), fits 366×312 in
 2.3, quick fixes) all still pass. No page errors.
 
 **Couldn't be checked:** pinch-zoom inside Full screen on a real iPhone.
+
+**Approved by John and merged (same day)**, wording as drafted.
