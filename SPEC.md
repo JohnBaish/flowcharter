@@ -426,7 +426,7 @@ series of cards in conversational English (mock-ups: `design/mock-cards.html`).
 - The cards ask the chart's name, add Start, then ask "What happens first?" /
   "After *X*, what happens next?" with plain-English choices: **Something gets
   done** (Action), **We ask a question** (Question), **Information comes in or
-  goes out** (Data in/out), **That's the end** (adds End); under **More**: **We
+  goes out** (Data in/out), **That's the end** (asks "How does this path end?" with "End" filled in and selected, so Next keeps it and typing gives the ending a name, e.g. "Cover arranged"; left blank it's "End"; Start is still added as "Start"); under **More**: **We
   wait** (Delay), **A document is made or used** (Document), **We follow a
   standard routine** (Standard routine), **It goes back to an earlier step**
   (pick a step: loops and rejoining paths; not offered on the very first step,
