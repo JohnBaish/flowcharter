@@ -677,3 +677,38 @@ code or words without asking). CC BY suits content, not code. If John later
 wants others to reuse the work: MIT for code, optionally CC BY for the Guide
 text and images. Making the repos private is the option if the notes should
 not be readable. No change made.
+
+### 2026-10-17 — Fresh look 6.1: the phone's Back, one step (branch `back-step`, awaiting John's try on the preview)
+
+**John's concern:** sites that fill your history with their own addresses are
+annoying. Asked about a "you're about to leave" warning instead: explained it's
+not workable (browsers show only their own fixed wording about unsaved changes,
+which would be untrue here; iPhone Safari doesn't show it; Chrome skips history
+traps). **He chose** the one-step version, with Back also closing Peek and Full
+screen.
+
+**What:** `lib/backLayers.ts`, `useBackLayer(open, id, onBack)`: while a
+"layer" is open it adds one history entry (`pushState`, same address); the
+browser's Back closes the top layer (`popstate`); closing it any other way
+takes its entry back off (`history.back()`, that pop ignored), so entries
+never pile up. Layers: the chart (in `App.tsx`, open while on List, Chart or
+cards; Back → Library), Peek (`StepsScreen.tsx`) and Full screen
+(`ChartScreen.tsx`). After a reload on a chart the browser is already on the
+chart's entry, so it's adopted rather than added; a reload with Peek/Full
+screen open turns that entry into the chart's. React's development double-run
+is absorbed (a layer closed and reopened at once keeps its entry). SPEC §2
+records the behaviour.
+
+**Verified:** build clean, lint the two known warnings, checks 30 + 12. In
+Chromium (built app) at 1200px and 390px touch, with a page before the site in
+the history: open a chart, switch List/Chart/List → history grows by one; Back →
+Library, Back → leaves; open a chart then Library via the top bar → Back leaves
+straight away (no dead press); New chart → cards, Back → Library and no empty
+chart left; List → Step by step, Back → Library; Peek: Back closes it, and after
+closing it by its button, Back → Library; Full screen the same; reload on a
+chart, Back → Library then leaves; Guide, Back leaves; address unchanged
+throughout. Same results in the development server (desktop). Earlier
+run-throughs (Stage 5, 2.3, optional items, ending names) all pass.
+
+**Couldn't be checked:** the real gestures on an iPhone (swipe back) and
+Android (back button). That's why John is trying the branch's preview first.

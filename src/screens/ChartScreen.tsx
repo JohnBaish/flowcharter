@@ -6,6 +6,7 @@ import { LABEL_FONT, TEXT_FONT } from '../lib/shapes.ts';
 import { canvasMeasure, fontsReady } from '../lib/textWrap.ts';
 import { useIsNarrow } from '../lib/responsive.ts';
 import { FlowChart, ShapeKey } from '../components/FlowChart.tsx';
+import { useBackLayer } from '../lib/backLayers.ts';
 
 const NARROW = 720;
 // Never shrink the chart below this, or its text gets too small to read — a
@@ -43,6 +44,8 @@ export function ChartScreen() {
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
   }, [full]);
+  // Back closes Full screen, as people expect on a phone (fresh look 6.1).
+  useBackLayer(full, 'full', () => setFull(false));
   // Closed again on leaving the Chart.
   useEffect(() => () => { setFull(false); setChartWide(false); }, [setFull, setChartWide]);
 

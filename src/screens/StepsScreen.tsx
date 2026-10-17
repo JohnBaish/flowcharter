@@ -8,6 +8,7 @@ import {
 } from '../lib/chartOps.ts';
 import { useIsNarrow } from '../lib/responsive.ts';
 import { LiveChart } from '../components/LiveChart.tsx';
+import { useBackLayer } from '../lib/backLayers.ts';
 
 // The step-by-step cards (PLAN.md Stage 5; mock-ups in design/mock-cards.html).
 // They follow one path to its end, then come back for each answer still
@@ -95,6 +96,8 @@ export function StepsScreen() {
   const [labels, setLabels] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [peek, setPeek] = useState(false);
+  // Back closes Peek, as people expect on a phone (fresh look 6.1).
+  useBackLayer(peek, 'peek', () => setPeek(false));
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   // Fill a card's boxes when it appears (also after Back, with what was typed).
