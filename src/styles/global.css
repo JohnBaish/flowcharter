@@ -223,6 +223,7 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
 }
 .wiz-pill:disabled, .wiz-choice:disabled { opacity: .45; cursor: default; }
 .wiz-locked { margin: 0 0 14px; }
+.wiz-choice-open { border-color: var(--color-accent); }
 .wiz-locked p { margin: 0 0 10px; }
 .wiz-field {
   width: 100%; box-sizing: border-box; font: 600 17px var(--font-body); padding: 12px 14px; border-radius: 14px;

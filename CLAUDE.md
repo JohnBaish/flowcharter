@@ -522,3 +522,11 @@ Chromium at 1200px and 390px touch: unanswered question: everything still open
 above, "We ask a question" opens the question's words; the button lands on the
 List with "Type of item 2" focused; changing it to Action gives one "nothing
 leads here". No errors, no sideways scroll. Screenshots sent to John.
+
+**Revised (same branch), after John asked where you'd reword it:** the text now
+reads "*Q* already has answers leading to N steps. To change its words or its
+answers, choose **We ask a question** below. To make it a different kind of
+step, change it in List mode, where you can see what happens to its answers.",
+and that choice has an orange outline (`.wiz-choice-open`). Re-checked at both
+sizes, with the same results. Screenshots of the card and of the rewording card
+it leads to were sent to John.
