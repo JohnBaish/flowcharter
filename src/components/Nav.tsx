@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import { useApp, type Screen } from '../state/store.tsx';
 import { relativeTime, useNow } from '../lib/time.ts';
-import { IconClose, IconMenu } from '../lib/icons.tsx';
 
 // List and Chart aren't here: the List | Chart switch in a chart's own header is
 // the one way between them (John, 2026-10-15), and a chart is opened from the Library.
@@ -15,51 +13,33 @@ export function Nav({ screen, onNavigate }: { screen: Screen; onNavigate: (s: Sc
 
   const now = useNow();
 
-  // Below the narrow-screen breakpoint (see global.css), the links and the
-  // saved-tag collapse behind this toggle; on a wide screen .nav-panel is CSS
-  // `display: contents`, so this state is irrelevant there.
-  const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = (s: Screen) => { onNavigate(s); setMenuOpen(false); };
-
   // A new chart opens on the step-by-step cards, whose first card asks whether
   // to go step by step or start with a blank list (John, 2026-10-16).
-  const handleNewChart = () => {
-    createChart('steps');
-    setMenuOpen(false);
-  };
+  const handleNewChart = () => createChart('steps');
 
+  // With only two links, the phone shows them directly rather than behind a
+  // menu button (fresh look 6.2); the "saved" tag is left out there for room.
   return (
-    <div className="nav" style={{ padding: 'var(--space-3) var(--space-6)', background: 'var(--color-surface)', flexWrap: 'wrap' }}>
+    <div className="nav nav-main" style={{ flexWrap: 'wrap' }}>
       <span className="nav-brand">Flowcharter</span>
       <button
-        className="nav-menu-toggle"
-        onClick={() => setMenuOpen((o) => !o)}
-        aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-        aria-expanded={menuOpen}
-        data-noprint="1"
-      >
-        {menuOpen ? <IconClose size={19} /> : <IconMenu size={19} />}
-      </button>
-      <button
-        className="btn btn-primary"
+        className="btn btn-primary nav-new"
         onClick={handleNewChart}
-        style={{ padding: '7px 16px', fontSize: '13.5px', whiteSpace: 'nowrap', marginLeft: 'auto' }}
+        style={{ fontSize: '13.5px', whiteSpace: 'nowrap', marginLeft: 'auto' }}
       >
         New chart
       </button>
-      <div className={`nav-panel${menuOpen ? ' open' : ''}`}>
-        {LINKS.map((l) => (
-          <a
-            key={l.screen}
-            href={`#${l.screen}`}
-            onClick={(e) => { e.preventDefault(); navigate(l.screen); }}
-            aria-current={screen === l.screen ? 'page' : undefined}
-          >
-            {l.label}
-          </a>
-        ))}
-        <span className="tag tag-neutral mono" data-noprint="1">saved {relativeTime(lastEditedAt, now)}</span>
-      </div>
+      {LINKS.map((l) => (
+        <a
+          key={l.screen}
+          href={`#${l.screen}`}
+          onClick={(e) => { e.preventDefault(); onNavigate(l.screen); }}
+          aria-current={screen === l.screen ? 'page' : undefined}
+        >
+          {l.label}
+        </a>
+      ))}
+      <span className="tag tag-neutral mono nav-saved" data-noprint="1">saved {relativeTime(lastEditedAt, now)}</span>
     </div>
   );
 }
