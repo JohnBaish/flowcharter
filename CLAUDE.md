@@ -589,3 +589,42 @@ At John's say-so: `fresh-look` merged into `main` here and in
 `HOUSE-STYLE.md` §11 are available to new threads. The only conflict was this
 log (both branches had added entries at the end); kept both, in date order. No
 app code changed.
+
+### 2026-10-17 — Fresh look optional items 2.5, 3.2, 4.2, 5.2, 5.3, 6.2 (branch `optional-items`, awaiting John's approval)
+
+**John said yes** to all six; built for screenshots before going live. 6.1 (back
+gesture) and the section 7 items are for a later conversation.
+- **2.5** A visible line under the choices when "It goes back to an earlier
+  step" is greyed out: "“It goes back to an earlier step” isn't available
+  here, because *X* has already been added. To remove it, use List mode."
+  (draft; `.wiz-note`; not shown on the locked-question card, which explains
+  itself).
+- **3.2** A Library card's name is a real button (`.library-chart-title`):
+  Tab reaches it, Enter opens the chart; looks as before, accent on hover.
+- **4.2** Undo after deleting a row in the List: a dark message at the bottom,
+  "Deleted “*text*”" (or "Deleted item N") with **Undo**, for 6 seconds
+  (`.toast`; `store.restoreItems`). It only shows while the rows are exactly as
+  the delete left them, so Undo can't throw away a later edit. The existing
+  confirmation for a row other routes lead to is kept. Clear isn't covered.
+- **5.2** Full screen on a phone: offered in the Chart header (beside Print and
+  Copy image) only while the chart is too wide for the screen; opens the whole
+  chart shrunk to fit width and height (`.chart-full`), pinch to zoom, Close.
+  The header and Chart screen share two unsaved flags in the store
+  (`chartWide`, `chartFull`), reset on leaving the Chart.
+- **5.3** The chart's name is 24px on a phone (32px on a computer).
+- **6.2** No menu button: Library and Guide sit in the top bar on a phone too;
+  the "saved … ago" tag is hidden there for room (`.nav-main`, `.nav-saved`).
+  Computer nav unchanged.
+
+**Verified:** build clean; lint the two known warnings (one new ref warning
+fixed); checks 30 + 12. In Chromium at 1200px and 390px touch: phone nav one
+row 62px tall, links 44px, no menu button, no sideways scroll; Tab reaches a
+card name and Enter opens it; Undo restores the rows exactly, the message
+goes after Undo, after another edit, and after 6s, and appears after the
+confirmed delete of a referenced row; name 24px on the phone, chart starts
+~55px higher (360 vs ~413); Full screen only on wide charts (newsreaders,
+five answers; not the long list, drink or the example), fits 366×312 in
+390×844, Close works; 2.5 line shown. Earlier run-throughs (Stage 5 cards,
+2.3, quick fixes) all still pass. No page errors.
+
+**Couldn't be checked:** pinch-zoom inside Full screen on a real iPhone.

@@ -1,4 +1,4 @@
-import { GripVertical, Menu, Plus, Printer, Trash2, X, type LucideProps } from 'lucide-react';
+import { GripVertical, Maximize2, Menu, Plus, Printer, Trash2, X, type LucideProps } from 'lucide-react';
 
 const STROKE_WIDTH = 2.75;
 
@@ -14,3 +14,4 @@ export const IconTrash = withStroke(Trash2);
 export const IconPrint = withStroke(Printer);
 export const IconMenu = withStroke(Menu);
 export const IconClose = withStroke(X);
+export const IconFullScreen = withStroke(Maximize2);

@@ -100,12 +100,10 @@ export function LibraryScreen() {
             return (
               <div key={id} className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', padding: 'var(--space-4)' }}>
                 <div style={{ minWidth: 0 }}>
-                  <div
-                    onClick={() => openChart(id)}
-                    style={{ font: '700 15.5px var(--font-body)', lineHeight: 1.2, textWrap: 'pretty', cursor: 'pointer', overflowWrap: 'anywhere' }}
-                  >
+                  {/* A real button, so it can be reached with Tab like Open (fresh look 3.2). */}
+                  <button className="library-chart-title" onClick={() => openChart(id)}>
                     {title(c)}
-                  </div>
+                  </button>
                   <div className="mono" style={{ fontSize: 12, color: 'var(--color-neutral-700)', marginTop: 3 }}>{summary(c.items)}</div>
                   <div className="mono" style={{ fontSize: 12, color: 'var(--color-neutral-700)' }}>Last changed {relativeTime(c.lastEditedAt, now)}</div>
                 </div>

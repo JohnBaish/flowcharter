@@ -25,13 +25,26 @@ type Layouts = { down: ChartLayout; across: ChartLayout };
 type Drawn = { items: unknown; layouts: Layouts } | { items: unknown; error: true };
 
 export function ChartScreen() {
-  const { chart, setDirection, setScreen } = useApp();
+  const { chart, setDirection, setScreen, setChartWide, chartFull: full, setChartFull: setFull } = useApp();
   const items = chart?.items ?? NO_ITEMS;
   const hasItems = items.length > 0;
   const isNarrow = useIsNarrow(NARROW);
   const [drawn, setDrawn] = useState<Drawn | null>(null);
   const frame = useRef<HTMLDivElement | null>(null);
   const [space, setSpace] = useState({ width: 1000, height: 640 });
+  // Full screen on a phone (fresh look 5.2): the whole chart shrunk to fit the
+  // screen, to see it all at once and pinch to zoom in. The header's Full screen
+  // button opens it; it's offered only while the chart is too wide to fit.
+  const [screenSize, setScreenSize] = useState({ width: 390, height: 844 });
+  useEffect(() => {
+    if (!full) return;
+    const measure = () => setScreenSize({ width: window.innerWidth, height: window.innerHeight });
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [full]);
+  // Closed again on leaving the Chart.
+  useEffect(() => () => { setFull(false); setChartWide(false); }, [setFull, setChartWide]);
 
   // Lay the chart out both ways whenever the list changes. Both are needed for
   // "Automatic", and each takes a few milliseconds, so it's simplest to always
@@ -69,6 +82,22 @@ export function ChartScreen() {
     return () => { ro.disconnect(); window.removeEventListener('resize', measure); };
   }, [hasItems]);
 
+  const layouts = drawn && 'layouts' in drawn ? drawn.layouts : null;
+  // What Automatic picks for this chart in this space — shown on its button
+  // whichever direction is selected, so it's clear what choosing it would do.
+  const automatic = layouts ? chooseDirection(layouts.down, layouts.across, space.width, space.height) : null;
+  const layout = layouts && chart
+    ? chart.direction === 'down' ? layouts.down
+      : chart.direction === 'across' ? layouts.across
+        : automatic
+    : null;
+  const minScale = isNarrow ? MIN_SCALE_PHONE : MIN_SCALE;
+  const fit = layout ? space.width / layout.width : 1;
+  const scale = Math.min(1, isNarrow && fit >= FIT_SCALE_PHONE ? fit : Math.max(minScale, fit));
+  // Too wide to fit a phone screen, so it scrolls sideways: offer Full screen.
+  const wide = isNarrow && items.length > 0 && !!layout && layout.width * scale > space.width + 1;
+  useEffect(() => { setChartWide(wide); }, [wide, setChartWide]);
+
   if (!chart) return null;
 
   if (!items.length) {
@@ -80,16 +109,7 @@ export function ChartScreen() {
     );
   }
 
-  const layouts = drawn && 'layouts' in drawn ? drawn.layouts : null;
   const failed = drawn && 'error' in drawn && drawn.items === items;
-  // What Automatic picks for this chart in this space — shown on its button
-  // whichever direction is selected, so it's clear what choosing it would do.
-  const automatic = layouts ? chooseDirection(layouts.down, layouts.across, space.width, space.height) : null;
-  const layout = layouts
-    ? chart.direction === 'down' ? layouts.down
-      : chart.direction === 'across' ? layouts.across
-        : automatic
-    : null;
   // Two choices (John, 2026-10-15): Automatic, which names the direction it
   // picks, and the other direction. Choosing the direction Automatic already
   // picks would look the same, so it isn't offered; a chart saved with that
@@ -99,9 +119,6 @@ export function ChartScreen() {
     ? [{ value: 'auto', label: `Automatic · ${NAMES[automatic.direction]}` }, { value: other, label: NAMES[other] }]
     : [{ value: 'auto', label: 'Automatic' }];
   const selected = chart.direction === other ? other : 'auto';
-  const minScale = isNarrow ? MIN_SCALE_PHONE : MIN_SCALE;
-  const fit = layout ? space.width / layout.width : 1;
-  const scale = Math.min(1, isNarrow && fit >= FIT_SCALE_PHONE ? fit : Math.max(minScale, fit));
   const usedTypes = [...new Set(items.map((it) => it.type))];
 
   return (
@@ -125,6 +142,20 @@ export function ChartScreen() {
           ))}
         </div>
       </div>
+      {full && layout && (
+        <div className="chart-full" role="dialog" aria-label={`${chart.name} — full screen`} data-noprint="1">
+          <div className="chart-full-head">
+            <h3>{chart.name.trim() || 'Untitled'}</h3>
+            <button className="btn btn-primary" onClick={() => setFull(false)}>Close</button>
+          </div>
+          <FlowChart
+            layout={layout}
+            // Fits both ways, below the heading (about 76px), with a small margin.
+            scale={Math.min(1, (screenSize.width - 24) / layout.width, (screenSize.height - 100) / layout.height)}
+            title={chart.name}
+          />
+        </div>
+      )}
       <div ref={frame} className="chart-frame">
         {failed ? (
           <p style={{ textAlign: 'center', color: 'var(--color-neutral-700)', padding: 'var(--space-6)' }}>

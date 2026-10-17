@@ -6,7 +6,8 @@ import { nextOpenSlot, summary } from '../lib/chartOps.ts';
 import { MAX_NAME } from '../data/charts.ts';
 import { copyChartImage, slug } from '../lib/exportImage.ts';
 import { printScreen } from '../lib/print.ts';
-import { IconPlus, IconPrint } from '../lib/icons.tsx';
+import { IconFullScreen, IconPlus, IconPrint } from '../lib/icons.tsx';
+import { useIsNarrow } from '../lib/responsive.ts';
 
 /** Header for the List and Chart screens — two views of the same chart: the
  *  chart's name and a count of its items on the left, the List | Chart switch in
@@ -14,9 +15,11 @@ import { IconPlus, IconPrint } from '../lib/icons.tsx';
  *  right in one line, as in Backtimer (List: Print, Add item, Clear; Chart:
  *  Print, Copy image). The Library is reached from the nav. */
 export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
-  const { chart, renameChart, setScreen, addItem, clearItems } = useApp();
+  const { chart, renameChart, setScreen, addItem, clearItems, chartWide, setChartFull } = useApp();
   const nameInput = useRef<HTMLTextAreaElement | null>(null);
   const [imageStatus, setImageStatus] = useState<'idle' | 'copied' | 'downloaded' | 'failed'>('idle');
+  // A smaller name on a phone, so the chart isn't pushed halfway down (fresh look 5.3).
+  const isNarrow = useIsNarrow(720);
 
   // The name is a textarea so a long one wraps; keep it exactly as tall as its text.
   useEffect(() => {
@@ -24,7 +27,7 @@ export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
     if (!el) return;
     el.style.height = 'auto';
     el.style.height = `${el.scrollHeight}px`;
-  }, [chart?.name]);
+  }, [chart?.name, isNarrow]);
 
   if (!chart) return null;
 
@@ -74,7 +77,7 @@ export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
           onChange={(e) => renameChart(chart.id, e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); (e.target as HTMLTextAreaElement).blur(); } }}
           style={{
-            font: '400 32px var(--font-heading)', lineHeight: 1.05, margin: '1px 0 0', padding: '0 6px',
+            font: `400 ${isNarrow ? 24 : 32}px var(--font-heading)`, lineHeight: 1.05, margin: '1px 0 0', padding: '0 6px',
             display: 'block', resize: 'none', overflow: 'hidden', wordBreak: 'break-word', width: '100%',
           }}
         />
@@ -116,6 +119,7 @@ export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
           </>
         )}
         {mode === 'chart' && (
+          <>
           <button
             onClick={copyImage}
             disabled={chart.items.length === 0}
@@ -124,6 +128,17 @@ export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
           >
             {imageStatus === 'copied' ? 'Copied!' : imageStatus === 'downloaded' ? 'Downloaded' : imageStatus === 'failed' ? "Couldn't copy" : 'Copy image'}
           </button>
+          {/* On a phone, when the chart is too wide to fit: see it all at once (fresh look 5.2). */}
+          {isNarrow && chartWide && (
+            <button
+              onClick={() => setChartFull(true)}
+              className="btn btn-secondary"
+              style={{ padding: '8px 14px', fontSize: '13.5px', whiteSpace: 'nowrap' }}
+            >
+              <IconFullScreen size={15} />Full screen
+            </button>
+          )}
+          </>
         )}
       </div>
     </div>

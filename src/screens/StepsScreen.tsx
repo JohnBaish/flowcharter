@@ -390,6 +390,13 @@ export function StepsScreen() {
             </button>
           )}
         </div>
+        {/* Phones don't show hover text, so say why it's greyed out (fresh look 2.5). */}
+        {made && !locked && backTargets(c.slot).length > 0 && (
+          <p className="wiz-note">
+            “It goes back to an earlier step” isn't available here, because <strong>{words(made)}</strong> has already been
+            added. To remove it, use List mode.
+          </p>
+        )}
         {foot()}
       </>
     );

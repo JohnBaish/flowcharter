@@ -85,6 +85,8 @@ interface AppContextValue extends PersistedState {
   removeItem: (itemId: ItemId) => void;
   /** Removes every row of the open chart (its name and settings stay). */
   clearItems: () => void;
+  /** Puts the open chart's rows back as they were (Undo after a delete). */
+  restoreItems: (items: Chart['items']) => void;
   reorderItems: (from: number, to: number) => void;
   setItemText: (itemId: ItemId, text: string) => void;
   setItemType: (itemId: ItemId, type: ShapeType) => void;
@@ -100,6 +102,13 @@ interface AppContextValue extends PersistedState {
   linkSlot: (slot: ops.Slot, to: ItemId) => void;
   setAnswers: (itemId: ItemId, labels: string[]) => void;
 
+  /** Not saved: whether the Chart is wider than a phone screen (so the header
+   *  offers Full screen), and whether Full screen is open (fresh look 5.2). */
+  chartWide: boolean;
+  setChartWide: (wide: boolean) => void;
+  chartFull: boolean;
+  setChartFull: (full: boolean) => void;
+
   exportState: () => string;
   /** Replaces the whole library with an already-checked one (see parseImport). */
   replaceLibrary: (library: Library) => void;
@@ -109,6 +118,8 @@ const AppContext = createContext<AppContextValue | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<PersistedState>(loadInitial);
+  const [chartWide, setChartWide] = useState(false);
+  const [chartFull, setChartFull] = useState(false);
 
   useEffect(() => {
     try {
@@ -187,6 +198,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     },
     removeItem: (itemId) => editItems((items) => ops.removeItem(items, itemId)),
     clearItems: () => editItems(() => []),
+    restoreItems: (items) => editItems(() => items),
     reorderItems: (from, to) => editItems((items) => ops.reorderItems(items, from, to)),
     setItemText: (itemId, text) => editItems((items) => ops.setText(items, itemId, text)),
     setItemType: (itemId, type) => editItems((items) => ops.setType(items, itemId, type)),
@@ -207,9 +219,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return id;
     },
 
+    chartWide, setChartWide, chartFull, setChartFull,
     exportState: () => exportJson({ charts: state.charts, chartOrder: state.chartOrder, openChartId: state.openChartId }),
     replaceLibrary: (library) => setEdited((s) => ({ ...s, ...library, screen: 'lib' })),
-  }), [state]);
+  }), [state, chartWide, chartFull]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

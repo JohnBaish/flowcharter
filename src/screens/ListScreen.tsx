@@ -1,4 +1,4 @@
-import { useState, type KeyboardEvent, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { flushSync } from 'react-dom';
 import { useApp } from '../state/store.tsx';
 import { SHAPES, SHAPE_ORDER, type ShapeType } from '../data/shapes.ts';
@@ -14,10 +14,24 @@ const NEW_STEP = '__new-step__';
 
 export function ListScreen() {
   const {
-    chart, addItem, removeItem, reorderItems, setItemText, setItemType, setItemThen,
+    chart, addItem, removeItem, restoreItems, reorderItems, setItemText, setItemType, setItemThen,
     setRouteCount, setRouteLabel, setRouteTo, addStepForAnswer,
   } = useApp();
   const items = chart?.items ?? [];
+  // The latest rows, read straight after a delete made inside flushSync.
+  const itemsRef = useRef(items);
+  useLayoutEffect(() => { itemsRef.current = items; });
+
+  // Undo for a deleted row (fresh look 4.2): the rows before the delete, and
+  // the rows just after it. The message shows only while nothing else has
+  // changed since, so Undo can never throw away a later edit.
+  const [undo, setUndo] = useState<{ text: string; before: Item[]; after: Item[] } | null>(null);
+  useEffect(() => {
+    if (!undo) return;
+    const t = setTimeout(() => setUndo(null), 6000);
+    return () => clearTimeout(t);
+  }, [undo]);
+  const showUndo = undo && undo.after === items;
   const isNarrow = useIsNarrow(NARROW);
   // The route-count box can be empty or half-typed; it only commits once it's a valid number.
   const [countDrafts, setCountDrafts] = useState<Record<string, string>>({});
@@ -39,8 +53,18 @@ export function ListScreen() {
         + `If you delete it, ${n === 1 ? 'that route' : 'those routes'} will need a new destination.\n\nDelete it?`;
       if (!window.confirm(message)) return;
     }
-    removeItem(item.id);
+    const before = items;
+    flushSync(() => removeItem(item.id));
+    const text = item.text.trim() ? `Deleted “${item.text.trim()}”` : `Deleted item ${index + 1}`;
+    setUndo({ text, before, after: itemsRef.current });
   };
+
+  const undoToast = showUndo && (
+    <div className="toast" role="status" data-noprint="1">
+      <span className="toast-text">{undo.text}</span>
+      <button className="toast-btn" onClick={() => { restoreItems(undo.before); setUndo(null); }}>Undo</button>
+    </div>
+  );
 
 
   // Enter adds the next row; Up/Down move between rows' text boxes.
@@ -282,6 +306,7 @@ export function ListScreen() {
           Each row leads on to the next one unless you choose otherwise. A question's answers appear underneath it; pick
           where each one goes. Choosing an earlier item makes a loop.
         </p>
+        {undoToast}
       </div>
     );
   }
@@ -363,6 +388,7 @@ export function ListScreen() {
       >
         <IconPlus size={15} />Add item
       </button>
+      {undoToast}
     </div>
   );
 }
