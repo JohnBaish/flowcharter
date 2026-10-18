@@ -6,6 +6,10 @@ tool: **Flowcharter** now, **Hindcaster** when it's finished, and anything
 after that. Written 2026-10-17 from what is live in `JohnBaish/clockwheel`.
 If this file and the code disagree, the code is right.
 
+**Flowcharter** followed the checklist on 2026-10-18 (its own repo,
+`JohnBaish/flowcharter`; details in its `CLAUDE.md`): its row is in the
+table below. Its visible text is a "What's a flowchart?" card in the Guide.
+
 Read `HOUSE-STYLE.md` first for everything else (look, phones, privacy,
 hosting, how John likes to work). This file only covers search.
 
@@ -20,11 +24,11 @@ tool linked back to the hub. Done in three steps.
 
 ### Step 1: invisible changes (in the page code, not on screen)
 
-| What | Clockmaker | Backtimer | Hub |
-|---|---|---|---|
-| `<title>` | Clockmaker – free radio hot clock & format clock maker | Backtimer – free backtiming calculator for radio and TV | baish.net – free radio and flowchart tools by John Baish |
-| `<meta name="description">` | Free hot clock maker for radio. Build a format clock for each hour, see it as a circle or a list, plan your week and print it. Works in your browser. | Free backtiming calculator for radio and TV. Enter your out-time and items, and see exactly when each one needs to start to hit the news on time. | Free browser tools by John Baish: Clockmaker for radio hot clocks, Backtimer for backtiming, and Flowcharter for flowcharts. |
-| `<link rel="canonical">` | https://clockmaker.baish.net/ | https://backtimer.baish.net/ | https://www.baish.net/ |
+| What | Clockmaker | Backtimer | Flowcharter | Hub |
+|---|---|---|---|---|
+| `<title>` | Clockmaker – free radio hot clock & format clock maker | Backtimer – free backtiming calculator for radio and TV | Flowcharter – free flowchart maker from a simple list | baish.net – free radio and flowchart tools by John Baish |
+| `<meta name="description">` | Free hot clock maker for radio. Build a format clock for each hour, see it as a circle or a list, plan your week and print it. Works in your browser. | Free backtiming calculator for radio and TV. Enter your out-time and items, and see exactly when each one needs to start to hit the news on time. | Free flowchart maker. Type your steps as a list, or answer simple questions step by step, and Flowcharter draws the chart. Print it or copy it as an image. | Free browser tools by John Baish: Clockmaker for radio hot clocks, Backtimer for backtiming, and Flowcharter for flowcharts. |
+| `<link rel="canonical">` | https://clockmaker.baish.net/ | https://backtimer.baish.net/ | https://flowcharter.baish.net/ | https://www.baish.net/ |
 
 Why each part:
 - **Title and search description** are what Google shows in its results.

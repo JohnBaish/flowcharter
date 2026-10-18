@@ -916,3 +916,7 @@ Request indexing); Flowcharter's row in clockwheel's `SEO-HANDOVER.md` §1 table
 
 **Merged into `main` at John's say-so**, and OK given for the clockwheel table row.
 The only conflict was this log (another thread had added section 7 entries); kept both.
+
+**Same day:** Flowcharter's row added to the table in clockwheel's
+`SEO-HANDOVER.md` (clockwheel commit `c13e569`, straight to its `main`), and
+this repo's copy re-copied from there.
