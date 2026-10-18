@@ -733,6 +733,34 @@ and 390px touch, the Guide and the Library show workshop@baish.net and no
 trace of the old address; no errors. The "couldn't be drawn" message only
 appears if drawing fails, so it was checked in the code, not on screen.
 
+### 2026-10-17 — SEO handover copied; research only (branch `claude/dazzling-ptolemy-645jyt`)
+
+**John asked** for `SEO-HANDOVER.md` to be copied from `JohnBaish/clockwheel`
+(main, commit `e8f971b`; clockwheel holds the master copy) and its checklist
+(§2) researched, with recommendations held until he asks. No app code changed.
+
+**Found, against the checklist** (not yet discussed with John):
+- 1–3, 4: `<title>` is just "Flowcharter"; the one description, "Create a
+  flowchart from a list", is used for search and link previews alike. The
+  link-preview picture draws that same wording, so the og:/twitter: tags
+  should keep it and only `<meta name="description">` change.
+- 5: no canonical tag (needed: flowcharter.vercel.app still serves the site).
+- 6: nothing in `src/` sets `document.title`.
+- 7: no search comment in `index.html` yet.
+- 8: `public/` has no robots.txt or sitemap.xml (one Vercel project, one
+  domain, so plain files will do). Locally, `vite preview` answers
+  `/robots.txt` with the app's HTML; whether live Vercel does the same or
+  gives a 404 can't be checked from here (Google treats a 404 as "no
+  rules"). Adding the real files settles it either way.
+- 9: a first visit opens the Guide (about 470 words, both widths), so
+  that's what Google sees; it says how to use the tool but not what a
+  flowchart is or the other names people search for (flow chart, flow
+  diagram, process map, decision tree).
+- 10: "Contact: workshop@baish.net" appears in the Guide's last card and the
+  Library footer; neither has the "More free tools at www.baish.net." link.
+- 11–12: done (card in `landing.html`; hub title already names flowchart tools).
+- 13–18: to do after the changes (checks, live files, Search Console, log).
+
 ### 2026-10-18 — Section 7 notes saved for discussion (notes only, straight to `main`)
 
 John is moving the discussion of the fresh-look report's section 7 (7.1–7.4,
@@ -854,4 +882,3 @@ file's key points only; the master house style is in clockwheel).
 
 **Merged at John's say-so:** branch `claude/epic-brahmagupta-muah7v` (7.1, 7.2,
 number style, this handover) into `main`.
-
