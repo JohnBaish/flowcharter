@@ -102,6 +102,30 @@ export function sanitiseLibrary(raw: unknown): Library | null {
   return { charts, chartOrder, openChartId: open };
 }
 
+/** JSON with object keys sorted, so two equal sets of charts compare equal
+ *  whatever order their fields happened to be built in. */
+function stableJson(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(stableJson).join(',')}]`;
+  if (isObject(value)) {
+    return `{${Object.keys(value).sort().map((k) => `${JSON.stringify(k)}:${stableJson(value[k])}`).join(',')}}`;
+  }
+  return JSON.stringify(value) ?? 'null';
+}
+
+/** Whether the browser's saved copy (raw text) holds different charts from the
+ *  ones in `mine`. Which screen or chart is open doesn't count, only the work.
+ *  Unreadable or missing text says false: nothing worth warning about. */
+export function savedCopyDiffers(raw: string | null, mine: Library): boolean {
+  if (!raw) return false;
+  try {
+    const theirs = sanitiseLibrary(JSON.parse(raw));
+    if (!theirs) return false;
+    return stableJson([theirs.charts, theirs.chartOrder]) !== stableJson([mine.charts, mine.chartOrder]);
+  } catch {
+    return false;
+  }
+}
+
 export function exportJson(library: Library, now = new Date()): string {
   return JSON.stringify({ app: EXPORT_APP, version: EXPORT_VERSION, exportedAt: now.toISOString(), state: library }, null, 2);
 }

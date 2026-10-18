@@ -8,7 +8,7 @@ import {
   addItem, addStepForAnswer, appendStep, countReferences, linkSlot, nextOpenSlot, openAnswer, setAnswers, guessType, leadsTo, nothingLeadsTo, removeItem, reorderItems, setRouteCount, setRouteLabel,
   setRouteTo, setText, setThen, setType, summary,
 } from '../src/lib/chartOps.ts';
-import { exportFilename, exportJson, parseImport, sanitiseChart } from '../src/lib/exchange.ts';
+import { exportFilename, exportJson, parseImport, sanitiseChart, savedCopyDiffers } from '../src/lib/exchange.ts';
 
 let passed = 0;
 const test = (name: string, fn: () => void) => {
@@ -327,6 +327,20 @@ test('nothingLeadsTo: flags a row nothing leads to, such as one added after an E
   assert.equal(nothingLeadsTo(setThen(stray, 's4', { kind: 'item', to: 'x' }), 5), false, 'a row pointed at it does');
   assert.equal(nothingLeadsTo(setRouteTo(stray, 's7', 's7b', 'x'), 5), false, 'so does an answer');
   assert.equal(nothingLeadsTo([items[0]], 0), false, 'row 1 is where the chart starts');
+});
+
+test('savedCopyDiffers: only different charts count, not which screen or chart is open', () => {
+  const a = newChart();
+  const b = { ...a, items: seedChart().items };
+  const mine = { charts: { [a.id]: a }, chartOrder: [a.id], openChartId: a.id };
+  const saved = (lib: object, extra: object = {}) => JSON.stringify({ ...lib, screen: 'chart', lastEditedAt: 1, ...extra });
+  assert.equal(savedCopyDiffers(saved(mine), mine), false, 'the same copy');
+  assert.equal(savedCopyDiffers(saved({ ...mine, charts: { [a.id]: { ...a } } }, { screen: 'guide' }), mine), false, 'another screen is not a change');
+  assert.equal(savedCopyDiffers(saved({ ...mine, charts: { [a.id]: Object.fromEntries(Object.entries(a).reverse()) } }), mine), false, 'field order does not matter');
+  assert.equal(savedCopyDiffers(saved({ ...mine, charts: { [a.id]: b } }), mine), true, 'edited rows');
+  assert.equal(savedCopyDiffers(saved({ charts: {}, chartOrder: [], openChartId: null }), mine), true, 'a chart removed');
+  assert.equal(savedCopyDiffers(null, mine), false, 'nothing saved');
+  assert.equal(savedCopyDiffers('not json', mine), false, 'damaged text');
 });
 
 console.log(`${passed} checks passed`);

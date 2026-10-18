@@ -738,3 +738,38 @@ current behaviour, why it was left, and roughly what changing it would take
 (with options), is saved as `design/fresh-look/section-7-2026-10-18.html`.
 7.3 is worded more exactly there than in the report: a step set to "ends
 here" in the List counts as finished on the cards. No app code changed.
+
+### 2026-10-18 — Fresh look 7.1: a warning when another tab has changed things (branch `claude/epic-brahmagupta-muah7v`, not merged)
+
+**John chose** option (a) for 7.1 (two tabs overwriting each other): a message
+with a Reload button, not a quiet refresh. Flowcharter only; Clockmaker is not
+touched (its handover notes are collected at the end of the section 7
+discussion). 7.3 and 7.4 are to be left alone. 7.2 and a site-wide number-style
+check (one to nine in words, 10 and above in digits) are agreed but not built.
+
+**What:** when another tab saves *different charts* (`savedCopyDiffers` in
+`lib/exchange.ts`; which screen or chart is open doesn't count, and field order
+doesn't matter), a dark bar appears at the top: "Flowcharter was changed in
+another tab. Reload to see the changes. Until you do, this tab won’t save
+anything." (draft wording) with a **Reload** button (`.stale-bar` in
+`App.tsx`/`global.css`, hidden when printing). The store listens for the
+browser's `storage` event (`changedElsewhere` in `store.tsx`).
+
+**Why saving pauses:** without that, merely moving between screens in the
+older tab would save its old copy over the other tab's work, so the warning
+would come too late. Trade-off: anything done in the older tab after the
+warning isn't kept. Nothing is lost silently, because the bar says so.
+
+**Verified:** build clean; lint the two known warnings; `npm run check` 31 + 12
+(new: `savedCopyDiffers`). In Chromium with two tabs at 1200px and 390px touch:
+no bar in the tab that edited; the other tab gets it; it can move between
+screens without overwriting the edit; Reload clears the bar and shows the
+edit; saving works again afterwards; changing screen alone in another tab
+gives no bar; bar is one row on a computer and stacked on a phone, Reload 44px
+tall there, no sideways scroll, no page errors.
+
+**Couldn't be checked:** a real iPhone or Safari (including Safari's private
+windows, where tabs may not share storage at all). One tiny gap remains: if a
+second tab is opened in the same instant the first saves, the newer copy can
+be overwritten and the first tab may show the bar; that window is a few
+milliseconds.

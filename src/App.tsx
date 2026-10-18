@@ -9,7 +9,7 @@ import { StepsScreen } from './screens/StepsScreen.tsx';
 import { useBackLayer } from './lib/backLayers.ts';
 
 function Shell() {
-  const { screen, chart, setScreen } = useApp();
+  const { screen, chart, setScreen, changedElsewhere } = useApp();
   // List and Chart show the open chart; with none (everything deleted) there's
   // nothing to show, so say so rather than render a broken screen.
   const needsChart = (screen === 'list' || screen === 'chart' || screen === 'steps') && !chart;
@@ -19,6 +19,14 @@ function Shell() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {changedElsewhere && (
+        <div className="stale-bar" role="alert" data-noprint="1">
+          <span className="stale-text">
+            Flowcharter was changed in another tab. Reload to see the changes. Until you do, this tab won’t save anything.
+          </span>
+          <button className="toast-btn" onClick={() => window.location.reload()}>Reload</button>
+        </div>
+      )}
       <Nav screen={screen} onNavigate={setScreen} />
       <div style={{ width: '100%', maxWidth: '1100px', margin: '0 auto' }}>
         {needsChart && (
