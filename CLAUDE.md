@@ -757,3 +757,34 @@ appears if drawing fails, so it was checked in the code, not on screen.
   Library footer; neither has the "More free tools at www.baish.net." link.
 - 11–12: done (card in `landing.html`; hub title already names flowchart tools).
 - 13–18: to do after the changes (checks, live files, Search Console, log).
+
+### 2026-10-18 — Search (SEO), following `SEO-HANDOVER.md` (same branch, not merged)
+
+**John approved** the recommendations and all the wording as drafted.
+**Changed:**
+- `index.html`: `<title>` "Flowcharter – free flowchart maker from a simple
+  list"; search description "Free flowchart maker. Type your steps as a list,
+  or answer simple questions step by step, and Flowcharter draws the chart.
+  Print it or copy it as an image."; canonical `https://flowcharter.baish.net/`;
+  a comment saying which tags are for search and which for link previews. The
+  og:/twitter: tags are unchanged ("Create a flowchart from a list" is drawn
+  into the preview picture).
+- `public/robots.txt` and `public/sitemap.xml` (plain files; one domain).
+- Guide: a new card before "Where they're kept", **What's a flowchart?**
+  (other names: flow charts, flow diagrams, process maps, decision tree).
+- "More free tools at www.baish.net." (new tab) before "Contact:" in the
+  Guide's last card and the Library footer.
+
+**Verified:** build clean, lint the two known warnings, checks 30 + 12. In
+Chromium against the built app (`vite preview`) at 1200px and 390px touch: tab
+title, description, canonical and og:/twitter: tags correct after the app has
+started; the new card shows on a first visit; both links present with
+`target="_blank"` and `rel="noopener noreferrer"`, and the Guide's opens a new
+tab at www.baish.net (the sandbox can't load it); `/robots.txt` (text/plain) and
+`/sitemap.xml` (text/xml) serve the right text; no page errors, no sideways
+scroll.
+
+**Still to do after merging:** John opens the live `/robots.txt` and
+`/sitemap.xml`; Search Console (add sitemap, Test live URL, View tested page,
+Request indexing); Flowcharter's row in clockwheel's `SEO-HANDOVER.md` §1 table
+(needs John's OK, other repo).

@@ -37,6 +37,7 @@ function ShapeSample({ type }: { type: ShapeType }) {
 const section = { margin: '0 0 var(--space-4)', padding: 'var(--space-6)' } as const;
 const heading = { margin: '2px 0 var(--space-3)' } as const;
 const body = { margin: '0 0 var(--space-3)', fontSize: 14.5, lineHeight: 1.6, opacity: 1 } as const;
+const hubLink = { color: 'var(--color-accent-700)', textDecoration: 'underline' } as const;
 
 export function GuideScreen() {
   return (
@@ -123,6 +124,16 @@ export function GuideScreen() {
       </div>
 
       <div className="card" style={section}>
+        <div className="card-kicker">About flowcharts</div>
+        <h3 className="card-title" style={heading}>What's a flowchart?</h3>
+        <p style={{ ...body, margin: 0 }}>
+          A flowchart shows the steps of a process in order, with arrows between them and questions where the path
+          splits. They're also called flow charts, flow diagrams or process maps, and one made mostly of questions is
+          sometimes called a decision tree.
+        </p>
+      </div>
+
+      <div className="card" style={section}>
         <div className="card-kicker">Your flowcharts</div>
         <h3 className="card-title" style={heading}>Where they're kept</h3>
         <p style={body}>
@@ -132,7 +143,11 @@ export function GuideScreen() {
         <p style={{ ...body, margin: 0 }}>
           The flowcharts you make here are not collected; they're only saved in your browser. We collect anonymous visit
           statistics (no cookies, no personal data) to see how the site is used. Flowcharter is a free-to-use personal
-          project by John Baish. Contact: workshop@baish.net
+          project by John Baish. More free tools at{' '}
+          <a href="https://www.baish.net/" target="_blank" rel="noopener noreferrer" style={hubLink}>
+            www.baish.net
+          </a>
+          . Contact: workshop@baish.net
         </p>
       </div>
     </div>
