@@ -840,3 +840,18 @@ routes and one; import of two charts over four; the cards' done card ("five
 steps") and the locked-question card ("two steps"). No page errors, no sideways
 scroll.
 
+### 2026-10-18 — Handover for Clockmaker; section 7 merged into `main` (notes, then merge)
+
+**Written, at John's request:** `design/handover-clockmaker-2026-10-18.md`, the
+section 7 ideas that might suit Clockmaker (the two-tab warning with how it
+works and what was learned; the number rule with the logic behind John's
+decisions; repeated answer names, probably not relevant; 7.3 and 7.4 not
+relevant), with a suggested way to work through it. Written without reading
+Clockmaker's code. Also `design/handover-clockmaker-prompt-2026-10-18.md`, the
+words John can paste to start a Clockmaker thread. Nothing in clockwheel was
+touched, and `HOUSE-STYLE.md` was not changed (the number rule is in this
+file's key points only; the master house style is in clockwheel).
+
+**Merged at John's say-so:** branch `claude/epic-brahmagupta-muah7v` (7.1, 7.2,
+number style, this handover) into `main`.
+
