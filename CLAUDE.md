@@ -950,3 +950,5 @@ table at a restaurant, from the customer's side, and approved the wording below.
 In Chromium at 1200px and 390px touch: the name box and all seven card hints
 read exactly as above; every Guide sample sits inside its shape (measured, and
 looked at); no page errors, no sideways scroll.
+
+**Approved by John and merged into `main` (same day).**
