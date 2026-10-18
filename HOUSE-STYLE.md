@@ -4,7 +4,7 @@ The shared look, behaviour and ways of working behind John Baish's tools
 (Clockmaker, Backtimer, the baish.net landing page), written so a new
 project — starting with **Flowcharter** — can match them without
 re-deriving anything. Everything here is taken from what is live in this
-repo (`JohnBaish/clockwheel`) as of 2026-10-15.
+repo (`JohnBaish/clockwheel`) as of 2026-10-18.
 
 **Rule of thumb: copy, don't reinvent.** Copy the files listed below into
 the new project and build on them. If something here and the code
@@ -26,8 +26,11 @@ Backtimer — long, and mostly about those apps. Read it only for the
 | `src/lib/responsive.ts` | `useIsNarrow(720)` — the phone/computer switch. |
 | `src/lib/timeInput.ts` | Phone keyboard helpers (`isTouch`, `toColon`, `selectAllSoon`). Only if the new tool has time or number entry. |
 | `src/lib/useDragReorder.ts` | Drag-to-reorder by a grip handle, mouse and touch. Only if needed. |
+| `src/lib/words.ts` | `numberWord` / `countOf`: the number rule for running text (§13). |
+| `src/lib/staleCopy.ts` and `.stale-bar` in `global.css` | The "changed in another tab" warning (§14). The matching code in `state/store.tsx` and `App.tsx` is small; copy the pattern. |
 | `public/favicon*.svg` | Favicon style to adapt (see §7). |
 | `design/og-clockmaker.html` | Link-preview image source; use it as the template for a new tool (see §7). |
+| `SEO-HANDOVER.md` | How search (titles, descriptions, canonical, robots.txt/sitemap, visible text, Search Console) was done, with a checklist for each new tool (see §12). |
 | `HOUSE-STYLE.md` and `.claude/skills/fresh-look/` | This file, and the "fresh look" review procedure with its PDF template and script (see §11). Copy both into every project, new or existing. |
 
 Dependencies these rely on: `@fontsource/caprasimo`, `@fontsource/figtree`,
@@ -135,9 +138,17 @@ Every screen must work on a 390px-wide phone with no sideways scrolling.
   (e.g. a table on a computer, a stack of `.list-card`s on a phone) —
   render one or the other, never both hidden with CSS.
 - Text in input boxes is **16px** on phones, or iPhone zooms the page when
-  a box is tapped (handled by `global.css` for `.plain-input`; anything
-  with an inline font size needs it set explicitly).
-- Tap targets at least **44px** tall.
+  a box is tapped (handled by `global.css` for `.plain-input` and `.input`;
+  anything with an inline font size needs it set explicitly).
+- Tap targets at least **44px** tall. A small icon button (e.g. a bin on a
+  phone card) can keep its small icon inside a 44px tap area
+  (`.list-card-delete` in `global.css`).
+- **Phones have no Shift key.** Where Shift-click adds to a selection on a
+  computer, make a tap add or remove that item on a touch screen.
+- **Back must stay inside the tool.** If a tool has more than one screen,
+  give each its own address (`…/#week`, see `src/lib/screenHash.ts`), so
+  the phone's Back gesture returns to the previous screen instead of
+  leaving the site.
 - **Keyboards only open when focus happens during a tap.** If a button
   should open the keyboard (Add, Next), update state with `flushSync` and
   focus the new box inside the same click handler. Never auto-focus a box
@@ -150,6 +161,8 @@ Every screen must work on a 390px-wide phone with no sideways scrolling.
   visible button for it (a full-width "+ Add …" under the list).
 - Keep important buttons in the top ~60% of the screen while a keypad is
   open (it covers roughly the bottom 40%).
+- Drag-to-reorder uses `useDragReorder` on a grip handle only (never the
+  browser's own drag-and-drop, which ignores touch).
 
 ## 7. Icons, favicons and link previews
 
@@ -198,8 +211,8 @@ and add its tags. Nothing else needs fixing or remaking first.
   - "The data you enter here is not collected; it's only saved in your own
     browser and you can clear it at any time."
 - Each tool says it is "a free-to-use personal project by John Baish" and
-  gives a contact address at baish.net (e.g. `backtimer@baish.net`), as
-  plain text, not a mailto link.
+  gives the shared contact address `workshop@baish.net` (one address for
+  every tool, since 2026-10-17), as plain text, not a mailto link.
 
 ## 9. Hosting
 
@@ -211,7 +224,8 @@ and add its tags. Nothing else needs fixing or remaking first.
   `src/lib/hostMode.ts` and `middleware.ts`). For a large new tool a
   separate repo and Vercel project is cleaner.
 - The baish.net landing page (`landing.html` here) has a card per tool;
-  add one for each new tool when it goes live.
+  add one for each new tool when it goes live, and update the hub's
+  `<title>` and search description to match (see §12).
 
 ## 10. Working with John
 
@@ -268,3 +282,70 @@ project a long, careful review on a computer and a phone, and report back
 
 Clockwheel holds the master copy of the skill, like this file. If it
 changes, re-copy it to the other projects.
+
+## 12. Search (SEO)
+
+Done for Clockmaker, Backtimer and the hub on 2026-10-17; the full record
+and a step-by-step checklist for a new tool are in **`SEO-HANDOVER.md`**
+(copy it into the new project). In short:
+- `<title>` "Name – free <what it is> for <who>" and a search description
+  starting "Free …", both John's wording. The search description is
+  separate from the link-preview (`og:`) description.
+- A canonical tag naming the tool's one main address; the hub's is
+  `https://www.baish.net/`. If the app sets `document.title`, it matches.
+- robots.txt and a one-address sitemap.xml (plain files in `public/` for a
+  one-domain project).
+- A short visible explanation a first-time visitor sees, folded parts
+  allowed, no FAQ; and "More free tools at www.baish.net." just before
+  "Contact:".
+- Search Console: one Domain property for baish.net covers every
+  subdomain, so a new tool only needs its sitemap submitted and its main
+  address inspected and requested.
+
+## 13. Numbers in running text
+
+John's rule: **one to nine as words, 10 and above as digits**, wherever a
+number is counted inside a sentence. Decided for Flowcharter (2026-10-18)
+and applied to Clockmaker the same day. Check each tool by searching every
+file that holds words people see, including messages built in code
+(`${count}`), listing every case with its surrounding words, and showing John
+before changing anything. Helpers: `numberWord(n)` and `countOf(n, 'hour')`
+in `src/lib/words.ts`.
+
+| Kind of number | Rule | Examples |
+|---|---|---|
+| Counted inside a sentence (pop-up boxes, messages, explanatory text) | Follows the rule | "assigned to three hours … those hours will become unassigned"; "all 12 items" |
+| Names, labels and controls: anything that must match what is on screen | Digits | row numbers, "Step 2 of 4", "Mon 06:00", a clock called "Daytime 1", a box you type a number into |
+| Times, durations and dates | Digits | "saved 5 min ago", "29:30", "18 Oct" |
+| Short count tags (small pill labels) and short count lines | Digits | "3 clocks", "8 songs", "18 segments", "12 of 83 active hours assigned", "used 3 times" |
+
+- **One** is written "one hour", not "the one hour" or "the only hour": the
+  latter reads as if it were the single one that exists. (Flowcharter uses
+  "the only item" where it really is the only row. Choose for readability,
+  not mechanically.) Where a plural verb follows, make it agree: "that hour
+  will become unassigned".
+- Zero is "zero" only inside a sentence; tags keep "0".
+
+## 14. Two tabs: warn, and stop saving
+
+A tool that saves its whole state to `localStorage` lets an old tab silently
+overwrite a newer one (even just by clicking between screens in the old
+tab). Pattern, from Flowcharter 7.1 and Clockmaker (2026-10-18):
+
+- The browser sends a `storage` event to a tab only when **another** tab
+  changes storage. Compare the new saved text with this tab's own state
+  (`savedCopyDiffers`): only the person's **work**, never which screen or item
+  is open, and not the last-edited stamp. Compare with sorted keys, and
+  treat unreadable or missing text as "nothing to warn about".
+- On a difference, show a dark bar across the top ("X was changed in another
+  tab. Reload to see the changes. Until you do, this tab won’t save
+  anything.") and **stop saving** in this tab. Stopping is the point: a quiet
+  refresh could change the screen under someone typing, and warning without
+  stopping would still let the next click overwrite the newer copy.
+- Hide any "saved … ago" tag while saving is stopped. Bar: one row on a
+  computer, stacked on a phone with a 44px Reload button, hidden in print.
+- Known tiny gap, accepted: a second tab opened in the same few milliseconds
+  as the first one's save can make the first show the bar. Not checkable
+  here: Safari and real iPhones.
+- Test with two pages in one Playwright browser context (they share
+  storage); wait about half a second after the second loads.
