@@ -9,12 +9,12 @@ const INK = '#201e1d';
 /** A sample of each shape, drawn at a size that fits a guide tile. */
 const SAMPLES: Record<ShapeType, { w: number; h: number; text: string[] }> = {
   terminator: { w: 112, h: 38, text: ['Start'] },
-  process: { w: 124, h: 44, text: ['Book the backup'] },
-  decision: { w: 132, h: 68, text: ['Backup', 'available?'] },
-  io: { w: 130, h: 44, text: ['Receive call'] },
-  predefined: { w: 130, h: 44, text: ['Arrange cover'] },
-  document: { w: 118, h: 50, text: ['Rota'] },
-  delay: { w: 124, h: 44, text: ['Wait an hour'] },
+  process: { w: 124, h: 44, text: ['Pick a restaurant'] },
+  decision: { w: 132, h: 68, text: ['Table', 'free?'] },
+  io: { w: 130, h: 44, text: ['Ask for a table'] },
+  predefined: { w: 130, h: 44, text: ['Pay the deposit'] },
+  document: { w: 118, h: 50, text: ['Confirmation', 'email'] },
+  delay: { w: 124, h: 44, text: ['Wait for email'] },
 };
 
 function ShapeSample({ type }: { type: ShapeType }) {

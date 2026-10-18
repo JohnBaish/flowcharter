@@ -924,3 +924,29 @@ this repo's copy re-copied from there.
 **Live check (John, 2026-10-18):** `https://flowcharter.baish.net/robots.txt` and
 `/sitemap.xml` show the right text. John is doing the Search Console steps
 (sitemap, Test live URL, View tested page, Request indexing) himself.
+
+### 2026-10-18 — Examples: booking a table, not backup newsreaders (branch `claude/focused-bardeen-551939`, not merged)
+
+**Why:** a new user mentioned the newsreader examples. John wants more general
+ones that don't draw attention to his own work procedures. He chose booking a
+table at a restaurant, from the customer's side, and approved the wording below.
+
+**Changed** (all 12 newsreader-themed places a visitor can see):
+- Cards (`PROMPT` and the name box in `StepsScreen.tsx`): name "e.g. Booking a
+  table"; Choose a restaurant; Do they have a table free at 8pm?; Ask for a
+  table for four on Friday; Wait for the confirmation email; Check the
+  confirmation email; Pay the deposit; Table booked.
+- Guide shape samples (`SAMPLES` in `GuideScreen.tsx`): Start (unchanged), Pick a
+  restaurant, Table / free?, Ask for a table, Pay the deposit, Confirmation /
+  email, Wait for email.
+- Together they make one small chart: Start → Choose a restaurant → Ask for a
+  table … → Table free? Yes → Pay the deposit → Wait for … → Check … → Table
+  booked; No → back to Choose a restaurant.
+- Left alone: the "Backup newsreader" chart in `data/charts.ts` and
+  `design/test-charts.json` (used only by the checks and as a test chart), code
+  comments, and earlier log entries.
+
+**Verified:** build clean; lint the two known warnings; `npm run check` 33 + 12.
+In Chromium at 1200px and 390px touch: the name box and all seven card hints
+read exactly as above; every Guide sample sits inside its shape (measured, and
+looked at); no page errors, no sideways scroll.

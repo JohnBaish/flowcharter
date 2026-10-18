@@ -49,14 +49,14 @@ const MORE: { kind: Kind; label: string; type: ShapeType }[] = [
 
 /** What the text card asks, for each kind of step. */
 const PROMPT: Record<Kind, { title: string; help?: string; example: string }> = {
-  action: { title: 'What gets done?', help: 'Starting with a verb works best.', example: 'Book the backup' },
-  question: { title: "What's the question?", help: "Write it the way you'd ask it, so it can be answered simply — usually yes or no.", example: 'Has cover been agreed?' },
-  data: { title: 'What information comes in or goes out?', example: 'Receive sick call' },
-  wait: { title: 'What are you waiting for?', example: 'Wait for the results' },
-  doc: { title: 'Which document is made or used?', example: 'Send the updated rota' },
-  routine: { title: 'Which standard routine?', help: 'One that has its own flowchart elsewhere.', example: 'Arrange cover' },
+  action: { title: 'What gets done?', help: 'Starting with a verb works best.', example: 'Choose a restaurant' },
+  question: { title: "What's the question?", help: "Write it the way you'd ask it, so it can be answered simply — usually yes or no.", example: 'Do they have a table free at 8pm?' },
+  data: { title: 'What information comes in or goes out?', example: 'Ask for a table for four on Friday' },
+  wait: { title: 'What are you waiting for?', example: 'Wait for the confirmation email' },
+  doc: { title: 'Which document is made or used?', example: 'Check the confirmation email' },
+  routine: { title: 'Which standard routine?', help: 'One that has its own flowchart elsewhere.', example: 'Pay the deposit' },
   // An ending can say what the outcome is; "End" is filled in, so Next keeps it (John, 2026-10-17).
-  end: { title: 'How does this path end?', help: 'Leave it as “End”, or say what the outcome is.', example: 'Cover arranged' },
+  end: { title: 'How does this path end?', help: 'Leave it as “End”, or say what the outcome is.', example: 'Table booked' },
 };
 
 const INK = '#201e1d';
@@ -338,7 +338,7 @@ export function StepsScreen() {
         <p>Give it a short name. You can change it later.</p>
         <input
           ref={inputRef} data-wiz-input className="wiz-field" value={text} maxLength={MAX_NAME}
-          placeholder="e.g. Backup newsreader" aria-label="Flowchart name"
+          placeholder="e.g. Booking a table" aria-label="Flowchart name"
           onChange={(e) => setText(e.target.value)} onKeyDown={onEnter(nameNext)}
         />
         {error && <div className="wiz-error">{error}</div>}
