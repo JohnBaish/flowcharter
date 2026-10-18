@@ -729,3 +729,12 @@ old Guide kept in `design/guide-archive/` (a record of the page as it was on
 and 390px touch, the Guide and the Library show workshop@baish.net and no
 trace of the old address; no errors. The "couldn't be drawn" message only
 appears if drawing fails, so it was checked in the code, not on screen.
+
+### 2026-10-18 — Section 7 notes saved for discussion (notes only, straight to `main`)
+
+John is moving the discussion of the fresh-look report's section 7 (7.1–7.4,
+"would leave alone") to a new thread. The page shown to him, with each item's
+current behaviour, why it was left, and roughly what changing it would take
+(with options), is saved as `design/fresh-look/section-7-2026-10-18.html`.
+7.3 is worded more exactly there than in the report: a step set to "ends
+here" in the List counts as finished on the cards. No app code changed.

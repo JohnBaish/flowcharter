@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Section 7 items</title>
+<style>
+:root{--bg:#f5ead8;--card:#ebddc5;--ink:#201e1d;--muted:#5b5550;--accent:#a8582a;--line:#d9cbb3}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 Figtree,-apple-system,"Helvetica Neue",Arial,sans-serif}
+main{max-width:640px;margin:0 auto;padding:24px 16px 40px}
+h1{font:400 26px/1.15 Caprasimo,Georgia,serif;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 20px;font-size:14px}
+.item{background:var(--card);border-radius:12px;padding:14px 16px;margin:0 0 14px}
+h2{font:700 16px/1.3 inherit;margin:0 0 6px}
+.num{color:var(--accent);margin-right:6px}
+p{margin:0 0 6px}
+.label{font-weight:700}
+.tag{font-weight:600;color:var(--accent)}
+.foot{color:var(--muted);font-size:13.5px;border-top:1px solid var(--line);padding-top:12px;margin-top:20px}
+</style></head><body><main>
+<h1>Flowcharter: section 7</h1>
+<p class="sub">Things the review looked at and suggested leaving alone (fresh look, 17 October). Each one has what happens now and why I'd leave it. For your discussion, I've also added roughly what changing it would involve. Nothing has been changed.</p>
+
+<div class="item">
+<h2><span class="num">7.1</span>Two browser tabs editing at once overwrite each other's saves</h2>
+<p><span class="label">What happens:</span> if Flowcharter is open in two tabs and you edit in both, each tab saves its own copy over the other's. Whichever tab saved last wins, and the other tab's changes are lost when you reload.</p>
+<p><span class="label">Why leave it:</span> it's rare for one person working alone, and Clockmaker behaves the same.</p>
+<p><span class="label">If you wanted to change it:</span> <span class="tag">small to medium</span>. A browser can tell a tab when another tab has saved. Flowcharter could then show a message such as "Flowcharter was changed in another tab" with a button to reload, or simply refresh itself. It would make sense to do the same in Clockmaker.</p>
+</div>
+
+<div class="item">
+<h2><span class="num">7.2</span>Repeated answer names are allowed</h2>
+<p><span class="label">What happens:</span> a question can have two answers with the same name, for example two "Yes" answers.</p>
+<p><span class="label">Why leave it:</span> it's harmless, and you might want it, such as two "Maybe" answers going to different places.</p>
+<p><span class="label">If you wanted to change it:</span> <span class="tag">small</span>. A gentle note under the answers, such as "Two answers are both called Yes". It wouldn't stop you.</p>
+</div>
+
+<div class="item">
+<h2><span class="num">7.3</span>The cards treat a path that stops without an End box as finished</h2>
+<p><span class="label">What happens:</span> in the List, an ordinary step (an Action, say) can be set to "ends here", so its path stops there with no End shape. When you go back to the cards, they count that path as finished and don't ask what comes next.</p>
+<p><span class="label">Why leave it:</span> it's consistent with the List, where "ends here" is a deliberate choice, and plenty of flowcharts are drawn that way.</p>
+<p><span class="label">If you wanted to change it:</span> <span class="tag">small to medium</span>. Two ways:</p>
+<p>(a) The cards could treat such a step as a loose end and ask "What happens after this?". That is stricter, but it would keep asking about paths you'd deliberately ended.</p>
+<p>(b) The chart could show a small mark where a path stops without an End, as a reminder only. I'd lean towards leaving it, or (b) if anything.</p>
+</div>
+
+<div class="item">
+<h2><span class="num">7.4</span>Coming back to the cards starts at the first loose end</h2>
+<p><span class="label">What happens:</span> if you leave the cards (for the List, the Library, or by closing the tab) and come back with "Step by step", the cards pick up at the first unfinished part of the chart, not the exact card you were on.</p>
+<p><span class="label">Why leave it:</span> it's what we agreed for Stage 5. The first loose end is usually where you'd want to be, and it always reflects what's really in the chart, even after edits in the List.</p>
+<p><span class="label">If you wanted to change it:</span> <span class="tag">medium</span>. The cards would need to remember where you were, and what to do if the List has changed that part since. Back would also only reach as far as the point where you returned. I'd only do it if you find the current behaviour gets in the way.</p>
+</div>
+
+<p class="foot">Reply by number, for example "7.1: let's do it" or "7.3 option b".</p>
+</main></body></html>
