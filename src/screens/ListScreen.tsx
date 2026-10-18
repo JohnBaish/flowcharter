@@ -7,6 +7,7 @@ import { countReferences, itemLabel, leadsTo, nothingLeadsTo, routeLetter } from
 import { repeatedNameNotes } from '../lib/answerNotes.ts';
 import { focusItemText, selectAllSoon } from '../lib/focus.ts';
 import { useDragReorder } from '../lib/useDragReorder.ts';
+import { numberWord } from '../lib/words.ts';
 import { useIsNarrow } from '../lib/responsive.ts';
 import { IconGrip, IconPlus, IconTrash } from '../lib/icons.tsx';
 
@@ -50,7 +51,7 @@ export function ListScreen() {
     const n = countReferences(items, item.id);
     if (n > 0) {
       const label = item.text.trim() ? ` "${item.text.trim()}"` : '';
-      const message = `Item ${index + 1}${label} is where ${n} other ${n === 1 ? 'route leads' : 'routes lead'}. `
+      const message = `Item ${index + 1}${label} is where ${numberWord(n)} other ${n === 1 ? 'route leads' : 'routes lead'}. `
         + `If you delete it, ${n === 1 ? 'that route' : 'those routes'} will need a new destination.\n\nDelete it?`;
       if (!window.confirm(message)) return;
     }

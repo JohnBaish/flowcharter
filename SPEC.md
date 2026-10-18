@@ -192,8 +192,8 @@ Small behaviours the spec above didn't spell out. All confirmed by John on
 - **Every button is at least 44px tall on a phone**, including the nav's.
 - **Each Library card shows a thin colour strip** of the shape types in that chart.
 - **Clear** (added at John's request after Stage 1): removes every row of the open
-  chart; the name and settings stay. It asks first ("Clear all 8 items from
-  'Backup newsreader'? This can't be undone.") and is greyed out when the list is
+  chart; the name and settings stay. It asks first ("Clear all eight items from
+  'Backup newsreader'? This can't be undone."; "the only item" for one) and is greyed out when the list is
   already empty. A grey text button in the header, as in Clockmaker's Backtimer.
 - **A chart whose name has been deleted** shows as "Untitled" in the Library.
 

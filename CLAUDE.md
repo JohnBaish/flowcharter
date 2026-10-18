@@ -24,6 +24,9 @@ Key points from the house style, repeated because they matter most:
 - Check in a real browser at 1200px and at 390px with touch emulation, and
   say what couldn't be checked.
 - Never rename the storage key (`flowcharter-state-v1`) once live.
+- Numbers in running text: one to nine as words, 10 and above as digits
+  (John, 2026-10-18; helpers in `lib/words.ts`). Names and controls stay as
+  digits (see the 2026-10-18 number-style entry).
 - Add a dated entry below for every change.
 
 ## Layout
@@ -804,4 +807,36 @@ and "second"; the List shows the note, it goes when names differ, returns with
 called" for three; no sideways scroll, no page errors.
 
 **Couldn't be checked:** a real iPhone (only the wording and layout changed).
+
+### 2026-10-18 — Number style: one to nine as words, 10 and above as digits (same branch, not merged)
+
+**John's rule, and his decisions from a case-by-case check** of every word the
+app shows (the page of cases was shown to him before anything changed):
+- **Changed (full sentences):** the Clear confirmation ("Clear all eight items
+  from “…”?", and "the only item" for one: John's wording, chosen over "the one
+  item" and "the item"); the delete confirmation ("…is where three other routes
+  lead", "one other route leads"); the import confirmation ("replace the four
+  flowcharts … with the two in this file"); the cards' "already has answers
+  leading to two steps" and "Your flowchart has eight steps". Numbers of 10 or
+  more stay as digits ("all 12 items"). SPEC's Clear wording updated.
+- **Left as digits, deliberately:** the short counts ("8 items · 2 questions" in
+  the header and on Library cards, "3 charts" in the Library, "3 steps so far" on
+  the cards); names and controls (row numbers, answer codes like 2a, "Item 2",
+  "3 · Go" in the goes-to list, the routes box, the answers card's numbered
+  boxes); times and dates ("5 min ago", "3 hr ago", "18 Oct").
+- **The logic, for applying it elsewhere (and for the Clockmaker handover):** a
+  number that is *counted in a sentence* follows the rule; a number that is a
+  *name, label or control* (it has to match what is on screen) stays a digit;
+  *times and dates* stay digits; short *count tags* are left alone unless the
+  owner asks. Singular wording is chosen for readability, not mechanically
+  ("the only item", not "the one item").
+- Not checked: notes and design files (`SPEC.md`, `CLAUDE.md`, `design/`),
+  which site visitors never see.
+
+**Verified:** build clean; lint the two known warnings; `npm run check` 33 + 12.
+In Chromium at 1200px and 390px touch, each message read exactly from the
+browser's own pop-up: Clear for one, eight, nine and 12 rows; delete for three
+routes and one; import of two charts over four; the cards' done card ("five
+steps") and the locked-question card ("two steps"). No page errors, no sideways
+scroll.
 

@@ -7,6 +7,7 @@ import {
   appendStep as withStep, itemLabel, leadsTo, nextOpenSlot, openAnswer, setAnswers as withAnswers, setText as withText, setType as withType, type Slot,
 } from '../lib/chartOps.ts';
 import { cardRepeatNote, repeatedNameNotes } from '../lib/answerNotes.ts';
+import { numberWord } from '../lib/words.ts';
 import { useIsNarrow } from '../lib/responsive.ts';
 import { LiveChart } from '../components/LiveChart.tsx';
 import { useBackLayer } from '../lib/backLayers.ts';
@@ -365,7 +366,7 @@ export function StepsScreen() {
         {made && locked && (
           <div className="wiz-locked">
             <p>
-              <strong>{words(made)}</strong> already has answers leading to {ledTo} step{ledTo === 1 ? '' : 's'}. To reword
+              <strong>{words(made)}</strong> already has answers leading to {numberWord(ledTo)} step{ledTo === 1 ? '' : 's'}. To reword
               the question or change its answers, choose <strong>We ask a question</strong> below. To make it a different
               kind of step, change it in List mode, where you can decide what happens to its answers.
             </p>
@@ -484,7 +485,7 @@ export function StepsScreen() {
         {kicker}
         <h2>That's every path covered.</h2>
         <p>
-          Your flowchart has {items.length} step{items.length === 1 ? '' : 's'}. You can change anything in the List,
+          Your flowchart has {numberWord(items.length)} step{items.length === 1 ? '' : 's'}. You can change anything in the List,
           and see it drawn on the Chart.
         </p>
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
