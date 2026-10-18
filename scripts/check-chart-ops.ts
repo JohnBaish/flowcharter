@@ -8,7 +8,9 @@ import {
   addItem, addStepForAnswer, appendStep, countReferences, linkSlot, nextOpenSlot, openAnswer, setAnswers, guessType, leadsTo, nothingLeadsTo, removeItem, reorderItems, setRouteCount, setRouteLabel,
   setRouteTo, setText, setThen, setType, summary,
 } from '../src/lib/chartOps.ts';
-import { exportFilename, exportJson, parseImport, sanitiseChart } from '../src/lib/exchange.ts';
+import { cardRepeatNote, repeatedNameNotes } from '../src/lib/answerNotes.ts';
+import { numberWord, ordinalWord } from '../src/lib/words.ts';
+import { exportFilename, exportJson, parseImport, sanitiseChart, savedCopyDiffers } from '../src/lib/exchange.ts';
 
 let passed = 0;
 const test = (name: string, fn: () => void) => {
@@ -327,6 +329,37 @@ test('nothingLeadsTo: flags a row nothing leads to, such as one added after an E
   assert.equal(nothingLeadsTo(setThen(stray, 's4', { kind: 'item', to: 'x' }), 5), false, 'a row pointed at it does');
   assert.equal(nothingLeadsTo(setRouteTo(stray, 's7', 's7b', 'x'), 5), false, 'so does an answer');
   assert.equal(nothingLeadsTo([items[0]], 0), false, 'row 1 is where the chart starts');
+});
+
+test('savedCopyDiffers: only different charts count, not which screen or chart is open', () => {
+  const a = newChart();
+  const b = { ...a, items: seedChart().items };
+  const mine = { charts: { [a.id]: a }, chartOrder: [a.id], openChartId: a.id };
+  const saved = (lib: object, extra: object = {}) => JSON.stringify({ ...lib, screen: 'chart', lastEditedAt: 1, ...extra });
+  assert.equal(savedCopyDiffers(saved(mine), mine), false, 'the same copy');
+  assert.equal(savedCopyDiffers(saved({ ...mine, charts: { [a.id]: { ...a } } }, { screen: 'guide' }), mine), false, 'another screen is not a change');
+  assert.equal(savedCopyDiffers(saved({ ...mine, charts: { [a.id]: Object.fromEntries(Object.entries(a).reverse()) } }), mine), false, 'field order does not matter');
+  assert.equal(savedCopyDiffers(saved({ ...mine, charts: { [a.id]: b } }), mine), true, 'edited rows');
+  assert.equal(savedCopyDiffers(saved({ charts: {}, chartOrder: [], openChartId: null }), mine), true, 'a chart removed');
+  assert.equal(savedCopyDiffers(null, mine), false, 'nothing saved');
+  assert.equal(savedCopyDiffers('not json', mine), false, 'damaged text');
+});
+
+test('repeated answer names: noticed, worded, and placed', () => {
+  assert.deepEqual(repeatedNameNotes(['Yes', 'No']), [], 'distinct names say nothing');
+  assert.deepEqual(repeatedNameNotes(['', '']), [], 'blank answers are not a repeat');
+  assert.deepEqual(repeatedNameNotes(['Yes', ' yes ', 'No']), ['Two answers are both called “Yes”.'], 'capitals and spaces do not make a new name');
+  assert.deepEqual(repeatedNameNotes(['Maybe', 'Maybe', 'Maybe', 'No', 'No']), ['Three answers are all called “Maybe”.', 'Two answers are both called “No”.']);
+  assert.equal(cardRepeatNote(['Yes', 'Yes', 'No'], 0), '(Two answers are called Yes. This is the first of them.)');
+  assert.equal(cardRepeatNote(['Yes', 'Yes', 'No'], 1), '(Two answers are called Yes. This is the second of them.)');
+  assert.equal(cardRepeatNote(['Yes', 'Yes', 'No'], 2), null, 'a name of its own needs no note');
+  assert.equal(cardRepeatNote(['', ''], 0), null);
+  assert.equal(cardRepeatNote(['A', 'a', 'A'], 2), '(Three answers are called A. This is the third of them.)');
+});
+
+test('numbers in words: one to nine as words, 10 and above as digits', () => {
+  assert.deepEqual([1, 2, 9, 10, 12].map(numberWord), ['one', 'two', 'nine', '10', '12']);
+  assert.deepEqual([1, 2, 3, 6, 9, 10, 11, 12, 13, 21, 22].map(ordinalWord), ['first', 'second', 'third', 'sixth', 'ninth', '10th', '11th', '12th', '13th', '21st', '22nd']);
 });
 
 console.log(`${passed} checks passed`);

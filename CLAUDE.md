@@ -24,6 +24,9 @@ Key points from the house style, repeated because they matter most:
 - Check in a real browser at 1200px and at 390px with touch emulation, and
   say what couldn't be checked.
 - Never rename the storage key (`flowcharter-state-v1`) once live.
+- Numbers in running text: one to nine as words, 10 and above as digits
+  (John, 2026-10-18; helpers in `lib/words.ts`). Names and controls stay as
+  digits (see the 2026-10-18 number-style entry).
 - Add a dated entry below for every change.
 
 ## Layout
@@ -738,3 +741,117 @@ current behaviour, why it was left, and roughly what changing it would take
 (with options), is saved as `design/fresh-look/section-7-2026-10-18.html`.
 7.3 is worded more exactly there than in the report: a step set to "ends
 here" in the List counts as finished on the cards. No app code changed.
+
+### 2026-10-18 — Fresh look 7.1: a warning when another tab has changed things (branch `claude/epic-brahmagupta-muah7v`, not merged)
+
+**John chose** option (a) for 7.1 (two tabs overwriting each other): a message
+with a Reload button, not a quiet refresh. Flowcharter only; Clockmaker is not
+touched (its handover notes are collected at the end of the section 7
+discussion). 7.3 and 7.4 are to be left alone. 7.2 and a site-wide number-style
+check (one to nine in words, 10 and above in digits) are agreed but not built.
+
+**What:** when another tab saves *different charts* (`savedCopyDiffers` in
+`lib/exchange.ts`; which screen or chart is open doesn't count, and field order
+doesn't matter), a dark bar appears at the top: "Flowcharter was changed in
+another tab. Reload to see the changes. Until you do, this tab won’t save
+anything." (draft wording) with a **Reload** button (`.stale-bar` in
+`App.tsx`/`global.css`, hidden when printing). The store listens for the
+browser's `storage` event (`changedElsewhere` in `store.tsx`).
+
+**Why saving pauses:** without that, merely moving between screens in the
+older tab would save its old copy over the other tab's work, so the warning
+would come too late. Trade-off: anything done in the older tab after the
+warning isn't kept. Nothing is lost silently, because the bar says so.
+
+**Verified:** build clean; lint the two known warnings; `npm run check` 31 + 12
+(new: `savedCopyDiffers`). In Chromium with two tabs at 1200px and 390px touch:
+no bar in the tab that edited; the other tab gets it; it can move between
+screens without overwriting the edit; Reload clears the bar and shows the
+edit; saving works again afterwards; changing screen alone in another tab
+gives no bar; bar is one row on a computer and stacked on a phone, Reload 44px
+tall there, no sideways scroll, no page errors.
+
+**Couldn't be checked:** a real iPhone or Safari (including Safari's private
+windows, where tabs may not share storage at all). One tiny gap remains: if a
+second tab is opened in the same instant the first saves, the newer copy can
+be overwritten and the first tab may show the bar; that window is a few
+milliseconds.
+
+**John approved 7.1** (wording as drafted, and saving pausing while the bar
+shows). Not merged yet: John hasn't said to.
+
+### 2026-10-18 — Fresh look 7.2: a note when answers share a name (same branch, not merged)
+
+**John chose** option (a): repeated answer names stay allowed, but are pointed
+out, and the cards say which answer they mean.
+- **List** (computer and phone): under a question's answers, "Two answers are
+  both called “Yes”." ("all called" for three or more; one sentence per
+  repeated name; screen only, not printed). Doesn't stop anything.
+- **Cards:** the answers card shows the same line while typing. Cards that
+  ask about one answer (the kind card, the text card and the pick card) show,
+  small, under the heading: "(Two answers are called Yes. This is the first of
+  them.)" ("the second", and so on).
+- Names count as the same ignoring capitals and spaces around them; blank
+  answers don't count. Rules in `chartOps` (`repeatedAnswers`, `answerPlace`),
+  wording in `lib/answerNotes.ts`.
+- **New:** `lib/words.ts` (`numberWord`, `ordinalWord`, `capitalise`) for John's
+  number rule (one to nine as words, 10 and above as digits), for the coming
+  site-wide check.
+
+**Verified:** build clean; lint the two known warnings; `npm run check` 33 +
+12 (new: repeated names, number words). In Chromium at 1200px and 390px touch:
+no note for Yes / No; typing "yes" over "No" shows it on the answers card; the
+first and second answers' cards, the text card and the pick card say "first"
+and "second"; the List shows the note, it goes when names differ, returns with
+"YES " (nothing is stopped or changed), and says "Three answers are all
+called" for three; no sideways scroll, no page errors.
+
+**Couldn't be checked:** a real iPhone (only the wording and layout changed).
+
+### 2026-10-18 — Number style: one to nine as words, 10 and above as digits (same branch, not merged)
+
+**John's rule, and his decisions from a case-by-case check** of every word the
+app shows (the page of cases was shown to him before anything changed):
+- **Changed (full sentences):** the Clear confirmation ("Clear all eight items
+  from “…”?", and "the only item" for one: John's wording, chosen over "the one
+  item" and "the item"); the delete confirmation ("…is where three other routes
+  lead", "one other route leads"); the import confirmation ("replace the four
+  flowcharts … with the two in this file"); the cards' "already has answers
+  leading to two steps" and "Your flowchart has eight steps". Numbers of 10 or
+  more stay as digits ("all 12 items"). SPEC's Clear wording updated.
+- **Left as digits, deliberately:** the short counts ("8 items · 2 questions" in
+  the header and on Library cards, "3 charts" in the Library, "3 steps so far" on
+  the cards); names and controls (row numbers, answer codes like 2a, "Item 2",
+  "3 · Go" in the goes-to list, the routes box, the answers card's numbered
+  boxes); times and dates ("5 min ago", "3 hr ago", "18 Oct").
+- **The logic, for applying it elsewhere (and for the Clockmaker handover):** a
+  number that is *counted in a sentence* follows the rule; a number that is a
+  *name, label or control* (it has to match what is on screen) stays a digit;
+  *times and dates* stay digits; short *count tags* are left alone unless the
+  owner asks. Singular wording is chosen for readability, not mechanically
+  ("the only item", not "the one item").
+- Not checked: notes and design files (`SPEC.md`, `CLAUDE.md`, `design/`),
+  which site visitors never see.
+
+**Verified:** build clean; lint the two known warnings; `npm run check` 33 + 12.
+In Chromium at 1200px and 390px touch, each message read exactly from the
+browser's own pop-up: Clear for one, eight, nine and 12 rows; delete for three
+routes and one; import of two charts over four; the cards' done card ("five
+steps") and the locked-question card ("two steps"). No page errors, no sideways
+scroll.
+
+### 2026-10-18 — Handover for Clockmaker; section 7 merged into `main` (notes, then merge)
+
+**Written, at John's request:** `design/handover-clockmaker-2026-10-18.md`, the
+section 7 ideas that might suit Clockmaker (the two-tab warning with how it
+works and what was learned; the number rule with the logic behind John's
+decisions; repeated answer names, probably not relevant; 7.3 and 7.4 not
+relevant), with a suggested way to work through it. Written without reading
+Clockmaker's code. Also `design/handover-clockmaker-prompt-2026-10-18.md`, the
+words John can paste to start a Clockmaker thread. Nothing in clockwheel was
+touched, and `HOUSE-STYLE.md` was not changed (the number rule is in this
+file's key points only; the master house style is in clockwheel).
+
+**Merged at John's say-so:** branch `claude/epic-brahmagupta-muah7v` (7.1, 7.2,
+number style, this handover) into `main`.
+

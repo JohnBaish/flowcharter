@@ -6,6 +6,7 @@ import { nextOpenSlot, summary } from '../lib/chartOps.ts';
 import { MAX_NAME } from '../data/charts.ts';
 import { copyChartImage, slug } from '../lib/exportImage.ts';
 import { printScreen } from '../lib/print.ts';
+import { numberWord } from '../lib/words.ts';
 import { IconFullScreen, IconPlus, IconPrint } from '../lib/icons.tsx';
 import { useIsNarrow } from '../lib/responsive.ts';
 
@@ -41,7 +42,7 @@ export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
   // Clearing has no undo, so it asks first and says exactly what will go.
   const handleClear = () => {
     const n = chart.items.length;
-    const what = n === 1 ? 'the 1 item' : `all ${n} items`;
+    const what = n === 1 ? 'the only item' : `all ${numberWord(n)} items`;
     const name = chart.name.trim() || 'this flowchart';
     if (window.confirm(`Clear ${what} from "${name}"? This can't be undone.`)) clearItems();
   };

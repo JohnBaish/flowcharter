@@ -1,8 +1,8 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { newChart, uid, MAX_NAME, type Chart, type Direction, type ItemId, type Next } from '../data/charts.ts';
 import type { ShapeType } from '../data/shapes.ts';
 import * as ops from '../lib/chartOps.ts';
-import { exportJson, sanitiseLibrary, type Library } from '../lib/exchange.ts';
+import { exportJson, sanitiseLibrary, savedCopyDiffers, type Library } from '../lib/exchange.ts';
 
 // 'steps' is the step-by-step cards (Stage 5), a third way of working on the open chart.
 export type Screen = 'lib' | 'list' | 'chart' | 'guide' | 'steps';
@@ -108,6 +108,9 @@ interface AppContextValue extends PersistedState {
   setChartWide: (wide: boolean) => void;
   chartFull: boolean;
   setChartFull: (full: boolean) => void;
+  /** Not saved: another tab has saved different charts since this one loaded.
+   *  Saving from this tab is paused until it is reloaded (fresh look 7.1). */
+  changedElsewhere: boolean;
 
   exportState: () => string;
   /** Replaces the whole library with an already-checked one (see parseImport). */
@@ -120,15 +123,33 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<PersistedState>(loadInitial);
   const [chartWide, setChartWide] = useState(false);
   const [chartFull, setChartFull] = useState(false);
+  const [changedElsewhere, setChangedElsewhere] = useState(false);
+  const stateRef = useRef(state);
 
   useEffect(() => {
+    stateRef.current = state;
+    // Once another tab has saved different charts, saving here would overwrite
+    // them (even just from moving between screens), so this tab stops until it
+    // is reloaded and has the newer copy.
+    if (changedElsewhere) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch {
       // Storage can be unavailable (private browsing, quota) — the app still
       // works for the session, it just won't survive a refresh.
     }
-  }, [state]);
+  }, [state, changedElsewhere]);
+
+  // The browser tells a tab when another tab changes the saved copy (never for
+  // its own saves). Only different charts count, not which screen is open.
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== STORAGE_KEY) return;
+      if (savedCopyDiffers(e.newValue, stateRef.current)) setChangedElsewhere(true);
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   // Content edits stamp lastEditedAt for the nav's "saved … ago" readout; pure
   // navigation (setScreen, openChart) doesn't count as an edit.
@@ -219,10 +240,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return id;
     },
 
-    chartWide, setChartWide, chartFull, setChartFull,
+    chartWide, setChartWide, chartFull, setChartFull, changedElsewhere,
     exportState: () => exportJson({ charts: state.charts, chartOrder: state.chartOrder, openChartId: state.openChartId }),
     replaceLibrary: (library) => setEdited((s) => ({ ...s, ...library, screen: 'lib' })),
-  }), [state, chartWide, chartFull]);
+  }), [state, chartWide, chartFull, changedElsewhere]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

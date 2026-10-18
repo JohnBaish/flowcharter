@@ -5,6 +5,7 @@ import type { Chart } from '../data/charts.ts';
 import { summary } from '../lib/chartOps.ts';
 import { exportFilename, parseImport } from '../lib/exchange.ts';
 import { relativeTime, useNow } from '../lib/time.ts';
+import { numberWord } from '../lib/words.ts';
 
 /** A strip showing the mix of shape types in a chart, in their own colours. */
 function TypeMix({ chart }: { chart: Chart }) {
@@ -56,7 +57,7 @@ export function LibraryScreen() {
     const current = chartOrder.length;
     // Importing replaces the whole library with no undo — say so before doing it.
     if (current > 0 && !window.confirm(
-      `This will replace the ${current} flowchart${current === 1 ? '' : 's'} in your Library with the ${incoming} in this file. `
+      `This will replace the ${numberWord(current)} flowchart${current === 1 ? '' : 's'} in your Library with the ${numberWord(incoming)} in this file. `
       + `It can't be undone. (Use Export first if you want to keep your current ones.)\n\nReplace them?`,
     )) return;
     setError(null);

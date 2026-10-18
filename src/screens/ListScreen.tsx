@@ -4,8 +4,10 @@ import { useApp } from '../state/store.tsx';
 import { SHAPES, SHAPE_ORDER, type ShapeType } from '../data/shapes.ts';
 import { MAX_ITEM_TEXT, MAX_LABEL, MAX_ROUTES, MIN_ROUTES, type Item, type Next, type Route } from '../data/charts.ts';
 import { countReferences, itemLabel, leadsTo, nothingLeadsTo, routeLetter } from '../lib/chartOps.ts';
+import { repeatedNameNotes } from '../lib/answerNotes.ts';
 import { focusItemText, selectAllSoon } from '../lib/focus.ts';
 import { useDragReorder } from '../lib/useDragReorder.ts';
+import { numberWord } from '../lib/words.ts';
 import { useIsNarrow } from '../lib/responsive.ts';
 import { IconGrip, IconPlus, IconTrash } from '../lib/icons.tsx';
 
@@ -49,7 +51,7 @@ export function ListScreen() {
     const n = countReferences(items, item.id);
     if (n > 0) {
       const label = item.text.trim() ? ` "${item.text.trim()}"` : '';
-      const message = `Item ${index + 1}${label} is where ${n} other ${n === 1 ? 'route leads' : 'routes lead'}. `
+      const message = `Item ${index + 1}${label} is where ${numberWord(n)} other ${n === 1 ? 'route leads' : 'routes lead'}. `
         + `If you delete it, ${n === 1 ? 'that route' : 'those routes'} will need a new destination.\n\nDelete it?`;
       if (!window.confirm(message)) return;
     }
@@ -207,6 +209,9 @@ export function ListScreen() {
     return target >= 0 && target <= index ? loopTag('loops back') : null;
   };
 
+  /** A gentle line under a question's answers when two share a name. It doesn't stop anything. */
+  const repeatNotes = (item: Item) => repeatedNameNotes(item.routes.map((r) => r.label));
+
   const answerInput = (item: Item, route: Route, label: string, style?: object) => (
     <>
       <input
@@ -299,6 +304,14 @@ export function ListScreen() {
                   </tr>
                 );
               })}
+              {item.type === 'decision' && repeatNotes(item).length > 0 && (
+                <tr className="list-answer" data-noprint="1">
+                  <td></td>
+                  <td></td>
+                  <td colSpan={3}>{repeatNotes(item).map((n) => <div key={n} className="list-repeat-note">{n}</div>)}</td>
+                  <td></td>
+                </tr>
+              )}
             </tbody>
           ))}
         </table>
@@ -376,6 +389,9 @@ export function ListScreen() {
                 </div>
               );
             })}
+            {item.type === 'decision' && repeatNotes(item).map((n) => (
+              <div key={n} className="list-card-note list-repeat-note" data-noprint="1">{n}</div>
+            ))}
           </div>
         ))}
       </div>
