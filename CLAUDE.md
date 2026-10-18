@@ -920,3 +920,7 @@ The only conflict was this log (another thread had added section 7 entries); kep
 **Same day:** Flowcharter's row added to the table in clockwheel's
 `SEO-HANDOVER.md` (clockwheel commit `c13e569`, straight to its `main`), and
 this repo's copy re-copied from there.
+
+**Live check (John, 2026-10-18):** `https://flowcharter.baish.net/robots.txt` and
+`/sitemap.xml` show the right text. John is doing the Search Console steps
+(sitemap, Test live URL, View tested page, Request indexing) himself.
