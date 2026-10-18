@@ -8,6 +8,8 @@ import {
   addItem, addStepForAnswer, appendStep, countReferences, linkSlot, nextOpenSlot, openAnswer, setAnswers, guessType, leadsTo, nothingLeadsTo, removeItem, reorderItems, setRouteCount, setRouteLabel,
   setRouteTo, setText, setThen, setType, summary,
 } from '../src/lib/chartOps.ts';
+import { cardRepeatNote, repeatedNameNotes } from '../src/lib/answerNotes.ts';
+import { numberWord, ordinalWord } from '../src/lib/words.ts';
 import { exportFilename, exportJson, parseImport, sanitiseChart, savedCopyDiffers } from '../src/lib/exchange.ts';
 
 let passed = 0;
@@ -341,6 +343,23 @@ test('savedCopyDiffers: only different charts count, not which screen or chart i
   assert.equal(savedCopyDiffers(saved({ charts: {}, chartOrder: [], openChartId: null }), mine), true, 'a chart removed');
   assert.equal(savedCopyDiffers(null, mine), false, 'nothing saved');
   assert.equal(savedCopyDiffers('not json', mine), false, 'damaged text');
+});
+
+test('repeated answer names: noticed, worded, and placed', () => {
+  assert.deepEqual(repeatedNameNotes(['Yes', 'No']), [], 'distinct names say nothing');
+  assert.deepEqual(repeatedNameNotes(['', '']), [], 'blank answers are not a repeat');
+  assert.deepEqual(repeatedNameNotes(['Yes', ' yes ', 'No']), ['Two answers are both called “Yes”.'], 'capitals and spaces do not make a new name');
+  assert.deepEqual(repeatedNameNotes(['Maybe', 'Maybe', 'Maybe', 'No', 'No']), ['Three answers are all called “Maybe”.', 'Two answers are both called “No”.']);
+  assert.equal(cardRepeatNote(['Yes', 'Yes', 'No'], 0), '(Two answers are called Yes. This is the first of them.)');
+  assert.equal(cardRepeatNote(['Yes', 'Yes', 'No'], 1), '(Two answers are called Yes. This is the second of them.)');
+  assert.equal(cardRepeatNote(['Yes', 'Yes', 'No'], 2), null, 'a name of its own needs no note');
+  assert.equal(cardRepeatNote(['', ''], 0), null);
+  assert.equal(cardRepeatNote(['A', 'a', 'A'], 2), '(Three answers are called A. This is the third of them.)');
+});
+
+test('numbers in words: one to nine as words, 10 and above as digits', () => {
+  assert.deepEqual([1, 2, 9, 10, 12].map(numberWord), ['one', 'two', 'nine', '10', '12']);
+  assert.deepEqual([1, 2, 3, 6, 9, 10, 11, 12, 13, 21, 22].map(ordinalWord), ['first', 'second', 'third', 'sixth', 'ninth', '10th', '11th', '12th', '13th', '21st', '22nd']);
 });
 
 console.log(`${passed} checks passed`);

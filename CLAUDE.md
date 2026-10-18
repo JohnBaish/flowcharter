@@ -773,3 +773,35 @@ windows, where tabs may not share storage at all). One tiny gap remains: if a
 second tab is opened in the same instant the first saves, the newer copy can
 be overwritten and the first tab may show the bar; that window is a few
 milliseconds.
+
+**John approved 7.1** (wording as drafted, and saving pausing while the bar
+shows). Not merged yet: John hasn't said to.
+
+### 2026-10-18 — Fresh look 7.2: a note when answers share a name (same branch, not merged)
+
+**John chose** option (a): repeated answer names stay allowed, but are pointed
+out, and the cards say which answer they mean.
+- **List** (computer and phone): under a question's answers, "Two answers are
+  both called “Yes”." ("all called" for three or more; one sentence per
+  repeated name; screen only, not printed). Doesn't stop anything.
+- **Cards:** the answers card shows the same line while typing. Cards that
+  ask about one answer (the kind card, the text card and the pick card) show,
+  small, under the heading: "(Two answers are called Yes. This is the first of
+  them.)" ("the second", and so on).
+- Names count as the same ignoring capitals and spaces around them; blank
+  answers don't count. Rules in `chartOps` (`repeatedAnswers`, `answerPlace`),
+  wording in `lib/answerNotes.ts`.
+- **New:** `lib/words.ts` (`numberWord`, `ordinalWord`, `capitalise`) for John's
+  number rule (one to nine as words, 10 and above as digits), for the coming
+  site-wide check.
+
+**Verified:** build clean; lint the two known warnings; `npm run check` 33 +
+12 (new: repeated names, number words). In Chromium at 1200px and 390px touch:
+no note for Yes / No; typing "yes" over "No" shows it on the answers card; the
+first and second answers' cards, the text card and the pick card say "first"
+and "second"; the List shows the note, it goes when names differ, returns with
+"YES " (nothing is stopped or changed), and says "Three answers are all
+called" for three; no sideways scroll, no page errors.
+
+**Couldn't be checked:** a real iPhone (only the wording and layout changed).
+

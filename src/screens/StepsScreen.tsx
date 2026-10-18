@@ -6,6 +6,7 @@ import { SHAPES, type ShapeType } from '../data/shapes.ts';
 import {
   appendStep as withStep, itemLabel, leadsTo, nextOpenSlot, openAnswer, setAnswers as withAnswers, setText as withText, setType as withType, type Slot,
 } from '../lib/chartOps.ts';
+import { cardRepeatNote, repeatedNameNotes } from '../lib/answerNotes.ts';
 import { useIsNarrow } from '../lib/responsive.ts';
 import { LiveChart } from '../components/LiveChart.tsx';
 import { useBackLayer } from '../lib/backLayers.ts';
@@ -256,6 +257,15 @@ export function StepsScreen() {
     return <>After <em>{words(it)}</em>, what happens next?</>;
   };
 
+  /** When two of a question's answers share a name, which one this card is about (fresh look 7.2). */
+  const repeatNote = (slot: Slot): ReactNode => {
+    if (slot.kind !== 'answer') return null;
+    const it = byId(slot.id);
+    if (!it) return null;
+    const note = cardRepeatNote(it.routes.map((r) => r.label), it.routes.findIndex((r) => r.id === slot.routeId));
+    return note ? <div className="wiz-context">{note}</div> : null;
+  };
+
   const slotContext = (slot: Slot): string => {
     const it = byId(slot.id);
     if (slot.kind === 'answer') {
@@ -350,6 +360,7 @@ export function StepsScreen() {
         {/* Read first: the path just finished, then the question that comes back. */}
         {c.note && <div className="wiz-context">{c.note}</div>}
         <h2>{slotTitle(c)}</h2>
+        {repeatNote(c.slot)}
         {made && !locked && <p>You chose <strong>{words(made)}</strong> here. Pick again to change it.</p>}
         {made && locked && (
           <div className="wiz-locked">
@@ -405,6 +416,7 @@ export function StepsScreen() {
       <>
         {kicker}
         <div className="wiz-context">{slotContext(c.slot)}</div>
+        {repeatNote(c.slot)}
         <h2>{pr.title}</h2>
         {pr.help && <p>{pr.help}</p>}
         <input
@@ -444,6 +456,7 @@ export function StepsScreen() {
           <button className="btn btn-ghost" style={{ color: 'var(--color-accent-700)', paddingLeft: 0, marginTop: 6 }}
             onClick={() => setLabels((ls) => [...ls, ''])}>+ Add another answer</button>
         )}
+        {repeatedNameNotes(labels).map((n) => <p key={n} className="wiz-note">{n}</p>)}
         {error && <div className="wiz-error">{error}</div>}
         {foot({ label: 'Next', go: () => answersNext(c) })}
       </>
@@ -454,6 +467,7 @@ export function StepsScreen() {
       <>
         {kicker}
         <div className="wiz-context">{slotContext(c.slot)}</div>
+        {repeatNote(c.slot)}
         <h2>Which step does it go back to?</h2>
         <p>Choose the step it loops back to, or joins up with.</p>
         <div className="wiz-picks">

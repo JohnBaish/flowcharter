@@ -238,6 +238,34 @@ export function setAnswers(items: Item[], id: ItemId, labels: string[]): Item[] 
   return out;
 }
 
+// — repeated answer names (fresh look 7.2): allowed, but pointed out —
+
+const answerKey = (label: string) => label.trim().toLowerCase();
+
+/** Answer names used more than once on one question, as typed the first time
+ *  (capital letters and spaces around a name don't make a different name).
+ *  Blank answers don't count. */
+export function repeatedAnswers(labels: string[]): { name: string; count: number }[] {
+  const seen = new Map<string, { name: string; count: number }>();
+  for (const label of labels) {
+    const key = answerKey(label);
+    if (!key) continue;
+    const found = seen.get(key);
+    if (found) found.count += 1;
+    else seen.set(key, { name: label.trim(), count: 1 });
+  }
+  return [...seen.values()].filter((g) => g.count > 1);
+}
+
+/** For the answer at `index`: how many answers share its name, and which of
+ *  them it is (1 = the first). Null when its name is blank or its own. */
+export function answerPlace(labels: string[], index: number): { count: number; nth: number } | null {
+  const key = answerKey(labels[index] ?? '');
+  if (!key) return null;
+  const same = labels.map((l, i) => (answerKey(l) === key ? i : -1)).filter((i) => i >= 0);
+  return same.length > 1 ? { count: same.length, nth: same.indexOf(index) + 1 } : null;
+}
+
 // — read-only helpers the screens (and the chart drawing) share —
 
 /** Where an ordinary (non-decision) row leads: the id of the row it flows into,
