@@ -134,7 +134,16 @@ export function LibraryScreen() {
         <p style={{ margin: 'var(--space-2) 0 0' }}>
           Flowcharter is a free-to-use personal project by John Baish. The flowcharts you make here are not collected;
           they’re only saved in your browser. We collect anonymous visit statistics (no cookies, no personal data) to see
-          how the site is used. Contact: workshop@baish.net
+          how the site is used. More free tools at{' '}
+          <a
+            href="https://www.baish.net/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'var(--color-accent-700)', textDecoration: 'underline' }}
+          >
+            www.baish.net
+          </a>
+          . Contact: workshop@baish.net
         </p>
       </div>
     </>
