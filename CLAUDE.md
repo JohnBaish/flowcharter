@@ -1101,3 +1101,5 @@ printed; no sideways scroll, no page errors. The Back and Chart-editing
 browser checks from earlier today still all pass. Pictures:
 `design/previews/view-switch/built-computer.png` and `built-phone.png`.
 Not merged: waiting for John.
+
+**Approved by John and merged into `main` (same day).**
