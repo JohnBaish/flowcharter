@@ -1,3 +1,4 @@
+import type { KeyboardEvent } from 'react';
 import { SHAPES, SHAPE_ORDER, type ShapeType } from '../data/shapes.ts';
 import type { ChartLayout, LayoutNode, Point } from '../lib/layout.ts';
 import {
@@ -12,6 +13,33 @@ const INK = '#201e1d';
 const CREAM = '#f5ead8';
 const FONT_FAMILY = 'Figtree, system-ui, sans-serif';
 const STROKE = 1.5;
+// A step still being written on the cards is drawn dashed (John, 2026-10-20).
+const DASH = '6 4';
+
+/** What's still being written on the cards: these steps, and these questions' answer lines. */
+export interface Draft { nodes?: string[]; answersOf?: string[] }
+
+/** Changing words on the Chart: which boxes and answers respond to a click, and
+ *  which one is being changed (outlined). Not used for printing or Copy image,
+ *  which only ever see the plain drawing. */
+export interface Editing {
+  onNode: (id: string) => void;
+  onLabel: (edgeId: string) => void;
+  active: string | null;
+}
+
+const isStub = (id: string) => id.includes('::stub');
+/** The question an answer's line belongs to, from its id (`<question id>::route<n>`). */
+const answerOf = (edgeId: string) => (edgeId.includes('::route') ? edgeId.slice(0, edgeId.indexOf('::route')) : null);
+
+/** Click, or Enter / Space from the keyboard. */
+function pressable(go: () => void, label: string) {
+  return {
+    role: 'button', tabIndex: 0, 'aria-label': label,
+    onClick: go,
+    onKeyDown: (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } },
+  };
+}
 
 const fillOf = (type: DrawnShape) => (type === 'stub' ? CREAM : SHAPES[type].fill);
 
@@ -19,17 +47,24 @@ function path(points: Point[]): string {
   return points.map((p, i) => `${i ? 'L' : 'M'}${Math.round(p.x * 10) / 10} ${Math.round(p.y * 10) / 10}`).join(' ');
 }
 
-function Shape({ n }: { n: LayoutNode }) {
+function Shape({ n, draft, edit }: { n: LayoutNode; draft: boolean; edit?: Editing }) {
   const inner = shapeInnerLines(n.type, n.w, n.h);
   const cx = n.w / 2 + n.textDx;
   const top = n.h / 2 + n.textDy - ((n.lines.length - 1) * LINE_HEIGHT) / 2;
+  const editable = edit && !isStub(n.id);
+  const dash = draft ? DASH : undefined;
   return (
-    <g transform={`translate(${n.x} ${n.y})`}>
+    <g
+      transform={`translate(${n.x} ${n.y})`}
+      className={editable ? `fc-edit${edit.active === n.id ? ' fc-active' : ''}` : undefined}
+      {...(editable ? pressable(() => edit.onNode(n.id), `Change the words: ${n.lines.join(' ')}`) : {})}
+    >
       <path
         d={shapePath(n.type, n.w, n.h)} fill={fillOf(n.type)} stroke={INK} strokeWidth={STROKE} strokeLinejoin="round"
-        className={n.type === 'stub' ? 'chart-paper-fill' : undefined}
+        strokeDasharray={dash}
+        className={n.type === 'stub' ? 'chart-paper-fill' : 'fc-outline'}
       />
-      {inner && <path d={inner} fill="none" stroke={INK} strokeWidth={STROKE} />}
+      {inner && <path d={inner} fill="none" stroke={INK} strokeWidth={STROKE} strokeDasharray={dash} />}
       {n.lines.length > 0 && (
         <text textAnchor="middle" dominantBaseline="central" fontFamily={FONT_FAMILY} fontSize={FONT_SIZE} fill={INK}>
           {n.lines.map((line, i) => <tspan key={i} x={cx} y={top + i * LINE_HEIGHT}>{line}</tspan>)}
@@ -40,7 +75,12 @@ function Shape({ n }: { n: LayoutNode }) {
 }
 
 /** The flowchart itself, at `scale` (1 = full size). */
-export function FlowChart({ layout, scale, title }: { layout: ChartLayout; scale: number; title: string }) {
+export function FlowChart({ layout, scale, title, draft, edit }: {
+  layout: ChartLayout; scale: number; title: string; draft?: Draft; edit?: Editing;
+}) {
+  const draftNodes = new Set(draft?.nodes ?? []);
+  const draftAnswers = new Set([...(draft?.answersOf ?? []), ...(draft?.nodes ?? [])]);
+  const dashed = (edgeId: string) => { const q = answerOf(edgeId); return q !== null && draftAnswers.has(q); };
   return (
     <svg
       viewBox={`0 0 ${Math.ceil(layout.width)} ${Math.ceil(layout.height)}`}
@@ -58,12 +98,19 @@ export function FlowChart({ layout, scale, title }: { layout: ChartLayout; scale
       </defs>
       {/* Lines first, so shapes and labels sit on top of them. */}
       {layout.edges.map((e) => e.points.length >= 2 && (
-        <path key={e.id} d={path(e.points)} fill="none" stroke={INK} strokeWidth={STROKE} markerEnd={e.toStub ? undefined : 'url(#fc-arrow)'} />
+        <path
+          key={e.id} d={path(e.points)} fill="none" stroke={INK} strokeWidth={STROKE}
+          strokeDasharray={dashed(e.id) ? DASH : undefined} markerEnd={e.toStub ? undefined : 'url(#fc-arrow)'}
+        />
       ))}
-      {layout.nodes.map((n) => <Shape key={n.id} n={n} />)}
+      {layout.nodes.map((n) => <Shape key={n.id} n={n} draft={draftNodes.has(n.id)} edit={edit} />)}
       {layout.edges.map((e) => e.label && (
-        <g key={`${e.id}-label`}>
-          <rect className="chart-paper-fill" x={e.label.x} y={e.label.y} width={e.label.w} height={e.label.h} rx={e.label.h / 2} fill={CREAM} />
+        <g
+          key={`${e.id}-label`}
+          className={edit ? `fc-edit${edit.active === e.id ? ' fc-active' : ''}` : undefined}
+          {...(edit ? pressable(() => edit.onLabel(e.id), `Change the answer: ${e.label.text}`) : {})}
+        >
+          <rect className="chart-paper-fill fc-outline" x={e.label.x} y={e.label.y} width={e.label.w} height={e.label.h} rx={e.label.h / 2} fill={CREAM} />
           <text
             x={e.label.x + e.label.w / 2} y={e.label.y + e.label.h / 2}
             textAnchor="middle" dominantBaseline="central"

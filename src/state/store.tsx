@@ -89,6 +89,7 @@ interface AppContextValue extends PersistedState {
   restoreItems: (items: Chart['items']) => void;
   reorderItems: (from: number, to: number) => void;
   setItemText: (itemId: ItemId, text: string) => void;
+  setItemWords: (itemId: ItemId, text: string) => void;
   setItemType: (itemId: ItemId, type: ShapeType) => void;
   setItemThen: (itemId: ItemId, then: Next) => void;
   setRouteCount: (itemId: ItemId, count: number) => void;
@@ -222,6 +223,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     restoreItems: (items) => editItems(() => items),
     reorderItems: (from, to) => editItems((items) => ops.reorderItems(items, from, to)),
     setItemText: (itemId, text) => editItems((items) => ops.setText(items, itemId, text)),
+    setItemWords: (itemId, text) => editItems((items) => ops.setWords(items, itemId, text)),
     setItemType: (itemId, type) => editItems((items) => ops.setType(items, itemId, type)),
     setItemThen: (itemId, then) => editItems((items) => ops.setThen(items, itemId, then)),
     setRouteCount: (itemId, count) => editItems((items) => ops.setRouteCount(items, itemId, count)),

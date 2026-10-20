@@ -952,3 +952,105 @@ read exactly as above; every Guide sample sits inside its shape (measured, and
 looked at); no page errors, no sideways scroll.
 
 **Approved by John and merged into `main` (same day).**
+
+### 2026-10-20 — Mock-ups: Back un-draws the cards' chart; changing words on the Chart (branch `claude/beautiful-ramanujan-v19j5u`, design only)
+
+**John asked** whether Back on the cards could un-draw the chart, and whether
+a finished chart's boxes could be clicked to change their words.
+
+**John decided:**
+- **Back really undoes** (option a). This reverses the 2026-10-16 "Back
+  revisits, it never deletes" choice: users found going back and then jumping
+  forward too complex to be worth keeping. Each Back removes what the card
+  before it added; going forward again means answering the cards again.
+- **Editing on the Chart changes only the words**, never the shape (unlike the
+  List, where new words can change a guessed shape).
+
+**Made, for John to judge** (nothing built in the app yet):
+`design/mock-back-and-edit.html` and its PDF
+`design/previews/back-and-edit/mock-back-and-edit.pdf`. The pictures are real
+screens from the built app, with the proposed parts painted on top by
+`design/mock-back-and-edit.mjs` (it drives the cards, building the booking
+chart; run it against `npx vite preview --port 4173`).
+- Back, five presses from "Pay the deposit": the step being written is drawn
+  **dashed** (so every Back visibly changes the chart, since the cards already
+  draw what's being typed); a card you come back to outlines the choice made
+  there and says so (draft: "You chose *Something gets done* here: *Pay the
+  deposit*. Choose it again to carry on with those words, or choose something
+  different."). Back only undoes what was done on the cards this time. The 2.3
+  locked-question card and the 2.5 note would no longer be reachable, so they
+  would be removed.
+- Chart editing: on a computer, hover outlines a box; clicking turns the box
+  itself into the place to type (Enter or clicking away saves, Esc cancels);
+  answers on lines work the same way. On a phone, tapping outlines the box and
+  opens a panel at the top of the screen (the keyboard opens below it). Hint
+  line beside Direction (drafts: "Click/Tap a box to change its words.").
+  Empty keeps the old words; List limits (80/40). Not in Full screen, the
+  cards' chart, print or Copy image.
+
+**Open for John (numbered in the PDF):** 1a the "You chose" wording; 1b the
+dashed step; 2a the hint wording; 2b the phone panel's title and place; 2c no
+editing in Full screen (suggested).
+
+**Verified:** the mock-up page in Chromium at 1200px and 390px with touch:
+fonts loaded, every picture present, no sideways scroll. The screenshots come
+from the real app with no page errors.
+
+**Couldn't be checked:** how the phone panel behaves with a real iPhone
+keyboard (to try on the preview once built).
+
+**John's answers (same day):** 1a, 1b, 2a and 2b agreed as drafted; 2c no
+editing in Full screen. Built straight away, below.
+
+### 2026-10-20 — Back undoes on the cards; changing words on the Chart (branch `claude/beautiful-ramanujan-v19j5u`, not merged)
+
+**Back undoes** (`StepsScreen.tsx`). Each card in the history now carries
+`before`, the steps as they were when it appeared (`Shown`); Back restores the
+previous card's `before` (`store.restoreItems`) and pops the top card, so every
+press un-draws what the card after it added. Cards remember what was entered
+on them for when Back returns: a text card its words (`typed`), an answers
+card its answers, a kind card its choice (`chose`) and the words written for
+it (`words`, with their kind, so an untouched "End" doesn't replace them).
+Words carry to a different kind except to or from an ending (as 2.2). Words
+typed on a text card and abandoned with Back are kept for the kind card below.
+Because a step is now always new when written, the old "change the row in
+place" path, the 2.3 locked-question card (`changeInList`, `.wiz-locked`) and
+the 2.5 note are gone. `FlowChart` takes a `draft` (steps, and questions'
+answer lines, drawn dashed); `LiveChart` passes it through.
+
+**Changing words on the Chart** (`ChartScreen.tsx`, `FlowChart.tsx`). Boxes
+and answer pills are `g.fc-edit` (role button, Tab + Enter work); the outline
+is CSS only (`.fc-outline`, hover only where a real pointer exists), so Copy
+image and print never see it. Computer: `EditBox`, a contenteditable over the
+shape, same size and fill, words selected, hint to the right (or below if
+there's no room). Phone (≤720px): `.chart-edit-panel` fixed at the top, the
+shape scrolled into sight below it. Opening uses `flushSync` so the box is
+focused inside the tap (the phone keyboard). Saves through the new
+`chartOps.setWords` (words only, never re-guessing the shape; one new check)
+and `setRouteLabel`. Empty keeps the old words. Not in Full screen or the
+cards' chart. SPEC §5 ("Changing words on the Chart") and §10b updated.
+
+**Verified:** build clean; lint the two known warnings; `npm run check` 34 + 12.
+In Chromium (built app) at 1200px and 390px with touch:
+- Cards: five Backs from "Pay the deposit" un-draw exactly as in the mock-ups
+  (words kept, dashed step, gone; answer lines dashed; question dashed, gone);
+  the "You chose" line and outline; choosing again restores the words, an
+  ending starts as "End"; answers remembered; Back from done undoes the loop;
+  Back to the name card removes Start and Next adds it again; resuming from the
+  List has no Back on the first card; the full booking chart built with the
+  right links.
+- Chart: hint wording; seven of the booking chart's shapes and answers
+  respond; hover outline; the box sits over the shape with the words selected;
+  Enter saves and a question mark doesn't turn an Action into a Question; Esc
+  cancels; empty keeps the words; clicking away saves; renaming an answer keeps
+  its loop; keyboard opening; the hint isn't printed. Phone: panel, 16px text,
+  selected words, outlined shape in sight below the panel, 44px buttons, Save
+  and Cancel, no outline left behind. Copy image after hovering has no orange
+  in it. All ten test charts draw at both widths (Full screen on the phone has
+  no editing). No page errors, no sideways scroll.
+
+**Couldn't be checked:** a real iPhone (the keyboard opening when a box is
+tapped and its effect on the panel; dashed lines in Safari).
+
+**John tried the preview (2026-10-20):** "Looks great." Merged into `main` at
+his say-so.
