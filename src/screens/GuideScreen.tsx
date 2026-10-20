@@ -87,9 +87,13 @@ export function GuideScreen() {
       <div className="card" style={section}>
         <div className="card-kicker">The Chart</div>
         <h3 className="card-title" style={heading}>Seeing and sharing it</h3>
-        <p style={{ ...body, margin: 0 }}>
+        <p style={body}>
           Use the <strong>List | Chart</strong> switch at the top to see your chart. <strong>Print</strong> it, or use{' '}
           <strong>Copy image</strong> to paste it into something else.
+        </p>
+        <p style={{ ...body, margin: 0 }}>
+          To change the words in a box, or an answer on a line, click it (on a phone, tap it). This changes only the
+          words: to change a step's shape, use the List.
         </p>
       </div>
 

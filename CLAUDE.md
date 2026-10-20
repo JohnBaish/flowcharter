@@ -1054,3 +1054,15 @@ tapped and its effect on the panel; dashed lines in Safari).
 
 **John tried the preview (2026-10-20):** "Looks great." Merged into `main` at
 his say-so.
+
+### 2026-10-20 — Guide: a line about changing words on the Chart (branch `claude/beautiful-ramanujan-v19j5u`, restarted from `main`; draft, not merged)
+
+**John asked** for a draft, shown in context. Added a second paragraph to the
+Guide's "Seeing and sharing it" card (`GuideScreen.tsx`), draft wording: "To
+change the words in a box, or an answer on a line, click it (on a phone, tap
+it). This changes only the words: to change a step's shape, use the List."
+Pictures of the real Guide at both widths: `design/previews/guide-chart-edit-
+computer.png` and `-phone.png`.
+
+**Verified:** build clean; in Chromium at 1200px and 390px touch the card reads
+as above, no page errors, no sideways scroll.
