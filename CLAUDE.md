@@ -1066,3 +1066,5 @@ computer.png` and `-phone.png`.
 
 **Verified:** build clean; in Chromium at 1200px and 390px touch the card reads
 as above, no page errors, no sideways scroll.
+
+**Approved by John and merged into `main` (same day)**, wording as drafted.
