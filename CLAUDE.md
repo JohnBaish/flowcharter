@@ -1068,3 +1068,38 @@ computer.png` and `-phone.png`.
 as above, no page errors, no sideways scroll.
 
 **Approved by John and merged into `main` (same day)**, wording as drafted.
+
+### 2026-10-20 — Mock-ups: a clearer List | Chart switch (branch `claude/beautiful-ramanujan-v19j5u`, restarted from `main`; design only)
+
+**John asked** for a way to make the List | Chart switch clearer at a glance.
+Observation: on the Chart screen it looks exactly like the Direction switch
+below it (both orange-and-cream pills). **Made:** `design/mock-view-switch.html`
+and its PDF `design/previews/view-switch/mock-view-switch.pdf`, from real
+screens with only the switch swapped (`design/mock-view-switch.mjs`): now;
+**A** small list and flowchart icons beside the words; **B** picture buttons
+(a numbered list, a mini flowchart in the shapes' colours; the current one
+outlined, not filled; ~25px taller on a phone); **C** tabs (icon + word, the
+current one orange and underlined; no extra room). Suggested C; B if it must be
+impossible to miss. No app code changed.
+
+**Verified:** the pictures from the built app in Chromium at 1200px and 390px
+touch, no page errors, no sideways scroll; the mock-up page with fonts loaded
+and every picture present.
+
+**John chose C, tabs (same day). Built:** `EditorHeader.tsx` now draws
+`.view-toggle` as two `.view-tab` labels (still radio buttons: Tab reaches them,
+arrow keys switch), each with its picture (`components/ViewIcons.tsx`, kept out
+of `lib/icons.tsx` so lint stays at the two known warnings); styles in
+`global.css` (orange text and a 3px orange underline on the current tab, a
+grey line under both; 44px tall on a phone). SPEC §2 updated.
+
+**Verified:** build clean; lint the two known warnings; `npm run check` 34 + 12.
+In Chromium (built app) at 1200px and 390px touch: both tabs with pictures;
+the current one orange and underlined; switching both ways; Tab reaches them
+with a visible focus outline and arrow keys switch; 44px tall on a phone; not
+printed; no sideways scroll, no page errors. The Back and Chart-editing
+browser checks from earlier today still all pass. Pictures:
+`design/previews/view-switch/built-computer.png` and `built-phone.png`.
+Not merged: waiting for John.
+
+**Approved by John and merged into `main` (same day).**

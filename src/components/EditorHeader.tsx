@@ -8,6 +8,7 @@ import { copyChartImage, slug } from '../lib/exportImage.ts';
 import { printScreen } from '../lib/print.ts';
 import { numberWord } from '../lib/words.ts';
 import { IconFullScreen, IconPlus, IconPrint } from '../lib/icons.tsx';
+import { IconChartView, IconListView } from './ViewIcons.tsx';
 import { useIsNarrow } from '../lib/responsive.ts';
 
 /** Header for the List and Chart screens — two views of the same chart: the
@@ -84,11 +85,13 @@ export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
         />
         <span className="tag tag-neutral mono" style={{ marginTop: 6, display: 'inline-block' }}>{summary(chart.items)}</span>
       </div>
-      <div className="seg view-toggle" role="radiogroup" aria-label="View">
+      {/* Tabs, not a pill switch, so they don't look like the Chart's Direction
+          switch (John chose this, 2026-10-20). */}
+      <div className="view-toggle" role="radiogroup" aria-label="View">
         {(['list', 'chart'] as const).map((v) => (
-          <label key={v} className="seg-opt">
+          <label key={v} className="view-tab">
             <input type="radio" name="editor-view" value={v} checked={mode === v} onChange={() => setScreen(v)} />
-            {v === 'list' ? 'List' : 'Chart'}
+            {v === 'list' ? <><IconListView />List</> : <><IconChartView />Chart</>}
           </label>
         ))}
       </div>

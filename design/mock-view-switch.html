@@ -1,0 +1,92 @@
+<!doctype html>
+<!--
+  Design mock-up (not app code), 2026-10-20: ways to make the List | Chart
+  switch clearer at a glance. Pictures are the real app with each version of
+  the switch swapped in (design/mock-view-switch.mjs makes them, into
+  design/previews/view-switch/). Open from disk after `npm ci`.
+-->
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>List and Chart switch</title>
+<link rel="stylesheet" href="../src/styles/organic.css">
+<style>
+  @font-face { font-family: 'Caprasimo'; font-weight: 400; src: url('../node_modules/@fontsource/caprasimo/files/caprasimo-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 400; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 700; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-700-normal.woff2') format('woff2'); }
+  body { margin: 0; background: var(--color-bg); color: var(--color-text); font: 400 15px/1.5 Figtree, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 28px 16px 48px; }
+  h1 { font: 400 30px/1.15 Caprasimo, serif; margin: 0 0 8px; }
+  h2 { font: 400 23px/1.2 Caprasimo, serif; margin: 36px 0 6px; }
+  h2 .tag { font: 700 13px Figtree, sans-serif; color: var(--color-accent-700); margin-right: 6px; }
+  p, li { margin: 0 0 10px; }
+  .lead { color: var(--color-neutral-700); }
+  figure { margin: 10px 0 14px; break-inside: avoid; }
+  figure img { width: 100%; display: block; border-radius: 12px; border: 1px solid var(--color-divider); }
+  figcaption { margin-top: 6px; font-size: 13.5px; color: var(--color-neutral-700); }
+  .phone { max-width: 300px; }
+  .phone { max-width: 260px; }
+  .draft { background: var(--color-surface); border-radius: 14px; padding: 12px 16px; margin: 20px 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Making List and Chart clearer</h1>
+  <p class="lead">Mock-ups for John, 20 October 2026: three ways to make the switch between the List and the Chart
+    easier to tell apart at a glance, and how it looks now. They're real screens with only the switch changed. Each
+    version shows the top of the Chart screen and of the List screen on a computer (close-ups), and the Chart screen on a phone.</p>
+  <p>Part of the problem, as I see it: on the Chart screen there are two switches that look exactly alike, List | Chart
+    and Direction, both orange-and-cream pills. So the eye can't tell straight away which one changes the view.</p>
+
+  <section class="first">
+  <h2><span class="tag">Now</span>Words only</h2>
+  <figure><img src="previews/view-switch/now-chart-computer-closeup.png" alt=""><figcaption>Chart, computer</figcaption></figure>
+  <div class="stack">
+    <figure><img src="previews/view-switch/now-list-computer-closeup.png" alt=""><figcaption>List, computer</figcaption></figure>
+    <figure class="phone"><img src="previews/view-switch/now-chart-phone-closeup.png" alt=""><figcaption>Chart, phone</figcaption></figure>
+  </div>
+  </section>
+
+  <section>
+  <h2><span class="tag">A</span>Add small icons</h2>
+  <p>The same switch with a little list picture and a little flowchart picture beside the words. The smallest change.
+    It still looks like the Direction switch, though.</p>
+  <figure><img src="previews/view-switch/icons-chart-computer-closeup.png" alt=""><figcaption>Chart, computer</figcaption></figure>
+  <div class="stack">
+    <figure><img src="previews/view-switch/icons-list-computer-closeup.png" alt=""><figcaption>List, computer</figcaption></figure>
+    <figure class="phone"><img src="previews/view-switch/icons-chart-phone-closeup.png" alt=""><figcaption>Chart, phone</figcaption></figure>
+  </div>
+  </section>
+
+  <section>
+  <h2><span class="tag">B</span>Picture buttons</h2>
+  <p>Two larger buttons, each with a small picture: a numbered list, and a little flowchart in the shapes' own colours.
+    The one you're on is outlined in orange. It's the most obvious of the three, and it's no longer an orange-filled pill,
+    so it looks nothing like the Direction switch. It takes a little more height (about 25px more on a phone).</p>
+  <figure><img src="previews/view-switch/pictures-chart-computer-closeup.png" alt=""><figcaption>Chart, computer</figcaption></figure>
+  <div class="stack">
+    <figure><img src="previews/view-switch/pictures-list-computer-closeup.png" alt=""><figcaption>List, computer</figcaption></figure>
+    <figure class="phone"><img src="previews/view-switch/pictures-chart-phone-closeup.png" alt=""><figcaption>Chart, phone</figcaption></figure>
+  </div>
+  </section>
+
+  <section>
+  <h2><span class="tag">C</span>Tabs</h2>
+  <p>Icons and words, as tabs: the one you're on is orange and underlined, like a tab at the top of a page. Tabs read as
+    "which page am I on", so they're clearly different from the Direction switch. They're quieter than B and take no
+    extra room.</p>
+  <figure><img src="previews/view-switch/tabs-chart-computer-closeup.png" alt=""><figcaption>Chart, computer</figcaption></figure>
+  <div class="stack">
+    <figure><img src="previews/view-switch/tabs-list-computer-closeup.png" alt=""><figcaption>List, computer</figcaption></figure>
+    <figure class="phone"><img src="previews/view-switch/tabs-chart-phone-closeup.png" alt=""><figcaption>Chart, phone</figcaption></figure>
+  </div>
+  <div class="draft">
+    <p style="margin:0"><b>My suggestion: C, tabs.</b> It says "these are two pages of the same chart" without taking more
+      room, and it stops the two switches looking alike. B is the choice if you want it to be impossible to miss. Any of
+      them can be mixed, for example B's pictures with C's tabs. Nothing has been changed in the app.</p>
+  </div>
+  </section>
+</main>
+</body>
+</html>

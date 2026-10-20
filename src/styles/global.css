@@ -216,12 +216,22 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
   gap: var(--space-3); padding: var(--space-3) var(--space-4);
 }
 .editor-actions { justify-self: end; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
-.view-toggle .seg-opt { padding: 6px 18px; font-size: 13.5px; }
+/* List | Chart as tabs: the one you're on is orange and underlined. */
+.view-toggle { display: inline-flex; gap: 4px; border-bottom: 2px solid var(--color-divider); }
+.view-tab {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; margin-bottom: -2px;
+  font-size: 15px; font-weight: 600; color: var(--color-neutral-700); cursor: pointer;
+  border-bottom: 3px solid transparent; border-radius: 10px 10px 0 0;
+}
+.view-tab input { position: absolute; opacity: 0; pointer-events: none; }
+.view-tab:has(input:checked) { color: var(--color-accent-700); border-bottom-color: var(--color-accent); }
+.view-tab:not(:has(input:checked)):hover { color: var(--color-text); background: color-mix(in srgb, var(--color-text) 6%, transparent); }
+.view-tab:has(input:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: -2px; }
 @media (max-width: 720px) {
   .editor-header { grid-template-columns: 1fr; }
   .view-toggle { justify-self: start; }
   .editor-actions { justify-self: start; justify-content: flex-start; }
-  .view-toggle .seg-opt { min-height: 44px; display: inline-flex; align-items: center; }
+  .view-tab { min-height: 44px; }
 }
 
 /* — Step-by-step cards (Stage 5; design/mock-cards.html) — */
