@@ -1051,3 +1051,6 @@ In Chromium (built app) at 1200px and 390px with touch:
 
 **Couldn't be checked:** a real iPhone (the keyboard opening when a box is
 tapped and its effect on the panel; dashed lines in Safari).
+
+**John tried the preview (2026-10-20):** "Looks great." Merged into `main` at
+his say-so.
