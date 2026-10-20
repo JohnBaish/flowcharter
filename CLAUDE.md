@@ -952,3 +952,49 @@ read exactly as above; every Guide sample sits inside its shape (measured, and
 looked at); no page errors, no sideways scroll.
 
 **Approved by John and merged into `main` (same day).**
+
+### 2026-10-20 — Mock-ups: Back un-draws the cards' chart; changing words on the Chart (branch `claude/beautiful-ramanujan-v19j5u`, design only)
+
+**John asked** whether Back on the cards could un-draw the chart, and whether
+a finished chart's boxes could be clicked to change their words.
+
+**John decided:**
+- **Back really undoes** (option a). This reverses the 2026-10-16 "Back
+  revisits, it never deletes" choice: users found going back and then jumping
+  forward too complex to be worth keeping. Each Back removes what the card
+  before it added; going forward again means answering the cards again.
+- **Editing on the Chart changes only the words**, never the shape (unlike the
+  List, where new words can change a guessed shape).
+
+**Made, for John to judge** (nothing built in the app yet):
+`design/mock-back-and-edit.html` and its PDF
+`design/previews/back-and-edit/mock-back-and-edit.pdf`. The pictures are real
+screens from the built app, with the proposed parts painted on top by
+`design/mock-back-and-edit.mjs` (it drives the cards, building the booking
+chart; run it against `npx vite preview --port 4173`).
+- Back, five presses from "Pay the deposit": the step being written is drawn
+  **dashed** (so every Back visibly changes the chart, since the cards already
+  draw what's being typed); a card you come back to outlines the choice made
+  there and says so (draft: "You chose *Something gets done* here: *Pay the
+  deposit*. Choose it again to carry on with those words, or choose something
+  different."). Back only undoes what was done on the cards this time. The 2.3
+  locked-question card and the 2.5 note would no longer be reachable, so they
+  would be removed.
+- Chart editing: on a computer, hover outlines a box; clicking turns the box
+  itself into the place to type (Enter or clicking away saves, Esc cancels);
+  answers on lines work the same way. On a phone, tapping outlines the box and
+  opens a panel at the top of the screen (the keyboard opens below it). Hint
+  line beside Direction (drafts: "Click/Tap a box to change its words.").
+  Empty keeps the old words; List limits (80/40). Not in Full screen, the
+  cards' chart, print or Copy image.
+
+**Open for John (numbered in the PDF):** 1a the "You chose" wording; 1b the
+dashed step; 2a the hint wording; 2b the phone panel's title and place; 2c no
+editing in Full screen (suggested).
+
+**Verified:** the mock-up page in Chromium at 1200px and 390px with touch:
+fonts loaded, every picture present, no sideways scroll. The screenshots come
+from the real app with no page errors.
+
+**Couldn't be checked:** how the phone panel behaves with a real iPhone
+keyboard (to try on the preview once built).

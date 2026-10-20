@@ -1,0 +1,135 @@
+<!doctype html>
+<!--
+  Design mock-up (not app code), 2026-10-20: (1) Back on the step-by-step cards
+  un-draws the chart (option a, chosen by John); (2) changing a box's words on
+  the Chart. The pictures are real screens from the app with the proposed
+  changes painted on top (design/mock-back-and-edit.mjs makes them, into
+  design/previews/back-and-edit/). Open from disk after `npm ci`.
+-->
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Back and editing mock-ups</title>
+<link rel="stylesheet" href="../src/styles/organic.css">
+<style>
+  @font-face { font-family: 'Caprasimo'; font-weight: 400; src: url('../node_modules/@fontsource/caprasimo/files/caprasimo-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 400; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Figtree'; font-weight: 700; src: url('../node_modules/@fontsource/figtree/files/figtree-latin-700-normal.woff2') format('woff2'); }
+  body { margin: 0; background: var(--color-bg); color: var(--color-text); font: 400 15px/1.5 Figtree, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 28px 16px 48px; }
+  h1 { font: 400 30px/1.15 Caprasimo, serif; margin: 0 0 8px; }
+  h2 { font: 400 23px/1.2 Caprasimo, serif; margin: 40px 0 8px; }
+  h2.first { break-before: auto; }
+  h3 { font: 700 12px Figtree, sans-serif; letter-spacing: .09em; text-transform: uppercase; color: var(--color-accent-700); margin: 26px 0 6px; }
+  p, li { margin: 0 0 10px; }
+  ul { padding-left: 20px; }
+  .lead { color: var(--color-neutral-700); }
+  figure { margin: 14px 0 22px; break-inside: avoid; }
+  figure img { width: 100%; display: block; border-radius: 12px; border: 1px solid var(--color-divider); }
+  figcaption { margin-top: 8px; font-size: 14px; }
+  figcaption b { color: var(--color-accent-700); }
+  .phones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; break-inside: avoid; }
+  .phones.two { grid-template-columns: repeat(2, 1fr); max-width: 520px; }
+  .phones img { width: 100%; border-radius: 12px; border: 1px solid var(--color-divider); }
+  .phones figcaption { font-size: 12.5px; }
+  .draft { background: var(--color-surface); border-radius: 14px; padding: 12px 16px; margin: 14px 0; }
+  .num { display: inline-block; min-width: 22px; font-weight: 700; color: var(--color-accent-700); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Back that un-draws, and changing words on the Chart</h1>
+  <p class="lead">Mock-ups for John, 20 October 2026. These are real screens from Flowcharter with the new parts painted
+    on top, so the charts are drawn exactly as the app draws them. Wording marked “draft” is mine, for you to change.</p>
+
+  <h2 class="first">1. Back un-draws the chart (step by step)</h2>
+  <p>Each press of <b>Back</b> takes the chart back one step. Below, someone has got as far as “Pay the deposit” and
+    presses Back five times.</p>
+
+  <figure><img src="previews/back-and-edit/back-0-computer.png" alt="">
+    <figcaption><b>Where they are.</b> Four steps so far.</figcaption></figure>
+  <figure><img src="previews/back-and-edit/back-1-computer.png" alt="">
+    <figcaption><b>Back 1.</b> The card for “Pay the deposit” returns with the words still in the box. On the chart the
+      step is <b>dashed</b>: it's being written, not saved. Pressing Next saves it again.</figcaption></figure>
+  <figure><img src="previews/back-and-edit/back-2-computer.png" alt="">
+    <figcaption><b>Back 2.</b> “Pay the deposit” has gone; the Yes line ends in an open circle again. The card outlines
+      the choice made last time and says so (draft wording). Choosing it again brings the words back; choosing
+      something else starts with an empty box.</figcaption></figure>
+  <figure><img src="previews/back-and-edit/back-3-computer.png" alt="">
+    <figcaption><b>Back 3.</b> The answers card. The answer lines are dashed, because they're being written.</figcaption></figure>
+  <figure><img src="previews/back-and-edit/back-4-computer.png" alt="">
+    <figcaption><b>Back 4.</b> The question's own card, with its words. The question is dashed.</figcaption></figure>
+  <figure><img src="previews/back-and-edit/back-5-computer.png" alt="">
+    <figcaption><b>Back 5.</b> The question has gone. The card remembers it was “We ask a question”.</figcaption></figure>
+
+  <h3>On a phone</h3>
+  <p>The card is the same. Peek shows the chart as it now stands.</p>
+  <div class="phones">
+    <figure><img src="previews/back-and-edit/back-2-phone.png" alt=""><figcaption>Back 2 on a phone</figcaption></figure>
+    <figure><img src="previews/back-and-edit/back-2-peek-phone.png" alt=""><figcaption>Peek after Back 2</figcaption></figure>
+    <figure><img src="previews/back-and-edit/back-0-peek-phone.png" alt=""><figcaption>Peek before pressing Back</figcaption></figure>
+  </div>
+
+  <h3>What else changes</h3>
+  <ul>
+    <li>Back always undoes the card before. To go forward again you answer each card again. Only the card you've just
+      gone back to offers your earlier words.</li>
+    <li>Back only undoes what was done on the cards this time. Coming to the cards from the List, the first card still
+      has no Back, as now. Steps made in the List are never undone by Back.</li>
+    <li>Two things become unnecessary and would be removed: the card that says a question “already has answers
+      leading to two steps” (fresh look 2.3), and the note saying “It goes back to an earlier step” isn't available
+      (2.5). Back can no longer reach a step with later steps still hanging off it.</li>
+    <li>If Back undoes a “goes back to an earlier step” line, the line disappears and the open circle returns.</li>
+    <li>The phone's own back gesture is unchanged: it still goes to the Library.</li>
+  </ul>
+
+  <div class="draft">
+    <p><span class="num">1a</span> Wording for the line on a card you've come back to (draft): “You chose
+      <b>Something gets done</b> here: <b>Pay the deposit</b>. Choose it again to carry on with those words, or choose
+      something different.”</p>
+    <p style="margin:0"><span class="num">1b</span> The dashed outline for a step that's being written. Without it, some
+      presses of Back would seem to do nothing to the chart, because the step being written is drawn while you type
+      (as you asked on 16 October).</p>
+  </div>
+
+  <h2>2. Changing a box's words on the Chart</h2>
+  <p>On the Chart screen, clicking (or tapping) a box lets you change its words. Only the words change: the shape
+    stays the same, even if the new words would have made the List guess a different shape.</p>
+
+  <h3>On a computer</h3>
+  <figure><img src="previews/back-and-edit/edit-1-hover-computer.png" alt="">
+    <figcaption><b>Hovering</b> over a box outlines it in orange. A short line at the right of the Direction row says
+      what to do (draft: “Click a box to change its words.”).</figcaption></figure>
+  <figure><img src="previews/back-and-edit/edit-2-box-closeup-computer.png" alt="">
+    <figcaption><b>Clicked</b> (close-up). The box itself becomes the place to type, with the words selected so typing replaces
+      them. <b>Enter</b> or clicking elsewhere saves; <b>Esc</b> cancels.</figcaption></figure>
+  <figure><img src="previews/back-and-edit/edit-3-answer-closeup-computer.png" alt="">
+    <figcaption><b>Answers too</b> (close-up). Clicking an answer on a line (here “No”) works the same way.</figcaption></figure>
+
+  <h3>On a phone</h3>
+  <p>Boxes on a phone are often shrunk, and too small to type into comfortably. So tapping a box outlines it and opens
+    a panel at the top of the screen, where the keyboard won't cover it.</p>
+  <div class="phones two">
+    <figure><img src="previews/back-and-edit/edit-1-phone.png" alt=""><figcaption>The hint (draft: “Tap a box to change its words.”)</figcaption></figure>
+    <figure><img src="previews/back-and-edit/edit-2-panel-phone.png" alt=""><figcaption>After tapping “Pay the deposit”</figcaption></figure>
+  </div>
+
+  <h3>The details</h3>
+  <ul>
+    <li>After saving, the chart redraws. Longer or shorter words change a box's size, so boxes can shift a little.</li>
+    <li>Leaving the box empty keeps the old words. The limits are the List's: 80 characters for a step, 40 for an
+      answer.</li>
+    <li>Changes are saved straight away, as in the List, and show in the List too.</li>
+    <li>Not editable: open circles (there's nothing to edit), the chart beside the cards, Full screen on a phone, and
+      anything printed or copied as an image (the outline and hint never appear there).</li>
+  </ul>
+
+  <div class="draft">
+    <p><span class="num">2a</span> The hint wording, on the computer and the phone.</p>
+    <p><span class="num">2b</span> The panel on the phone: its title (draft: “Change the words”) and its place at the top of the screen.</p>
+    <p style="margin:0"><span class="num">2c</span> Whether Full screen on a phone should allow editing too. My suggestion is no: it's for looking.</p>
+  </div>
+</main>
+</body>
+</html>
