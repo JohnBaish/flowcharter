@@ -998,3 +998,56 @@ from the real app with no page errors.
 
 **Couldn't be checked:** how the phone panel behaves with a real iPhone
 keyboard (to try on the preview once built).
+
+**John's answers (same day):** 1a, 1b, 2a and 2b agreed as drafted; 2c no
+editing in Full screen. Built straight away, below.
+
+### 2026-10-20 — Back undoes on the cards; changing words on the Chart (branch `claude/beautiful-ramanujan-v19j5u`, not merged)
+
+**Back undoes** (`StepsScreen.tsx`). Each card in the history now carries
+`before`, the steps as they were when it appeared (`Shown`); Back restores the
+previous card's `before` (`store.restoreItems`) and pops the top card, so every
+press un-draws what the card after it added. Cards remember what was entered
+on them for when Back returns: a text card its words (`typed`), an answers
+card its answers, a kind card its choice (`chose`) and the words written for
+it (`words`, with their kind, so an untouched "End" doesn't replace them).
+Words carry to a different kind except to or from an ending (as 2.2). Words
+typed on a text card and abandoned with Back are kept for the kind card below.
+Because a step is now always new when written, the old "change the row in
+place" path, the 2.3 locked-question card (`changeInList`, `.wiz-locked`) and
+the 2.5 note are gone. `FlowChart` takes a `draft` (steps, and questions'
+answer lines, drawn dashed); `LiveChart` passes it through.
+
+**Changing words on the Chart** (`ChartScreen.tsx`, `FlowChart.tsx`). Boxes
+and answer pills are `g.fc-edit` (role button, Tab + Enter work); the outline
+is CSS only (`.fc-outline`, hover only where a real pointer exists), so Copy
+image and print never see it. Computer: `EditBox`, a contenteditable over the
+shape, same size and fill, words selected, hint to the right (or below if
+there's no room). Phone (≤720px): `.chart-edit-panel` fixed at the top, the
+shape scrolled into sight below it. Opening uses `flushSync` so the box is
+focused inside the tap (the phone keyboard). Saves through the new
+`chartOps.setWords` (words only, never re-guessing the shape; one new check)
+and `setRouteLabel`. Empty keeps the old words. Not in Full screen or the
+cards' chart. SPEC §5 ("Changing words on the Chart") and §10b updated.
+
+**Verified:** build clean; lint the two known warnings; `npm run check` 34 + 12.
+In Chromium (built app) at 1200px and 390px with touch:
+- Cards: five Backs from "Pay the deposit" un-draw exactly as in the mock-ups
+  (words kept, dashed step, gone; answer lines dashed; question dashed, gone);
+  the "You chose" line and outline; choosing again restores the words, an
+  ending starts as "End"; answers remembered; Back from done undoes the loop;
+  Back to the name card removes Start and Next adds it again; resuming from the
+  List has no Back on the first card; the full booking chart built with the
+  right links.
+- Chart: hint wording; seven of the booking chart's shapes and answers
+  respond; hover outline; the box sits over the shape with the words selected;
+  Enter saves and a question mark doesn't turn an Action into a Question; Esc
+  cancels; empty keeps the words; clicking away saves; renaming an answer keeps
+  its loop; keyboard opening; the hint isn't printed. Phone: panel, 16px text,
+  selected words, outlined shape in sight below the panel, 44px buttons, Save
+  and Cancel, no outline left behind. Copy image after hovering has no orange
+  in it. All ten test charts draw at both widths (Full screen on the phone has
+  no editing). No page errors, no sideways scroll.
+
+**Couldn't be checked:** a real iPhone (the keyboard opening when a box is
+tapped and its effect on the panel; dashed lines in Safari).

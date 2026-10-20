@@ -316,6 +316,26 @@ open circle, with its label. Nothing is hidden just because it isn't
 finished. A row that nothing leads to (other than row 1) still appears, as
 its own little island.
 
+### Changing words on the Chart (agreed with John 2026-10-20)
+
+- Clicking (or tapping) a box or an answer on a line changes its **words only**:
+  the shape never changes, even if the List would guess a different one from
+  the new words. Open circles can't be changed (there's nothing to change).
+- A line beside **Direction** says so: "Click a box to change its words." (a
+  touch screen says "Tap").
+- **On a computer:** a box is outlined in orange on hover; clicking turns the
+  box itself into the place to type, words selected, with "Enter to save · Esc
+  to cancel" beside it. Enter or clicking elsewhere saves; Esc cancels. The
+  keyboard works too (Tab to a box, Enter).
+- **On a phone** (≤720px): tapping outlines the box and opens a panel at the
+  top of the screen, "Change the words", with the words in a box, **Cancel**
+  and **Save**, so the keyboard doesn't cover it.
+- Left empty, the old words stay. The List's limits apply (80 characters for a
+  step, 40 for an answer). Saved straight away, as in the List; the chart
+  redraws, so boxes may shift a little.
+- Not in Full screen (it's for looking), not on the chart beside the cards, and
+  never in print or Copy image.
+
 ### Moving boxes by hand (parked idea, not planned)
 
 Drag a box to move it. Its lines re-route, and the position is remembered for
@@ -448,16 +468,24 @@ series of cards in conversational English (mock-ups: `design/mock-cards.html`).
   bottom, as "+ New step"). Switching to the cards picks up at the first loose
   end: an answer with no destination, else a last step that leads nowhere;
   if there are none, "That's every path covered."
-- **Back** returns to the previous card with what you wrote, to change it; it
-  doesn't delete. (To remove a step, use the List.) Changing an End into
-  another kind of step starts its box empty, not with "End".
-- Back to a question whose answers already lead to steps: only **We ask a
-  question** (outlined) can be chosen, to reword it or change its answers; the
-  card says "*Q* already has answers leading to N steps. To reword the question
-  or change its answers, choose We ask a question below. To make it a different
-  kind of step, change it in List mode, where you can decide what happens to its
-  answers." (John's wording) with a **Change it in List mode** button that opens
-  the List at that step's Type box.
+- **Back undoes** (John, 2026-10-20; this replaced "Back revisits, it never
+  deletes" from 2026-10-16, because going back and then jumping forward proved
+  too complex for users). Each Back returns to the previous card and takes away
+  what that card added, so the chart un-draws one step at a time. Going forward
+  again means answering the cards again.
+- The card Back returns to offers what was there before: a text card has its
+  words in the box; an answers card has its answers; a kind card outlines the
+  choice made and says "You chose *Something gets done* here: *Pay the
+  deposit*. Choose it again to carry on with those words, or choose something
+  different." (agreed wording; "You chose *It goes back to an earlier step*
+  here. Choose it again, or choose something different." for a loop). The words
+  also come back for a different kind of step, except to or from an ending
+  (an ending's words don't suit another step).
+- What's still being written is drawn **dashed** beside the card (and in Peek):
+  the step on a text card, and a question's answer lines on the answers card.
+  Next saves it and it's drawn solid.
+- Back only undoes what was done on the cards this time: coming to the cards
+  from the List, the first card has no Back.
 - On a phone, **Back** and the card's main button share the first line of the
   card's foot; **Peek at the chart** and **Switch to building in List mode**
   sit beneath.

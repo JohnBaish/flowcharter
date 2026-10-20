@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { seedChart, newChart, type Item } from '../src/data/charts.ts';
 import {
   addItem, addStepForAnswer, appendStep, countReferences, linkSlot, nextOpenSlot, openAnswer, setAnswers, guessType, leadsTo, nothingLeadsTo, removeItem, reorderItems, setRouteCount, setRouteLabel,
-  setRouteTo, setText, setThen, setType, summary,
+  setRouteTo, setText, setThen, setType, setWords, summary,
 } from '../src/lib/chartOps.ts';
 import { cardRepeatNote, repeatedNameNotes } from '../src/lib/answerNotes.ts';
 import { numberWord, ordinalWord } from '../src/lib/words.ts';
@@ -355,6 +355,21 @@ test('repeated answer names: noticed, worded, and placed', () => {
   assert.equal(cardRepeatNote(['Yes', 'Yes', 'No'], 2), null, 'a name of its own needs no note');
   assert.equal(cardRepeatNote(['', ''], 0), null);
   assert.equal(cardRepeatNote(['A', 'a', 'A'], 2), '(Three answers are called A. This is the third of them.)');
+});
+
+test('setWords: changing words on the Chart never changes the shape', () => {
+  let items = addItem(addItem([], 'a', null), 'b', 'a');
+  items = setText(items, 'b', 'Pay the deposit');
+  assert.equal(items[1].type, 'process');
+  assert.equal(items[1].typeChosen, false, 'the shape was guessed');
+  assert.equal(setText(items, 'b', 'Is the deposit paid?')[1].type, 'decision', 'the List would guess a Question');
+  items = setWords(items, 'b', 'Is the deposit paid?');
+  assert.equal(items[1].text, 'Is the deposit paid?');
+  assert.equal(items[1].type, 'process', 'on the Chart it stays an Action');
+  assert.equal(setWords(items, 'b', 'x'.repeat(200))[1].text.length, 80);
+  const example = seedChart().items;
+  const changed = setWords(example, 's3', 'Anyone free?');
+  assert.deepEqual(changed.map((it) => [it.type, it.then, it.routes]), example.map((it) => [it.type, it.then, it.routes]), 'shapes and routes untouched');
 });
 
 test('numbers in words: one to nine as words, 10 and above as digits', () => {

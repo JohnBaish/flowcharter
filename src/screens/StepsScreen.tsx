@@ -4,12 +4,13 @@ import { useApp } from '../state/store.tsx';
 import { MAX_ITEM_TEXT, MAX_LABEL, MAX_NAME, MAX_ROUTES, MIN_ROUTES, type Item, type ItemId } from '../data/charts.ts';
 import { SHAPES, type ShapeType } from '../data/shapes.ts';
 import {
-  appendStep as withStep, itemLabel, leadsTo, nextOpenSlot, openAnswer, setAnswers as withAnswers, setText as withText, setType as withType, type Slot,
+  appendStep as withStep, itemLabel, leadsTo, nextOpenSlot, openAnswer, setAnswers as withAnswers, type Slot,
 } from '../lib/chartOps.ts';
 import { cardRepeatNote, repeatedNameNotes } from '../lib/answerNotes.ts';
 import { numberWord } from '../lib/words.ts';
 import { useIsNarrow } from '../lib/responsive.ts';
 import { LiveChart } from '../components/LiveChart.tsx';
+import type { Draft } from '../components/FlowChart.tsx';
 import { useBackLayer } from '../lib/backLayers.ts';
 
 // The step-by-step cards (PLAN.md Stage 5; mock-ups in design/mock-cards.html).
@@ -22,14 +23,20 @@ type Kind = 'action' | 'question' | 'data' | 'wait' | 'doc' | 'routine' | 'end';
 /** The answer whose path the cards are following, for "That's the Yes path finished." */
 type Branch = { q: string; a: string } | null;
 
+// Each card remembers what was chosen or written on it, so that when Back
+// returns to it, it can offer the same again (John, 2026-10-20).
 type Card =
   | { t: 'choose' }
   | { t: 'name' }
-  | { t: 'kind'; slot: Slot; branch: Branch; note?: string; made?: ItemId }
-  | { t: 'text'; slot: Slot; branch: Branch; kind: Kind; row?: ItemId }
-  | { t: 'answers'; row: ItemId; branch: Branch }
+  | { t: 'kind'; slot: Slot; branch: Branch; note?: string; chose?: Kind | 'back'; words?: { kind: Kind; text: string } }
+  | { t: 'text'; slot: Slot; branch: Branch; kind: Kind; typed?: string }
+  | { t: 'answers'; row: ItemId; branch: Branch; typed?: string[] }
   | { t: 'pick'; slot: Slot; branch: Branch }
   | { t: 'done' };
+
+/** A card as shown, with the steps as they were when it appeared: Back puts
+ *  those back, so each press of Back un-draws what the card after it added. */
+type Shown = Card & { before: Item[] };
 
 const TYPE: Record<Kind, ShapeType> = {
   action: 'process', question: 'decision', data: 'io', wait: 'delay', doc: 'document', routine: 'predefined', end: 'terminator',
@@ -82,7 +89,7 @@ const words = (it: Item | undefined) => (it?.text.trim() || 'the step with no wo
 
 export function StepsScreen() {
   const {
-    chart, setScreen, renameChart, addItem, setItemText, setItemType, appendStep, linkSlot, setAnswers,
+    chart, setScreen, renameChart, addItem, setItemText, appendStep, linkSlot, setAnswers, restoreItems,
   } = useApp();
   const items = chart?.items ?? [];
   const isNarrow = useIsNarrow(720);
@@ -92,7 +99,11 @@ export function StepsScreen() {
   const itemsRef = useRef(items);
   itemsRef.current = items;
 
-  const [history, setHistory] = useState<Card[]>(() => [firstCard(chart?.items ?? [], chart?.name ?? '')]);
+  // Starts at the cards' first card, so Back never undoes anything done before
+  // (in the List, or on an earlier visit to the cards).
+  const [history, setHistory] = useState<Shown[]>(() => [
+    { ...firstCard(chart?.items ?? [], chart?.name ?? ''), before: chart?.items ?? [] },
+  ]);
   const card = history[history.length - 1];
   const [text, setText] = useState('');
   const [labels, setLabels] = useState<string[]>([]);
@@ -102,19 +113,14 @@ export function StepsScreen() {
   useBackLayer(peek, 'peek', () => setPeek(false));
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  // Fill a card's boxes when it appears (also after Back, with what was typed).
+  // Fill a card's boxes when it appears (also after Back, with what was written).
   const cardKey = history.length;
   useLayoutEffect(() => {
     const now = itemsRef.current;
     if (card.t === 'name') setText(chart && chart.name !== 'New chart' ? chart.name : '');
-    // An ending starts as "End" (or its name, after Back); any other step changed
-    // from an End starts empty, not with the word "End" (fresh look 2.2).
-    if (card.t === 'text') {
-      const row = card.row ? now.find((it) => it.id === card.row) : undefined;
-      if (card.kind === 'end') setText(row && row.type === 'terminator' ? row.text : 'End');
-      else setText(row && row.type !== 'terminator' ? row.text : '');
-    }
-    if (card.t === 'answers') setLabels(now.find((it) => it.id === card.row)?.routes.map((r) => r.label) ?? ['Yes', 'No']);
+    // An ending starts as "End", so Next keeps it.
+    if (card.t === 'text') setText(card.typed ?? (card.kind === 'end' ? 'End' : ''));
+    if (card.t === 'answers') setLabels(card.typed ?? now.find((it) => it.id === card.row)?.routes.map((r) => r.label) ?? ['Yes', 'No']);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cardKey]);
 
@@ -125,14 +131,41 @@ export function StepsScreen() {
   const backTargets = (slot: Slot) => items.filter((it) => !(slot.kind === 'after' && it.id === slot.id));
 
   /** Shows a card, rendering it at once so its box can be focused inside the
-   *  tap — the only way a phone opens its keyboard. */
+   *  tap — the only way a phone opens its keyboard. It notes the steps as they
+   *  are now, for Back. */
   const show = (next: Card) => {
     setError(null);
-    flushSync(() => setHistory((h) => [...h, next]));
+    flushSync(() => setHistory((h) => [...h, { ...next, before: itemsRef.current }]));
     const el = inputRef.current;
     if (el) { el.focus(); el.select(); }
   };
-  const back = () => { setError(null); setHistory((h) => (h.length > 1 ? h.slice(0, -1) : h)); };
+  /** Changes what the card on top remembers (see Card). */
+  const remember = (change: (top: Shown) => Shown, alsoBelow?: (below: Shown) => Shown) => setHistory((h) => {
+    const out = [...h];
+    out[out.length - 1] = change(out[out.length - 1]);
+    if (alsoBelow && out.length > 1) out[out.length - 2] = alsoBelow(out[out.length - 2]);
+    return out;
+  });
+  /** Back to the card before, putting the steps back as they were when it
+   *  appeared, so the chart un-draws one step at a time (John, 2026-10-20). */
+  const back = () => {
+    if (history.length < 2) return;
+    setError(null);
+    const to = history[history.length - 2];
+    // Words changed here but not yet saved are kept for the kind card below
+    // (not an untouched "End", which would replace the words it remembers).
+    const started = card.t === 'text' ? card.typed ?? (card.kind === 'end' ? 'End' : '') : '';
+    const typed = card.t === 'text' && text.trim() !== started.trim() ? text.trim() : '';
+    flushSync(() => {
+      restoreItems(to.before);
+      setHistory((h) => {
+        const out = h.slice(0, -1);
+        const below = out[out.length - 1];
+        if (typed && card.t === 'text' && below.t === 'kind') out[out.length - 1] = { ...below, words: { kind: card.kind, text: typed } };
+        return out;
+      });
+    });
+  };
 
   /** A path has finished: on to the next loose end, or the last card. */
   const pathEnded = (branch: Branch) => {
@@ -141,8 +174,8 @@ export function StepsScreen() {
     show(slot ? { t: 'kind', slot, branch: branchFor(slot), note } : { t: 'done' });
   };
 
-  /** After a step is written: carry on from it if it's a loose end; if it
-   *  already leads somewhere (it was changed after Back), the next loose end. */
+  /** After a step is written: carry on from it (a new step at the bottom is
+   *  always a loose end), or else at the next loose end. */
   const carryOn = (row: ItemId, branch: Branch) => {
     const now = itemsRef.current;
     const i = now.findIndex((it) => it.id === row);
@@ -184,9 +217,13 @@ export function StepsScreen() {
   };
 
   const chooseKind = (c: Extract<Card, { t: 'kind' }>, kind: Kind | 'back') => {
-    const made = c.made && byId(c.made) ? c.made : undefined;
+    remember((top) => ({ ...top, chose: kind }) as Shown);
     if (kind === 'back') { show({ t: 'pick', slot: c.slot, branch: c.branch }); return; }
-    show({ t: 'text', slot: c.slot, branch: c.branch, kind, row: made });
+    // Words written here before come back: for the same kind, or any kind but
+    // an ending (an ending's words don't suit another step, fresh look 2.2).
+    const w = c.words;
+    const typed = w && (w.kind === kind || (w.kind !== 'end' && kind !== 'end')) ? w.text : undefined;
+    show({ t: 'text', slot: c.slot, branch: c.branch, kind, typed });
   };
 
   const textNext = (c: Extract<Card, { t: 'text' }>) => {
@@ -194,23 +231,10 @@ export function StepsScreen() {
     const value = (text.trim() || (c.kind === 'end' ? 'End' : '')).slice(0, MAX_ITEM_TEXT);
     if (!value) { setError('Please type something, or press Back.'); return; }
     const type = TYPE[c.kind];
-    let row = c.row && byId(c.row) ? c.row : '';
-    flushSync(() => {
-      if (row) {
-        setItemText(row, value);
-        if (byId(row)?.type !== type) setItemType(row, type);
-      } else {
-        row = appendStep(c.slot, type, value);
-      }
-    });
-    // The kind card below this one now has a step it made; this card has its row.
-    setHistory((h) => {
-      const out = [...h];
-      out[out.length - 1] = { ...c, row };
-      const below = out[out.length - 2];
-      if (below && below.t === 'kind') out[out.length - 2] = { ...below, made: row };
-      return out;
-    });
+    let row = '';
+    flushSync(() => { row = appendStep(c.slot, type, value); });
+    // Remembered for Back: on this card, and on the kind card that chose it.
+    remember((top) => ({ ...top, typed: value }) as Shown, (below) => (below.t === 'kind' ? { ...below, words: { kind: c.kind, text: value } } : below));
     if (type === 'decision') show({ t: 'answers', row, branch: c.branch });
     else if (type === 'terminator') pathEnded(c.branch);
     else carryOn(row, c.branch);
@@ -219,6 +243,7 @@ export function StepsScreen() {
   const answersNext = (c: Extract<Card, { t: 'answers' }>) => {
     const clean = labels.map((l) => l.trim().slice(0, MAX_LABEL));
     if (clean.some((l) => !l)) { setError('Please give every answer a name, or remove the empty one.'); return; }
+    remember((top) => ({ ...top, typed: clean }) as Shown);
     flushSync(() => setAnswers(c.row, clean));
     const slot = openAnswer(itemsRef.current, c.row) ?? nextOpenSlot(itemsRef.current);
     show(slot ? { t: 'kind', slot, branch: branchFor(slot) } : { t: 'done' });
@@ -227,14 +252,6 @@ export function StepsScreen() {
   const pick = (c: Extract<Card, { t: 'pick' }>, to: ItemId) => {
     flushSync(() => linkSlot(c.slot, to));
     pathEnded(c.branch);
-  };
-
-  /** Opens the List with the cursor on this step's Type box. */
-  const changeInList = (id: ItemId) => {
-    const n = itemsRef.current.findIndex((it) => it.id === id) + 1;
-    flushSync(() => setScreen('list'));
-    const select = document.querySelector<HTMLSelectElement>(`select[aria-label="Type of item ${n}"]`);
-    if (select) { select.focus(); select.scrollIntoView({ block: 'center' }); }
   };
 
   const onEnter = (go: () => void) => (e: KeyboardEvent<HTMLInputElement>) => {
@@ -278,16 +295,17 @@ export function StepsScreen() {
   };
 
   // The chart drawn beside the card (or in Peek) includes what's being typed on
-  // this card, before Next saves it, so it's never a step behind (John).
+  // this card, before Next saves it, so it's never a step behind (John). What's
+  // being written is drawn dashed until Next saves it (John, 2026-10-20).
+  const DRAFT = '__draft__';
   const preview = ((): Item[] => {
-    if (card.t === 'text' && text.trim()) {
-      const type = TYPE[card.kind];
-      if (card.row && byId(card.row)) return withType(withText(items, card.row, text), card.row, type);
-      return withStep(items, card.slot, '__draft__', type, text.trim());
-    }
+    if (card.t === 'text' && text.trim()) return withStep(items, card.slot, DRAFT, TYPE[card.kind], text.trim());
     if (card.t === 'answers') return withAnswers(items, card.row, labels.map((l) => l.trim()));
     return items;
   })();
+  const draft: Draft | undefined = card.t === 'text' && text.trim() ? { nodes: [DRAFT] }
+    : card.t === 'answers' ? { answersOf: [card.row] }
+      : undefined;
 
   const count = `${items.length} step${items.length === 1 ? '' : 's'} so far`;
   const kicker = <div className="wiz-kicker">Step by step · {chart.name.trim() || 'Untitled'}</div>;
@@ -347,14 +365,10 @@ export function StepsScreen() {
     );
   } else if (card.t === 'kind') {
     const c = card;
-    const made = c.made ? byId(c.made) : undefined;
-    // A question whose answers already lead to steps can only be reworded here:
-    // turning it into another kind would leave those steps stranded out of
-    // sight, so that's done in the List, where they show (fresh look 2.3).
-    const ledTo = made && made.type === 'decision'
-      ? new Set(made.routes.map((r) => r.to).filter((to) => to && items.some((it) => it.id === to))).size
-      : 0;
-    const locked = ledTo > 0;
+    // Come back to with Back: what was chosen here last time is outlined and
+    // said — the kind whose words are remembered, if any.
+    const picked = c.chose === 'back' ? 'back' : c.words?.kind ?? c.chose;
+    const chosen = picked === 'back' ? 'It goes back to an earlier step' : [...MAIN, ...MORE].find((m) => m.kind === picked)?.label;
     body = (
       <>
         {kicker}
@@ -362,22 +376,18 @@ export function StepsScreen() {
         {c.note && <div className="wiz-context">{c.note}</div>}
         <h2>{slotTitle(c)}</h2>
         {repeatNote(c.slot)}
-        {made && !locked && <p>You chose <strong>{words(made)}</strong> here. Pick again to change it.</p>}
-        {made && locked && (
-          <div className="wiz-locked">
-            <p>
-              <strong>{words(made)}</strong> already has answers leading to {numberWord(ledTo)} step{ledTo === 1 ? '' : 's'}. To reword
-              the question or change its answers, choose <strong>We ask a question</strong> below. To make it a different
-              kind of step, change it in List mode, where you can decide what happens to its answers.
-            </p>
-            <button className="btn btn-secondary" onClick={() => changeInList(made.id)}>Change it in List mode</button>
-          </div>
+        {chosen && c.words && picked !== 'back' && (
+          <p>
+            You chose <strong>{chosen}</strong> here: <strong>{c.words.text}</strong>. Choose it again to carry on with those
+            words, or choose something different.
+          </p>
         )}
+        {chosen && picked === 'back' && <p>You chose <strong>{chosen}</strong> here. Choose it again, or choose something different.</p>}
         <div className="wiz-choices">
           {MAIN.map((m) => (
             <button
-              key={m.kind} className={`wiz-choice${locked && m.kind === 'question' ? ' wiz-choice-open' : ''}`}
-              onClick={() => chooseKind(c, m.kind)} disabled={locked && m.kind !== 'question'}
+              key={m.kind} className={`wiz-choice${picked === m.kind ? ' wiz-choice-open' : ''}`}
+              onClick={() => chooseKind(c, m.kind)}
             >
               <ShapeIcon type={m.type} />{m.label}
             </button>
@@ -386,27 +396,17 @@ export function StepsScreen() {
         <div className="wiz-more-label">More</div>
         <div className="wiz-more">
           {MORE.map((m) => (
-            <button key={m.kind} className="wiz-pill" onClick={() => chooseKind(c, m.kind)} disabled={locked}>
+            <button key={m.kind} className={`wiz-pill${picked === m.kind ? ' wiz-choice-open' : ''}`} onClick={() => chooseKind(c, m.kind)}>
               <ShapeIcon type={m.type} small />{m.label}
             </button>
           ))}
           {/* Not on the very first step: there's nothing earlier to go back to (fresh look 2.1). */}
           {backTargets(c.slot).length > 0 && (
-            <button
-              className="wiz-pill" onClick={() => chooseKind(c, 'back')} disabled={!!made}
-              title={made ? `To remove “${words(made)}”, use List mode` : undefined}
-            >
+            <button className={`wiz-pill${picked === 'back' ? ' wiz-choice-open' : ''}`} onClick={() => chooseKind(c, 'back')}>
               <ShapeIcon type="back" small />It goes back to an earlier step
             </button>
           )}
         </div>
-        {/* Phones don't show hover text, so say why it's greyed out (fresh look 2.5). */}
-        {made && !locked && backTargets(c.slot).length > 0 && (
-          <p className="wiz-note">
-            “It goes back to an earlier step” isn't available here, because <strong>{words(made)}</strong> has already been
-            added. To remove it, use List mode.
-          </p>
-        )}
         {foot()}
       </>
     );
@@ -503,7 +503,7 @@ export function StepsScreen() {
       {!isNarrow && items.length > 0 && (
         <div className="wiz-side">
           <h3>Your chart so far</h3>
-          <LiveChart items={preview} title={chart.name} />
+          <LiveChart items={preview} title={chart.name} draft={draft} />
         </div>
       )}
       {/* On a phone the chart opens over the whole screen: below the card it was
@@ -514,7 +514,7 @@ export function StepsScreen() {
             <h3>Your chart so far</h3>
             <button className="btn btn-primary" onClick={() => setPeek(false)}>Back to the questions</button>
           </div>
-          <LiveChart items={preview} title={chart.name} />
+          <LiveChart items={preview} title={chart.name} draft={draft} />
         </div>
       )}
     </div>

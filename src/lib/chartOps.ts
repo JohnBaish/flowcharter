@@ -69,6 +69,12 @@ export function setText(items: Item[], id: ItemId, text: string): Item[] {
   });
 }
 
+/** Changing a step's words on the Chart: only the words change, never its
+ *  shape, even when typing in the List would guess a new one (John, 2026-10-20). */
+export function setWords(items: Item[], id: ItemId, text: string): Item[] {
+  return items.map((it) => (it.id === id ? { ...it, text: text.slice(0, MAX_ITEM_TEXT) } : it));
+}
+
 /** The person picked a type: from now on it's never guessed for this row. */
 export function setType(items: Item[], id: ItemId, type: ShapeType): Item[] {
   return items.map((it, i) => (it.id === id ? retype(it, type, true, i, followingId(items, i)) : it));

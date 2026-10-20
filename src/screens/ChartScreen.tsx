@@ -1,10 +1,13 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
+import { flushSync } from 'react-dom';
 import { useApp } from '../state/store.tsx';
-import type { Direction, Item } from '../data/charts.ts';
+import { MAX_ITEM_TEXT, MAX_LABEL, type Direction, type Item } from '../data/charts.ts';
+import { SHAPES } from '../data/shapes.ts';
 import { chooseDirection, layoutChart, type ChartLayout } from '../lib/layout.ts';
-import { LABEL_FONT, TEXT_FONT } from '../lib/shapes.ts';
+import { FONT_SIZE, LABEL_FONT, LABEL_FONT_SIZE, TEXT_FONT } from '../lib/shapes.ts';
 import { canvasMeasure, fontsReady } from '../lib/textWrap.ts';
 import { useIsNarrow } from '../lib/responsive.ts';
+import { isTouch } from '../lib/focus.ts';
 import { FlowChart, ShapeKey } from '../components/FlowChart.tsx';
 import { useBackLayer } from '../lib/backLayers.ts';
 
@@ -23,10 +26,15 @@ const NAMES = { down: 'Down', across: 'Across' } as const;
 const NO_ITEMS: Item[] = [];
 
 type Layouts = { down: ChartLayout; across: ChartLayout };
+/** The box or answer whose words are being changed: `id` is the drawn shape or
+ *  line (a step's id, or `<question id>::route<n>`). */
+type Edit = { id: string; itemId: string; routeId: string | null; words: string };
 type Drawn = { items: unknown; layouts: Layouts } | { items: unknown; error: true };
 
 export function ChartScreen() {
-  const { chart, setDirection, setScreen, setChartWide, chartFull: full, setChartFull: setFull } = useApp();
+  const {
+    chart, setDirection, setScreen, setChartWide, chartFull: full, setChartFull: setFull, setItemWords, setRouteLabel,
+  } = useApp();
   const items = chart?.items ?? NO_ITEMS;
   const hasItems = items.length > 0;
   const isNarrow = useIsNarrow(NARROW);
@@ -101,6 +109,68 @@ export function ChartScreen() {
   const wide = isNarrow && items.length > 0 && !!layout && layout.width * scale > space.width + 1;
   useEffect(() => { setChartWide(wide); }, [wide, setChartWide]);
 
+  // — Changing a box's words (John, 2026-10-20): only the words, never the shape. —
+  const [edit, setEdit] = useState<Edit | null>(null);
+  const editBox = useRef<HTMLDivElement | null>(null);
+  const panelBox = useRef<HTMLTextAreaElement | null>(null);
+  const [panelText, setPanelText] = useState('');
+  const finished = useRef(false);
+
+  /** Opens the editor, rendering it at once so its box can be focused inside
+   *  the tap — the only way a phone opens its keyboard. */
+  const open = (next: Edit) => {
+    finished.current = false;
+    flushSync(() => { setEdit(next); setPanelText(next.words); });
+    if (isNarrow) {
+      const ta = panelBox.current;
+      if (ta) { ta.focus(); ta.select(); }
+      // Keep the box being changed in sight below the panel.
+      const panel = document.querySelector('.chart-edit-panel');
+      const shape = document.querySelector('.fc-active');
+      if (panel && shape) {
+        const gap = shape.getBoundingClientRect().top - panel.getBoundingClientRect().bottom - 16;
+        if (gap < 0) window.scrollBy(0, gap);
+      }
+    } else {
+      const el = editBox.current;
+      if (el) {
+        el.textContent = next.words;
+        el.focus();
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const sel = window.getSelection();
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+      }
+    }
+  };
+  const onNode = (id: string) => {
+    const it = items.find((x) => x.id === id);
+    if (it) open({ id, itemId: id, routeId: null, words: it.text });
+  };
+  const onLabel = (edgeId: string) => {
+    const at = edgeId.indexOf('::route');
+    const it = items.find((x) => x.id === edgeId.slice(0, at));
+    const r = it?.routes[Number(edgeId.slice(at + '::route'.length))];
+    if (it && r) open({ id: edgeId, itemId: it.id, routeId: r.id, words: r.label });
+  };
+  /** Saves the words (or keeps the old ones, if left empty) and closes the editor. */
+  const finish = (save: boolean, typed: string) => {
+    if (finished.current || !edit) return;
+    finished.current = true;
+    const words = typed.replace(/\s+/g, ' ').trim();
+    if (save && words && words !== edit.words.trim()) {
+      if (edit.routeId) setRouteLabel(edit.itemId, edit.routeId, words.slice(0, MAX_LABEL));
+      else setItemWords(edit.itemId, words.slice(0, MAX_ITEM_TEXT));
+    }
+    setEdit(null);
+  };
+  const onEditKey = (e: KeyboardEvent<HTMLElement>, typed: () => string) => {
+    if (e.nativeEvent.isComposing) return;
+    if (e.key === 'Enter') { e.preventDefault(); finish(true, typed()); }
+    if (e.key === 'Escape') { e.preventDefault(); finish(false, ''); }
+  };
+
   if (!chart) return null;
 
   if (!items.length) {
@@ -144,6 +214,7 @@ export function ChartScreen() {
             </label>
           ))}
         </div>
+        <span className="chart-hint" data-noprint="1">{isTouch() ? 'Tap' : 'Click'} a box to change its words.</span>
       </div>
       {full && layout && (
         <div className="chart-full" role="dialog" aria-label={`${chart.name} — full screen`} data-noprint="1">
@@ -165,12 +236,73 @@ export function ChartScreen() {
             Sorry — this chart couldn't be drawn. Your list is safe; try changing it slightly, or tell workshop@baish.net.
           </p>
         ) : layout ? (
-          <FlowChart layout={layout} scale={scale} title={chart.name} />
+          <div className="chart-stage" style={{ width: Math.floor(layout.width * scale) }}>
+            <FlowChart layout={layout} scale={scale} title={chart.name} edit={{ onNode, onLabel, active: edit?.id ?? null }} />
+            {edit && !isNarrow && <EditBox layout={layout} scale={scale} room={space.width} edit={edit} boxRef={editBox} onKey={onEditKey} onDone={finish} />}
+          </div>
         ) : (
           <p style={{ textAlign: 'center', color: 'var(--color-neutral-700)', padding: 'var(--space-6)' }}>Drawing…</p>
         )}
       </div>
       <ShapeKey types={usedTypes} />
+      {edit && isNarrow && (
+        <div className="chart-edit-panel" role="dialog" aria-label="Change the words">
+          <h3>Change the words</h3>
+          <textarea
+            ref={panelBox} rows={2} value={panelText} maxLength={edit.routeId ? MAX_LABEL : MAX_ITEM_TEXT}
+            aria-label={edit.routeId ? 'The answer' : 'The words in the box'}
+            onChange={(e) => setPanelText(e.target.value)} onKeyDown={(e) => onEditKey(e, () => panelText)}
+          />
+          <div className="chart-edit-panel-actions">
+            <button className="btn btn-ghost" onClick={() => finish(false, '')}>Cancel</button>
+            <button className="btn btn-primary" onClick={() => finish(true, panelText)}>Save</button>
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+/** On a computer: the box (or answer) itself becomes the place to type — same
+ *  place, size and colour, outlined in orange — with a short hint beside it. */
+function EditBox({ layout, scale, room, edit, boxRef, onKey, onDone }: {
+  layout: ChartLayout; scale: number; room: number; edit: Edit;
+  boxRef: RefObject<HTMLDivElement | null>;
+  onKey: (e: KeyboardEvent<HTMLElement>, typed: () => string) => void;
+  onDone: (save: boolean, typed: string) => void;
+}) {
+  const node = layout.nodes.find((n) => n.id === edit.id);
+  const label = layout.edges.find((e) => e.id === edit.id)?.label;
+  const box = node ?? label;
+  if (!box) return null;
+  const pad = label ? 6 : 0;
+  const x = box.x * scale - pad, y = box.y * scale - pad;
+  const w = box.w * scale + 2 * pad, h = box.h * scale + 2 * pad;
+  const stageWidth = layout.width * scale;
+  const typed = () => boxRef.current?.textContent ?? '';
+  // The hint sits to the right of the box, or under it where there's no room
+  // (the chart is centred in a frame `room` wide).
+  const beside = x + w + 14 + 200 <= (room + stageWidth) / 2;
+  return (
+    <>
+      <div
+        ref={boxRef} className={`chart-edit-box${label ? ' is-answer' : ''}`} data-noprint="1"
+        contentEditable suppressContentEditableWarning role="textbox"
+        aria-label={label ? 'The answer' : 'The words in the box'}
+        style={{
+          left: x, top: y, width: w, height: h,
+          background: node && node.type !== 'stub' ? SHAPES[node.type].fill : '#fffdf8',
+          fontSize: Math.max(12, (label ? LABEL_FONT_SIZE : FONT_SIZE) * scale),
+        }}
+        onKeyDown={(e) => onKey(e, typed)}
+        onBlur={() => onDone(true, typed())}
+      />
+      <div
+        className="chart-edit-hint" data-noprint="1"
+        style={beside ? { left: x + w + 14, top: y + h / 2 - 12 } : { left: Math.max(0, x + w / 2 - 95), top: y + h + 6 }}
+      >
+        Enter to save · Esc to cancel
+      </div>
+    </>
   );
 }
