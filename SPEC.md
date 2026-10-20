@@ -47,7 +47,7 @@ about unsaved changes would be untrue, since everything is saved.)
 | Screen | What's on it |
 |---|---|
 | **Library** | All saved charts as cards (name, number of items, last edited). Open, Duplicate, Delete (with `window.confirm`). **Import** / **Export** of the whole library. The footer notice (§9). |
-| **List** | The open chart's rows (§4). Header: on the left the kicker "Flowchart", the chart name (edit in place) and a tag "8 items · 2 questions" beneath it; centred, a **List \| Chart** switch (the only way between the two); on the right, in one line as in Backtimer, **Print** (ghost), **+ Add item** (ghost), **Clear** (ghost, grey). No Duplicate (it's on the Library's cards) and no Done (the nav's Library link does that). |
+| **List** | The open chart's rows (§4). Header: on the left the kicker "Flowchart", the chart name (edit in place) and a tag "8 items · 2 questions" beneath it; centred, **List \| Chart** tabs (the only way between the two; each with a small picture, a list and a flowchart; the one you're on is orange and underlined, so they don't look like the Chart's Direction switch, John 2026-10-20); on the right, in one line as in Backtimer, **Print** (ghost), **+ Add item** (ghost), **Clear** (ghost, grey). No Duplicate (it's on the Library's cards) and no Done (the nav's Library link does that). |
 | **Chart** | The drawn flowchart (§5). Same header, with actions **Print** (ghost) and **Copy image**. A **Direction** switch: Automatic · Down · Across. A key underneath showing only the shape types this chart uses. |
 | **Guide** | What Flowcharter is, how to fill in the list, the full key of shapes with their meanings, and tips for a clear chart, taken from John's guide. |
 
