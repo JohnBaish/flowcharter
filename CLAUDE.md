@@ -1068,3 +1068,20 @@ computer.png` and `-phone.png`.
 as above, no page errors, no sideways scroll.
 
 **Approved by John and merged into `main` (same day)**, wording as drafted.
+
+### 2026-10-20 — Mock-ups: a clearer List | Chart switch (branch `claude/beautiful-ramanujan-v19j5u`, restarted from `main`; design only)
+
+**John asked** for a way to make the List | Chart switch clearer at a glance.
+Observation: on the Chart screen it looks exactly like the Direction switch
+below it (both orange-and-cream pills). **Made:** `design/mock-view-switch.html`
+and its PDF `design/previews/view-switch/mock-view-switch.pdf`, from real
+screens with only the switch swapped (`design/mock-view-switch.mjs`): now;
+**A** small list and flowchart icons beside the words; **B** picture buttons
+(a numbered list, a mini flowchart in the shapes' colours; the current one
+outlined, not filled; ~25px taller on a phone); **C** tabs (icon + word, the
+current one orange and underlined; no extra room). Suggested C; B if it must be
+impossible to miss. No app code changed.
+
+**Verified:** the pictures from the built app in Chromium at 1200px and 390px
+touch, no page errors, no sideways scroll; the mock-up page with fonts loaded
+and every picture present.
