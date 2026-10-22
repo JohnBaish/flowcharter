@@ -21,10 +21,12 @@ writeFileSync(filled, readFileSync(src, 'utf8').replaceAll('{{REPO}}', resolve(r
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
 const page = await browser.newPage();
 await page.goto('file://' + filled);
-await page.evaluate(() => document.fonts.ready);
+// Load every brand face, including any the report doesn't happen to use (an unused face
+// otherwise stays "unloaded"), so a wrong path is always caught.
+await page.evaluate(() => Promise.allSettled([...document.fonts].map((f) => f.load())));
 const fonts = await page.evaluate(() => [...document.fonts].map((f) => `${f.family} ${f.weight}: ${f.status}`));
 console.log(fonts.join('\n'));
-if (fonts.some((f) => !f.endsWith('loaded'))) {
+if (fonts.some((f) => !f.endsWith(': loaded'))) { // not just 'loaded': 'unloaded' ends with it too
   await browser.close();
   console.error('A brand font did not load — check the repo path and that npm ci has been run there.');
   process.exit(1);

@@ -49,7 +49,12 @@ Do every pass twice: at **1200×860**, and at **390×844 with
    test or example data (e.g. Flowcharter's `design/test-charts.json`) loaded
    into localStorage.
 3. **Stress content**: empty, one item, very many items, very long names and
-   words, accented letters, the largest or deepest example.
+   words, accented letters, the largest or deepest example. Where the tool
+   shows data, use every real state the data can be in (Hindcaster's early
+   and final updates, older saved formats, a source that's missing), not
+   only today's: Hindcaster's worst fault showed only with real early-morning
+   data. Where the tool writes sentences, check all of them across real data
+   (every county, every day available), not a sample.
 4. **The paths people wander down.** Abandon something halfway. Press Back, or
    change your mind. Delete things. Reload mid-task. Import a wrong or damaged
    file. Use the empty states. Use the keyboard only. Use the phone's own

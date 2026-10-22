@@ -8,11 +8,10 @@ Read these first, in this order:
 1. `SPEC.md`: what Flowcharter is and does (agreed with John).
 2. `PLAN.md`: the staged build. Work one stage at a time, on its branch.
 3. `HOUSE-STYLE.md`: the shared look and ways of working. Copied from
-   `JohnBaish/clockwheel` on 2026-10-15 (at clockwheel commit `f62a1b1`), and
-   re-copied 2026-10-17 with §11 added (last re-copied at clockwheel commit
-   `c86369d`, the same day). Clockwheel holds the master copy. If it has changed since,
-   re-copy it and note that here. The same goes for
-   `.claude/skills/fresh-look/SKILL.md` (the `/fresh-look` review).
+   `JohnBaish/clockwheel`; last re-copied 2026-10-22 (clockwheel commit
+   `199e20d`). Clockwheel holds the master copy. If it has changed since,
+   re-copy it and note that here. The same goes for `SEO-HANDOVER.md` and
+   `.claude/skills/fresh-look/` (the `/fresh-look` review).
 
 Key points from the house style, repeated because they matter most:
 
@@ -20,7 +19,9 @@ Key points from the house style, repeated because they matter most:
   do, and use British spelling. He decides wording.
 - Agree before building anything significant. Show rendered previews of
   images and icons before wiring them in.
-- Build on a branch and merge to `main` only when John says so.
+- Build on a branch. Notes, documents, review files and checking scripts
+  can be merged without asking (say afterwards); anything a visitor could
+  see or feel only when John says so (HOUSE-STYLE §10, "When to merge").
 - Check in a real browser at 1200px and at 390px with touch emulation, and
   say what couldn't be checked.
 - Never rename the storage key (`flowcharter-state-v1`) once live.
@@ -1103,3 +1104,14 @@ browser checks from earlier today still all pass. Pictures:
 Not merged: waiting for John.
 
 **Approved by John and merged into `main` (same day).**
+
+### 2026-10-22 — house style, SEO handover and fresh-look review re-copied (notes only, straight to `main`)
+
+From clockwheel `199e20d`, after John answered the house-style questions
+drawn from Hindcaster's work (clockwheel's notes have the list): when to
+merge without asking, git and preview-server checks, wording rules,
+privacy, charts, automatic checks and more. The fresh-look PDF script now
+checks every brand font style (the old one passed an unused style as
+"loaded"). `SEO-HANDOVER.md` gains Hindcaster's column and the hub's new
+title. The key points above now give the new merge rule. No app code
+changed.

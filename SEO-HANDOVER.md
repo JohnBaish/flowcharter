@@ -10,6 +10,14 @@ If this file and the code disagree, the code is right.
 `JohnBaish/flowcharter`; details in its `CLAUDE.md`): its row is in the
 table below. Its visible text is a "What's a flowchart?" card in the Guide.
 
+**Hindcaster** followed it on 2026-10-20 (its own repo, `JohnBaish/hindcaster`;
+details in its `CLAUDE.md`): its row is in the table below. John chose a
+description that opens with a question rather than "Free …", and a title without
+"free" (it read like a verb there). Its visible text is one paragraph below the
+choosers on its first screen, the only screen Google sees (its views are
+addressed after "#"). The hub's title became general ("free browser tools") so
+it needn't change with each new kind of tool.
+
 Read `HOUSE-STYLE.md` first for everything else (look, phones, privacy,
 hosting, how John likes to work). This file only covers search.
 
@@ -24,11 +32,11 @@ tool linked back to the hub. Done in three steps.
 
 ### Step 1: invisible changes (in the page code, not on screen)
 
-| What | Clockmaker | Backtimer | Flowcharter | Hub |
-|---|---|---|---|---|
-| `<title>` | Clockmaker – free radio hot clock & format clock maker | Backtimer – free backtiming calculator for radio and TV | Flowcharter – free flowchart maker from a simple list | baish.net – free radio and flowchart tools by John Baish |
-| `<meta name="description">` | Free hot clock maker for radio. Build a format clock for each hour, see it as a circle or a list, plan your week and print it. Works in your browser. | Free backtiming calculator for radio and TV. Enter your out-time and items, and see exactly when each one needs to start to hit the news on time. | Free flowchart maker. Type your steps as a list, or answer simple questions step by step, and Flowcharter draws the chart. Print it or copy it as an image. | Free browser tools by John Baish: Clockmaker for radio hot clocks, Backtimer for backtiming, and Flowcharter for flowcharts. |
-| `<link rel="canonical">` | https://clockmaker.baish.net/ | https://backtimer.baish.net/ | https://flowcharter.baish.net/ | https://www.baish.net/ |
+| What | Clockmaker | Backtimer | Flowcharter | Hindcaster | Hub |
+|---|---|---|---|---|---|
+| `<title>` | Clockmaker – free radio hot clock & format clock maker | Backtimer – free backtiming calculator for radio and TV | Flowcharter – free flowchart maker from a simple list | Hindcaster – yesterday's weather in England | baish.net – free browser tools by John Baish |
+| `<meta name="description">` | Free hot clock maker for radio. Build a format clock for each hour, see it as a circle or a list, plan your week and print it. Works in your browser. | Free backtiming calculator for radio and TV. Enter your out-time and items, and see exactly when each one needs to start to hit the news on time. | Free flowchart maker. Type your steps as a list, or answer simple questions step by step, and Flowcharter draws the chart. Print it or copy it as an image. | What was the weather yesterday? Free figures for anywhere in England by postcode or county: highs, overnight lows, wind and rainfall, compared with a year ago. | Free browser tools by John Baish: Clockmaker for radio clocks, Backtimer for backtiming, Flowcharter for flowcharts and Hindcaster for yesterday's weather. |
+| `<link rel="canonical">` | https://clockmaker.baish.net/ | https://backtimer.baish.net/ | https://flowcharter.baish.net/ | https://hindcaster.baish.net/ | https://www.baish.net/ |
 
 Why each part:
 - **Title and search description** are what Google shows in its results.
@@ -168,11 +176,12 @@ Do the code parts on a branch; John merges.
 **The hub (in this repo, `JohnBaish/clockwheel`, not the tool's):**
 
 11. Add a card for the tool to `landing.html` (alphabetical among the
-    tools, before John's Blog). *Flowcharter: already done.*
+    tools, before John's Blog). *Flowcharter: already done. Hindcaster:
+    done 2026-10-20.*
 12. **John's standing reminder: when a tool is added or changed, update the
-    hub's `<title>` and search description to match.** The current ones name
-    radio and flowchart tools only, so Hindcaster will need new wording from
-    John. *Flowcharter: already named.*
+    hub's `<title>` and search description to match.** Since 2026-10-20 the
+    title is general ("free browser tools"), so usually only the description
+    needs the new tool added. *Flowcharter and Hindcaster: named.*
 
 **Check before merging** (Playwright, 1200px and 390px with touch):
 

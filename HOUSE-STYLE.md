@@ -1,10 +1,15 @@
 # baish.net house style
 
 The shared look, behaviour and ways of working behind John Baish's tools
-(Clockmaker, Backtimer, the baish.net landing page), written so a new
-project — starting with **Flowcharter** — can match them without
-re-deriving anything. Everything here is taken from what is live in this
-repo (`JohnBaish/clockwheel`) as of 2026-10-18.
+(Clockmaker, Backtimer, Flowcharter, Hindcaster, the baish.net landing
+page), written so a new project can match them without re-deriving
+anything. Most of it is taken from what is live in this repo
+(`JohnBaish/clockwheel`); what Hindcaster added (outside data, scheduled
+jobs, a site built over many threads) was agreed with John on 2026-10-22.
+
+**These are models, not laws.** In John's words, a basic structure "we can
+vary depending on the task and mood". Where something here doesn't fit, say
+so and suggest the better way.
 
 **Rule of thumb: copy, don't reinvent.** Copy the files listed below into
 the new project and build on them. If something here and the code
@@ -130,6 +135,29 @@ the content; on a phone it sits at the top (see §6).
 **Confirmations:** destructive actions with no undo (Clear, Delete) use a
 plain `window.confirm()` that says exactly what will be lost.
 
+**Safety net:** wrap the screens in a React error boundary, so a fault shows
+a plain message ("Sorry, this page couldn't be shown. …") with a way back,
+never a blank page. Pattern: `SafetyNet` in Hindcaster's `src/App.tsx`.
+(Clockmaker and Backtimer don't have one yet.)
+
+**Label-and-value cards on phones:** labels in one narrow fixed column, and
+every value starting at the same left edge beside it (a two-column grid),
+not values pushed to the right edge. Chosen as "option B" in Hindcaster
+(2026-10-20).
+
+**Charts:** use fixed scales, so a small difference looks small and a
+large one large; don't let each chart stretch to fit its own figures.
+Things that can be "none" (rain, counts) start at zero; temperatures
+don't, since 0°C isn't "nothing" and the dots are read by their gaps.
+Check the colours for colour-blind readers and against both backgrounds
+(the dataviz skill's validator). Pattern: Hindcaster's year-ago charts,
+`scaleFor()` in `src/lib/yearAgo.ts`.
+
+**Printing:** besides `data-noprint` and `.print-only`, keep table rows,
+cards, headings with what follows them, and any self-contained section whole
+across pages (`break-inside: avoid`, `break-after: avoid`); a long table may
+still split between rows.
+
 ## 6. Phones (≤720px)
 
 Every screen must work on a 390px-wide phone with no sideways scrolling.
@@ -163,6 +191,12 @@ Every screen must work on a 390px-wide phone with no sideways scrolling.
   open (it covers roughly the bottom 40%).
 - Drag-to-reorder uses `useDragReorder` on a grip handle only (never the
   browser's own drag-and-drop, which ignores touch).
+- Text boxes for codes (postcodes and the like): `autoCapitalize="characters"`,
+  `autoCorrect="off"`, `spellCheck={false}`, `autoComplete="off"`, and
+  `enterKeyHint="go"` when Return starts something.
+- Lists of choices (a county list, say): a mouse click or a tap goes straight
+  to the choice; the keyboard's arrow keys move through the list without
+  jumping, with "Press Enter to show it." beneath (Hindcaster's `AreaList`).
 
 ## 7. Icons, favicons and link previews
 
@@ -171,7 +205,12 @@ either cream fill with a 2.5px terracotta ring (Clockmaker, baish.net) or
 solid terracotta (Backtimer), with two 4.5px round-capped strokes in ink and
 terracotta/cream. Each tool gets its own variation on that recipe, so they
 read as a family but are easy to tell apart in a row of browser tabs.
-Check every new one at a real 16px before using it.
+Check every new one at a real 16px before using it. Keep to the two-stroke
+recipe where it can say something meaningful; if it can't (Hindcaster's sun
+behind a cloud needed shapes), keep the same disc and ring with any simple
+drawing. Show the options at 16, 32, 48 and 96px in a row of browser tabs
+beside the other tools' icons (Hindcaster's `design/favicon-options.html`),
+and check at 16px which ones still read.
 
 **Link-preview images** (`og:image`, 1200×630): cream background,
 illustration 440×440 at (96, 95), tool name in Caprasimo 72px and a
@@ -202,6 +241,14 @@ and add its tags. Nothing else needs fixing or remaking first.
 - Vercel Web Analytics is on (anonymous visit counts, no cookies):
   `<Analytics />` from `@vercel/analytics/react` in React entry points,
   `inject()` from `@vercel/analytics` in non-React pages.
+- **Not sending data is a core value of every tool** (John). Nothing a
+  person types or chooses goes to a server. Where a choice has to be in the
+  page's address (Hindcaster's `#postcode/RG4`), keep it after the "#",
+  which browsers never send, and strip that part from the visit statistics
+  (`beforeSend` in Hindcaster's `src/main.tsx`).
+- Saved preferences (`localStorage`) must survive a private window or blocked
+  storage: wrap every read and write in `try`/`catch` and fall back to the
+  default.
 - Privacy wording is scoped to the person's content, not "your data"
   generally, because visit statistics *are* collected. Approved wording,
   for reuse:
@@ -210,6 +257,14 @@ and add its tags. Nothing else needs fixing or remaking first.
     personal data) to see how the site is used."
   - "The data you enter here is not collected; it's only saved in your own
     browser and you can clear it at any time."
+  - For a tool where nothing typed in is kept (Hindcaster): "We don't
+    record anything you do here, apart from anonymous visit statistics (no
+    cookies, no personal data), showing us how the site is used."
+- **Other people's data** (weather, maps, postcodes): read each source's
+  licence and copy its attribution word for word. Hindcaster puts each in a
+  small grey source line at the foot of the section it belongs to, plus a
+  "not connected with or endorsed by …" line. **Ask John** how and where
+  credits appear before adding them to a new tool.
 - Each tool says it is "a free-to-use personal project by John Baish" and
   gives the shared contact address `workshop@baish.net` (one address for
   every tool, since 2026-10-17), as plain text, not a mailto link.
@@ -223,6 +278,20 @@ and add its tags. Nothing else needs fixing or remaking first.
   serves clockmaker, backtimer and baish.net, chosen by hostname in
   `src/lib/hostMode.ts` and `middleware.ts`). For a large new tool a
   separate repo and Vercel project is cleaner.
+- Vercel lessons: a domain attached to the wrong project shows that
+  project's site (Vercel picks the project the domain is attached to);
+  Web Analytics has to be switched on in each project's dashboard; a
+  private GitHub repo still deploys.
+- **Keys and tokens** live only where they're used (GitHub Actions secrets,
+  or the outside service). John pastes a token only into the service that
+  needs it, never into a chat, and Claude never writes one into a file, a
+  log or a commit. Write every expiry date into the project's plan.
+- **Jobs on a timer:** start them from **cron-job.org** (it calls the
+  workflow's "Run workflow" through GitHub's API), which has been reliable
+  where GitHub's own schedule started late or not at all. If a GitHub
+  schedule is kept as well, it registers under whoever last saved the
+  workflow file, so John re-saves the file on github.com after Claude
+  changes it. Make every run safe to repeat.
 - The baish.net landing page (`landing.html` here) has a card per tool;
   add one for each new tool when it goes live, and update the hub's
   `<title>` and search description to match (see §12).
@@ -230,23 +299,80 @@ and add its tags. Nothing else needs fixing or remaking first.
 ## 10. Working with John
 
 - John is not a developer. Explain in plain English, briefly, and say what
-  he needs to do (if anything) and what to expect.
+  he needs to do (if anything) and what to expect. Instructions for him to
+  follow go step by step, giving each box's name and what goes in it
+  separately (an arrow like "Key → value" was once typed in literally).
 - He decides wording; draft text for him to edit, and use his words
   exactly once agreed. British spelling ("colour", "visualise").
   "Out-time" is hyphenated.
 - Propose and agree before building anything significant. For images and
-  icons, show a rendered preview for approval before wiring it in.
+  icons, show a rendered preview for approval before wiring it in. Where
+  there's a choice, show labelled options (A, B, C …) as pictures, on a
+  phone and on a computer.
+- **Starting a project:** a written spec (what it does, with open questions
+  numbered at the end) and a plan in stages, one branch per stage. A
+  structure to vary as the work needs, not a fixed rule.
+- **Questions in numbered batches** (Q1–Q19, then B1–B6 …), with John's
+  answers recorded beside them in the notes, so he can reply by number.
+  Break from it when it helps, e.g. "before I start, can you clarify …".
+- **Handing over to a fresh thread:** a dated handover file in `design/`
+  with everything agreed, what's open and where things are, listed in the
+  notes' "read these first" order.
+- **Accuracy:** never stand in made-up figures for real ones; anything made
+  up is labelled "Illustration only", and test data comes from real
+  examples. Work facts out (weekdays, clock-change dates, sunrise times,
+  distances) with code rather than from memory. When Claude gets something
+  wrong, log it openly as a "Correction:" entry.
+- In the notes, mark Claude's own wording or choices "for John to confirm".
 - Build new features on a **branch**, not `main`. Vercel gives every
   branch a private preview at
   `https://<project>-git-<branch>-john-baish.vercel.app` (append
-  `?host=…` overrides as needed). Merge to `main` only when he says so.
-  Small agreed wording fixes can go straight to `main`.
+  `?host=…` overrides as needed).
+- **When to merge** (agreed with John, 2026-10-22):
+  - *Without asking:* notes and documents (logs, plans, specs, this file,
+    handovers, mock-ups and previews), the fresh-look review files, and
+    checking scripts. Say afterwards what was merged.
+  - *Only when John says so:* anything a visitor could see or feel (page
+    code, styles, wording, images, search tags, the rules that make the
+    figures), and anything on a prototype branch.
+  - *Also only when John says so,* though visitors don't see them
+    directly: scheduled jobs and collectors (they change live data, and
+    John re-saves them on GitHub), and anything touching secrets,
+    settings, other services or deleting.
+  - A small change John has already agreed in so many words can go
+    straight to `main` once it's checked.
+- **Automatic checks:** a tool with rules worth getting right (sums,
+  rounding, dates, sentences built from figures) gets an `npm run check`
+  of plain scripts that try the rules on known examples and fail loudly
+  if an answer changes (Hindcaster's `scripts/check-*.ts`, no test
+  library). Prove a new check works by breaking the thing it checks and
+  seeing it fail. Clockmaker has none yet.
 - Check work in a real browser (Playwright) at 1200px and at 390px with
   touch emulation — not just "it builds". Say plainly what couldn't be
   checked (e.g. a real iPhone keyboard).
 - Keep a dated entry in the project's `CLAUDE.md` for every change: what,
   why, what was deliberately left alone, how it was verified.
 - Ask before anything destructive or outside the repo.
+- Note every site John allows in the environment's network settings, and
+  suggest removing any that were needed only once.
+
+**Git safety (Claude's checks, every time):**
+- At the start of a thread, check the repo is on an up-to-date `main` (or
+  the intended branch), not a fixed snapshot of an earlier point, before
+  changing anything (`git status -sb`, then `git fetch` and compare).
+- If a merge stops with a conflict, stop: resolve it, and never commit a
+  file with conflict markers. Check `git status` before any push to `main`.
+- After every push, ask GitHub what it holds (`git ls-remote origin <branch>`)
+  rather than trusting "sent": a push from the wrong place can report
+  success and send nothing (2026-10-22).
+
+**Preview servers (Claude's checks):** start `vite preview` directly with
+`node node_modules/vite/bin/vite.js preview --port <n> --strictPort` (not
+through `npx`, whose child can outlive it), and stop it by its process
+number, found with `ps -eo pid,args`. Never `pkill -f <pattern>`: the
+pattern is in the shell's own command line, so it stops the shell too (this
+has happened three times, the last on 2026-10-22). `ss` isn't installed in
+these containers.
 
 ## 11. Fresh look (a full review)
 
@@ -277,6 +403,10 @@ project a long, careful review on a computer and a phone, and report back
 - Send the report as an A5 PDF too, in the brand fonts, so John can read it on
   his phone alongside Claude (`report-template.html` and `make-pdf.mjs` sit
   beside the skill).
+- Where the tool shows data, test with every real state the data can be in
+  (early and final, older saved formats, a missing source), not only today's.
+- Where the tool writes sentences, check all of them across real data, not a
+  sample.
 - Build nothing until John picks. Then log the findings and his decisions in
   `CLAUDE.md`.
 
@@ -289,8 +419,15 @@ Done for Clockmaker, Backtimer and the hub on 2026-10-17; the full record
 and a step-by-step checklist for a new tool are in **`SEO-HANDOVER.md`**
 (copy it into the new project). In short:
 - `<title>` "Name – free <what it is> for <who>" and a search description
-  starting "Free …", both John's wording. The search description is
+  starting "Free …", both John's wording, as a default that can be broken on
+  purpose (Hindcaster's title is "Hindcaster – yesterday's weather in
+  England" and its description opens "What was the weather yesterday?"). The
+  hub's title is general ("baish.net – free browser tools by John Baish"),
+  so it needn't change for each new tool. The search description is
   separate from the link-preview (`og:`) description.
+- A tool whose screens live after "#" in the address is one page to Google:
+  only its first screen is ever indexed. Put a sentence there that says
+  what the tool does, for first-time visitors and for search.
 - A canonical tag naming the tool's one main address; the hub's is
   `https://www.baish.net/`. If the app sets `document.title`, it matches.
 - robots.txt and a one-address sitemap.xml (plain files in `public/` for a
@@ -349,3 +486,28 @@ tab). Pattern, from Flowcharter 7.1 and Clockmaker (2026-10-18):
   here: Safari and real iPhones.
 - Test with two pages in one Playwright browser context (they share
   storage); wait about half a second after the second loads.
+
+## 15. Wording
+
+John decides wording; these are his standing preferences, from Hindcaster
+(2026-10-19 to 2026-10-22). Use judgement, and ask when in doubt.
+
+- **"Less than" and "more than", not "under" and "over",** for amounts in
+  ordinary sentences ("less than 1 mile"). Other senses stay ("the night
+  isn't over", "just over the borders"), and so does a compact, more
+  mathematical comparison like Clockmaker's "over, under or exactly on
+  60:00".
+- **Don't end a sentence with a preposition.** "We'll have to put up with
+  it", not "It's something we'll have to put up with"; "There are no
+  figures for these places for last year to compare", not "… to compare
+  with".
+- **Dates in running text:** month first, with an ordinal: "Friday October
+  16th", "October 18th to 20th 2025". Existing places that do otherwise are
+  left as they are unless John asks (Clockmaker's Summary "18 Oct").
+- **Ranges:** "12 to 15°C", not a dash, so a range can't be read as a minus.
+- **Times:** each tool keeps one style ("5:50am" in Hindcaster; 24-hour
+  "06:00" in Clockmaker, which suits broadcasting).
+- **Rounding** (any tool showing decimals): halves away from zero, so 4.55
+  shows as 4.6 and −0.05 as −0.1, never "−0.0". Don't use JavaScript's
+  `toFixed` or a plain `Math.round` for this; work in whole hundredths
+  (Hindcaster's `src/lib/format.ts`).
