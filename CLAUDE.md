@@ -1145,3 +1145,22 @@ Clockmaker's new `npm run check`. No app code changed.
 
 From clockwheel `d8c3aee`: a new §16, the checklist and first prompt for
 starting a new tool. Docs only.
+
+### 2026-10-22 — Full screen on iPads too (branch `ipad-full-screen`, not merged)
+
+**John asked** (after a look at the sites at iPad and iPhone Duo sizes): offer
+Full screen on iPads, not only phones. iPads (744px wide and more) get the
+computer layout, where Full screen was never offered, so a wide chart could
+only be scrolled inside its frame. Now Full screen shows on a phone **or any
+touch screen** (`(pointer: coarse)`, `isTouch()`) whenever the chart is too wide
+to fit (`wide` in `ChartScreen.tsx`; the button in `EditorHeader.tsx`). Computers
+with a mouse are unchanged. SPEC §5 "Size" updated.
+
+**Verified:** build clean; lint the two known warnings; checks 34 + 12. In
+Chromium with touch at 744px (iPad mini), 890×626 (iPhone Duo open sideways,
+estimated) and 1032px (iPad Pro 13): offered for the newsreaders tree at 744
+and 890 (it fits at 1032, so not offered there); opens the whole chart, Close
+and Back both close it. Not offered at 1200px with a mouse. Phones unchanged.
+Noticed: the 30-row test chart, drawn Across on the open Duo, becomes a very
+thin strip in Full screen (it fits the width); choosing Down avoids that.
+**Couldn't be checked:** a real iPad (pinch to zoom inside Full screen).

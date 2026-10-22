@@ -132,8 +132,9 @@ export function EditorHeader({ mode }: { mode: 'list' | 'chart' }) {
           >
             {imageStatus === 'copied' ? 'Copied!' : imageStatus === 'downloaded' ? 'Downloaded' : imageStatus === 'failed' ? "Couldn't copy" : 'Copy image'}
           </button>
-          {/* On a phone, when the chart is too wide to fit: see it all at once (fresh look 5.2). */}
-          {isNarrow && chartWide && (
+          {/* On a phone or other touch screen, when the chart is too wide to fit:
+              see it all at once (fresh look 5.2; tablets added 2026-10-22). */}
+          {chartWide && (
             <button
               onClick={() => setChartFull(true)}
               className="btn btn-secondary"

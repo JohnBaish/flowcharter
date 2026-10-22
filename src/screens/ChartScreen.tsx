@@ -41,7 +41,7 @@ export function ChartScreen() {
   const [drawn, setDrawn] = useState<Drawn | null>(null);
   const frame = useRef<HTMLDivElement | null>(null);
   const [space, setSpace] = useState({ width: 1000, height: 640 });
-  // Full screen on a phone (fresh look 5.2): the whole chart shrunk to fit the
+  // Full screen on a phone or tablet (fresh look 5.2): the whole chart shrunk to fit the
   // screen, to see it all at once and pinch to zoom in. The header's Full screen
   // button opens it; it's offered only while the chart is too wide to fit.
   const [screenSize, setScreenSize] = useState({ width: 390, height: 844 });
@@ -105,8 +105,10 @@ export function ChartScreen() {
   const minScale = isNarrow ? MIN_SCALE_PHONE : MIN_SCALE;
   const fit = layout ? space.width / layout.width : 1;
   const scale = Math.min(1, isNarrow && fit >= FIT_SCALE_PHONE ? fit : Math.max(minScale, fit));
-  // Too wide to fit a phone screen, so it scrolls sideways: offer Full screen.
-  const wide = isNarrow && items.length > 0 && !!layout && layout.width * scale > space.width + 1;
+  // Too wide to fit, so it scrolls sideways: offer Full screen on a phone, and on
+  // any touch screen (an iPad, or an iPhone Duo opened sideways, gets the
+  // computer layout but has no mouse to scroll with; John, 2026-10-22).
+  const wide = (isNarrow || isTouch()) && items.length > 0 && !!layout && layout.width * scale > space.width + 1;
   useEffect(() => { setChartWide(wide); }, [wide, setChartWide]);
 
   // — Changing a box's words (John, 2026-10-20): only the words, never the shape. —

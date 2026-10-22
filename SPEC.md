@@ -264,7 +264,10 @@ Not yet seen by John; easy to change.
   but never below 60% (75% on a phone, about 10.5px text). On a phone, a chart
   that would fit completely at 65% or more is shrunk to fit rather than scroll a
   few boxes out of sight. A chart still too wide scrolls sideways inside its
-  frame; the page scrolls up and down as usual.
+  frame; the page scrolls up and down as usual. On a phone or any other touch
+  screen (an iPad, an iPhone Duo opened out), such a chart also offers **Full
+  screen**: the whole chart shrunk to fit, to pinch and zoom (tablets added
+  2026-10-22).
 - The layout library loads only when a chart is first drawn, so the List and
   Library stay quick.
 
