@@ -38,6 +38,10 @@ export function ChartScreen() {
   const items = chart?.items ?? NO_ITEMS;
   const hasItems = items.length > 0;
   const isNarrow = useIsNarrow(NARROW);
+  // Changing words: on a phone or any other touch screen, in a panel at the top with
+  // 16px text (a smaller box over the shape would make an iPhone or iPad zoom in;
+  // tablets added 2026-10-22). With a mouse, in a box over the shape itself.
+  const usePanel = isNarrow || isTouch();
   const [drawn, setDrawn] = useState<Drawn | null>(null);
   const frame = useRef<HTMLDivElement | null>(null);
   const [space, setSpace] = useState({ width: 1000, height: 640 });
@@ -123,7 +127,7 @@ export function ChartScreen() {
   const open = (next: Edit) => {
     finished.current = false;
     flushSync(() => { setEdit(next); setPanelText(next.words); });
-    if (isNarrow) {
+    if (usePanel) {
       const ta = panelBox.current;
       if (ta) { ta.focus(); ta.select(); }
       // Keep the box being changed in sight below the panel.
@@ -240,14 +244,14 @@ export function ChartScreen() {
         ) : layout ? (
           <div className="chart-stage" style={{ width: Math.floor(layout.width * scale) }}>
             <FlowChart layout={layout} scale={scale} title={chart.name} edit={{ onNode, onLabel, active: edit?.id ?? null }} />
-            {edit && !isNarrow && <EditBox layout={layout} scale={scale} room={space.width} edit={edit} boxRef={editBox} onKey={onEditKey} onDone={finish} />}
+            {edit && !usePanel && <EditBox layout={layout} scale={scale} room={space.width} edit={edit} boxRef={editBox} onKey={onEditKey} onDone={finish} />}
           </div>
         ) : (
           <p style={{ textAlign: 'center', color: 'var(--color-neutral-700)', padding: 'var(--space-6)' }}>Drawing…</p>
         )}
       </div>
       <ShapeKey types={usedTypes} />
-      {edit && isNarrow && (
+      {edit && usePanel && (
         <div className="chart-edit-panel" role="dialog" aria-label="Change the words">
           <h3>Change the words</h3>
           <textarea

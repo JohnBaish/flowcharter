@@ -186,7 +186,7 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
   position: absolute; z-index: 5; white-space: nowrap; font-size: 12px; font-weight: 600;
   color: var(--color-neutral-700); background: var(--color-surface); border-radius: 8px; padding: 4px 8px;
 }
-/* On a phone the boxes are too small to type in, so a panel opens at the top of
+/* On a phone or tablet the boxes are too small to type in, so a panel opens at the top of
    the screen, where the keyboard won't cover it. */
 .chart-edit-panel {
   position: fixed; left: 0; right: 0; top: 0; z-index: 60; background: var(--color-surface);
@@ -343,3 +343,10 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
 .safety-net { margin: var(--space-6); padding: var(--space-6); text-align: center; }
 .safety-net p { margin: 0 0 var(--space-4); }
 @media (max-width: 720px) { .safety-net .btn { min-height: 44px; } }
+
+/* Touch screens wider than a phone (an iPad, an iPhone Duo opened out) get the
+   computer layout, but are tapped like a phone, so their boxes are 16px too
+   (John, 22 October 2026). */
+@media (pointer: coarse) {
+  .plain-input, .input, select.input, .wiz-field, .wiz-answer input { font-size: 16px; }
+}

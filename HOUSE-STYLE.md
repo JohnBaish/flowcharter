@@ -169,7 +169,15 @@ Every screen must work on a 390px-wide phone with no sideways scrolling.
   render one or the other, never both hidden with CSS.
 - Text in input boxes is **16px** on phones, or iPhone zooms the page when
   a box is tapped (handled by `global.css` for `.plain-input` and `.input`;
-  anything with an inline font size needs it set explicitly).
+  anything with an inline font size needs it set explicitly). The same goes
+  for **any touch screen**, whatever its width: an iPad or an iPhone Duo
+  opened out gets the computer layout but is tapped like a phone, so
+  `global.css` also sets 16px under `@media (pointer: coarse)`, and inline
+  sizes use `isNarrow || isTouch()` (John, 22 October 2026).
+- **Tablets get the computer layout** (every iPad is wider than 720px). Check
+  touch-only features there too: a phone-only button or panel may also be
+  wanted on a touch screen of any width (Flowcharter's Full screen and its
+  "change the words" panel use `isNarrow || isTouch()`).
 - Tap targets at least **44px** tall. A small icon button (e.g. a bin on a
   phone card) can keep its small icon inside a 44px tap area
   (`.list-card-delete` in `global.css`).

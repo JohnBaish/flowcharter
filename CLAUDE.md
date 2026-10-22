@@ -1146,7 +1146,7 @@ Clockmaker's new `npm run check`. No app code changed.
 From clockwheel `d8c3aee`: a new §16, the checklist and first prompt for
 starting a new tool. Docs only.
 
-### 2026-10-22 — Full screen on iPads too (branch `ipad-full-screen`, not merged)
+### 2026-10-22 — Full screen on iPads too (branch `ipad-full-screen`, merged the same day)
 
 **John asked** (after a look at the sites at iPad and iPhone Duo sizes): offer
 Full screen on iPads, not only phones. iPads (744px wide and more) get the
@@ -1164,3 +1164,25 @@ and Back both close it. Not offered at 1200px with a mouse. Phones unchanged.
 Noticed: the 30-row test chart, drawn Across on the open Duo, becomes a very
 thin strip in Full screen (it fits the width); choosing Down avoids that.
 **Couldn't be checked:** a real iPad (pinch to zoom inside Full screen).
+
+### 2026-10-22 — typing boxes 16px on any touch screen; the words panel on tablets (same branch, merged)
+
+**John agreed** (after before/after pictures) that typing boxes and lists are
+16px on any touch screen, not just phones, as an iPhone (and maybe an iPad)
+zooms in on smaller ones. `global.css`: `.plain-input, .input, select.input,
+.wiz-field, .wiz-answer input` 16px under `@media (pointer: coarse)`.
+Changing words on the Chart: on a touch screen the box drawn over the shape
+was 14px, so tablets now get the phone's "Change the words" panel at the top
+(`usePanel` in `ChartScreen.tsx`); a mouse still edits in place.
+`HOUSE-STYLE.md` re-copied from clockwheel `b430918` (§6).
+
+**Verified:** build clean; lint the two known warnings; checks 34 + 12. In
+Chromium with touch at 744, 820, 890×626, 1032 and 1180px: every box 16px; the
+panel opens with the words selected and saves; no sideways scroll, no errors.
+At 1200px with a mouse: unchanged, and the in-place box still saves. Phones
+unchanged. **Side effect, accepted for now:** in the List on an iPad mini
+(744px) the bigger drop-down lists leave the Item column narrower, so three of
+the example's eight items are cut off in their boxes (one was already); at
+820px one is. Tapping a box shows the whole text. **Couldn't be checked:** a
+real iPad (pinch to zoom inside Full screen; whether iPad Safari zooms on small
+boxes at all).
