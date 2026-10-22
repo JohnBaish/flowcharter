@@ -36,6 +36,7 @@ Backtimer — long, and mostly about those apps. Read it only for the
 | `public/favicon*.svg` | Favicon style to adapt (see §7). |
 | `design/og-clockmaker.html` | Link-preview image source; use it as the template for a new tool (see §7). |
 | `SEO-HANDOVER.md` | How search (titles, descriptions, canonical, robots.txt/sitemap, visible text, Search Console) was done, with a checklist for each new tool (see §12). |
+| `design/overview/` | The baish.net overview PDF: every site described, with screenshots, for discussing themes and ideas in other chats; its source and a script that rebuilds it. Lives here only, not copied (see §16). |
 | `HOUSE-STYLE.md` and `.claude/skills/fresh-look/` | This file, and the "fresh look" review procedure with its PDF template and script (see §11). Copy both into every project, new or existing. |
 
 Dependencies these rely on: `@fontsource/caprasimo`, `@fontsource/figtree`,
@@ -575,3 +576,11 @@ domain and Web Analytics (§9); any keys, as GitHub secrets, never pasted
 into a chat; Search Console near the end (§12); and, last, the card on the
 baish.net landing page, with the hub's title and description updated to
 match (in this repo, with his OK).
+
+**After the hub card, update the baish.net overview** (`design/overview/` in
+this repo; its `README.md` has the steps): a written page and screenshots for
+the new tool, and the shared pages brought up to date. It's for John to share
+with Claude in other chats. Before that thread, John adds `baish.net` and its
+subdomains to the environment's Allowed domains, so the screenshots can come
+from the live sites (without them, Claude builds each site from `main` and
+serves it locally, and the PDF says so).

@@ -1174,7 +1174,7 @@ zooms in on smaller ones. `global.css`: `.plain-input, .input, select.input,
 Changing words on the Chart: on a touch screen the box drawn over the shape
 was 14px, so tablets now get the phone's "Change the words" panel at the top
 (`usePanel` in `ChartScreen.tsx`); a mouse still edits in place.
-`HOUSE-STYLE.md` re-copied from clockwheel `b430918` (§6).
+`HOUSE-STYLE.md` re-copied from clockwheel `c9d991e` (§6).
 
 **Verified:** build clean; lint the two known warnings; checks 34 + 12. In
 Chromium with touch at 744, 820, 890×626, 1032 and 1180px: every box 16px; the
