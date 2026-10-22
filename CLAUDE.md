@@ -1115,3 +1115,23 @@ checks every brand font style (the old one passed an unused style as
 "loaded"). `SEO-HANDOVER.md` gains Hindcaster's column and the hub's new
 title. The key points above now give the new merge rule. No app code
 changed.
+
+### 2026-10-22 — Safety net; card wording (K1, K3) (branch `house-style-k1-k3`, merged)
+
+From the house-style follow-up questions, agreed by John. **K1:**
+`src/components/SafetyNet.tsx` wraps the screens in `App.tsx` (keyed by screen
+and chart): if one fails while drawing, "Sorry, this screen couldn’t be shown.
+Your flowcharts are still saved in this browser." with **Go to the Library**.
+**K3** (sentences ending in a preposition, HOUSE-STYLE §15), in
+`StepsScreen.tsx`: the wait card asks "What has to happen before you carry
+on?"; the name card "What shall we call this flowchart?"; "Change the words if
+necessary." (was "if you need to"); and the pick card (after "It goes back to
+an earlier step") now reads **Which step comes next?** / "Choose one you’ve
+already written. The path either loops back to it or joins another path
+there." (John's choice of Claude's wording).
+
+**Verified:** build clean; lint the two known warnings; `npm run check` 34 +
+12. In Chromium at 1200px and 390px with touch, a scratch build with a
+deliberate fault: the message and button show (44px on a phone), Go to the
+Library works; the real build shows no message; no errors, no sideways scroll.
+Merged to `main` at John's word.

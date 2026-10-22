@@ -469,8 +469,8 @@ export function StepsScreen() {
         {kicker}
         <div className="wiz-context">{slotContext(c.slot)}</div>
         {repeatNote(c.slot)}
-        <h2>Which step does it go back to?</h2>
-        <p>Choose the step it loops back to, or joins up with.</p>
+        <h2>Which step comes next?</h2>
+        <p>Choose one you’ve already written. The path either loops back to it or joins another path there.</p>
         <div className="wiz-picks">
           {backTargets(c.slot).map((it) => (
             <button key={it.id} className="wiz-pill" onClick={() => pick(c, it.id)}>{itemLabel(items, items.indexOf(it))}</button>
