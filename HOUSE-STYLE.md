@@ -313,7 +313,8 @@ and add its tags. Nothing else needs fixing or remaking first.
   phone and on a computer.
 - **Starting a project:** a written spec (what it does, with open questions
   numbered at the end) and a plan in stages, one branch per stage. A
-  structure to vary as the work needs, not a fixed rule.
+  structure to vary as the work needs, not a fixed rule. Step by step in
+  §16.
 - **Questions in numbered batches** (Q1–Q19, then B1–B6 …), with John's
   answers recorded beside them in the notes, so he can reply by number.
   Break from it when it helps, e.g. "before I start, can you clarify …".
@@ -513,3 +514,56 @@ John decides wording; these are his standing preferences, from Hindcaster
   shows as 4.6 and −0.05 as −0.1, never "−0.0". Don't use JavaScript's
   `toFixed` or a plain `Math.round` for this; work in whole hundredths
   (Hindcaster's `src/lib/format.ts`).
+
+## 16. Starting a new tool
+
+How a new baish.net tool begins, from an idea worked out in a Claude chat
+to the first agreed stage. Agreed with John on 2026-10-22; Hindcaster was
+started this way.
+
+**John, before the first thread:**
+
+1. Create the repo on GitHub. Decide public or private first: the tools
+   are public, but Hindcaster is private because it stores another
+   organisation's raw data.
+2. Put the handover from the Claude chat in the repo, under any name
+   except `CLAUDE.md` (for example `idea_handover_from_claude_chat.md`).
+   `CLAUDE.md` is special: Claude Code reads it at the start of every
+   session as standing instructions, and in these projects it holds
+   Claude's working notes and log.
+3. Start a cloud thread on the new repo, on its `main` branch.
+4. Paste the prompt below, with the tool's name and today's date.
+
+**The prompt:**
+
+> This is a new tool for baish.net, a sister to Clockmaker, Backtimer,
+> Flowcharter and Hindcaster. My ideas are in the handover file in this
+> repo. Please:
+> 1. Add `JohnBaish/clockwheel` to this session (read only) and read its
+>    `HOUSE-STYLE.md` and `SEO-HANDOVER.md`. Look at how
+>    `JohnBaish/hindcaster` was started too, if it helps.
+> 2. Move my handover to `design/handover-<date>.md` without changing its
+>    words. Copy in `HOUSE-STYLE.md`, `SEO-HANDOVER.md` and
+>    `.claude/skills/fresh-look/` from clockwheel, noting the commit.
+> 3. Write `SPEC.md` (what the tool does, with numbered open questions at
+>    the end), `PLAN.md` (stages, one branch each) and `CLAUDE.md`
+>    (working notes and a dated log, with a reading list).
+> 4. Then ask me the open questions in a numbered batch. Don't build any
+>    of the app until I've answered and agreed the first stage.
+
+**Claude, in the first thread:**
+
+5. Copy the files in §1 from clockwheel rather than writing them again,
+   and note the commit in `CLAUDE.md` (clockwheel holds the master copy).
+6. Check the handover's facts with code or the real sources before relying
+   on them (§10, "Accuracy"); say what couldn't be checked.
+7. Draft the spec and plan, ask the numbered questions, record John's
+   answers beside them, and build nothing visible until he agrees.
+8. Before building pages, show mock-ups at 1200px and 390px; before wiring
+   in a favicon or preview image, show the options (§7).
+
+**John's own jobs later, when each comes up:** the Vercel project, its
+domain and Web Analytics (§9); any keys, as GitHub secrets, never pasted
+into a chat; Search Console near the end (§12); and, last, the card on the
+baish.net landing page, with the hub's title and description updated to
+match (in this repo, with his OK).
