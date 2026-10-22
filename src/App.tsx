@@ -7,6 +7,7 @@ import { ChartScreen } from './screens/ChartScreen.tsx';
 import { GuideScreen } from './screens/GuideScreen.tsx';
 import { StepsScreen } from './screens/StepsScreen.tsx';
 import { useBackLayer } from './lib/backLayers.ts';
+import { SafetyNet } from './components/SafetyNet.tsx';
 
 function Shell() {
   const { screen, chart, setScreen, changedElsewhere } = useApp();
@@ -29,6 +30,7 @@ function Shell() {
       )}
       <Nav screen={screen} onNavigate={setScreen} />
       <div style={{ width: '100%', maxWidth: '1100px', margin: '0 auto' }}>
+        <SafetyNet key={`${screen}/${chart?.id ?? ''}`} onLibrary={() => setScreen('lib')}>
         {needsChart && (
           <div style={{ padding: 'var(--space-6)', textAlign: 'center', color: 'var(--color-neutral-700)' }}>
             No flowchart is open. Pick one in the Library, or start a new one with New chart.
@@ -40,6 +42,7 @@ function Shell() {
         {screen === 'chart' && chart && <><EditorHeader mode="chart" /><ChartScreen /></>}
         {/* Keyed by chart, so opening another chart starts its cards afresh. */}
         {screen === 'steps' && chart && <StepsScreen key={chart.id} />}
+        </SafetyNet>
       </div>
     </div>
   );
