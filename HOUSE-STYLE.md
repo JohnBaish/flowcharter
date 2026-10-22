@@ -137,8 +137,10 @@ plain `window.confirm()` that says exactly what will be lost.
 
 **Safety net:** wrap the screens in a React error boundary, so a fault shows
 a plain message ("Sorry, this page couldn't be shown. …") with a way back,
-never a blank page. Pattern: `SafetyNet` in Hindcaster's `src/App.tsx`.
-(Clockmaker and Backtimer don't have one yet.)
+never a blank page. Patterns: `SafetyNet` in Hindcaster's `src/App.tsx`, and
+`src/components/SafetyNet.tsx` here and in Flowcharter ("Sorry, this screen
+couldn’t be shown. Your … still saved in this browser." with Go to the Library,
+or Reload the page where there's no Library).
 
 **Label-and-value cards on phones:** labels in one narrow fixed column, and
 every value starting at the same left edge beside it (a two-column grid),
@@ -346,7 +348,7 @@ and add its tags. Nothing else needs fixing or remaking first.
   of plain scripts that try the rules on known examples and fail loudly
   if an answer changes (Hindcaster's `scripts/check-*.ts`, no test
   library). Prove a new check works by breaking the thing it checks and
-  seeing it fail. Clockmaker has none yet.
+  seeing it fail. Clockmaker and Backtimer's are `scripts/check-sums.ts`.
 - Check work in a real browser (Playwright) at 1200px and at 390px with
   touch emulation — not just "it builds". Say plainly what couldn't be
   checked (e.g. a real iPhone keyboard).

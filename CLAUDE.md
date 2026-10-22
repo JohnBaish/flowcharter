@@ -9,7 +9,7 @@ Read these first, in this order:
 2. `PLAN.md`: the staged build. Work one stage at a time, on its branch.
 3. `HOUSE-STYLE.md`: the shared look and ways of working. Copied from
    `JohnBaish/clockwheel`; last re-copied 2026-10-22 (clockwheel commit
-   `199e20d`). Clockwheel holds the master copy. If it has changed since,
+   `84e6178`). Clockwheel holds the master copy. If it has changed since,
    re-copy it and note that here. The same goes for `SEO-HANDOVER.md` and
    `.claude/skills/fresh-look/` (the `/fresh-look` review).
 
@@ -1135,3 +1135,8 @@ there." (John's choice of Claude's wording).
 deliberate fault: the message and button show (44px on a phone), Go to the
 Library works; the real build shows no message; no errors, no sideways scroll.
 Merged to `main` at John's word.
+
+### 2026-10-22 — house style re-copied (notes only, straight to `main`)
+
+From clockwheel `84e6178`: §5 and §10 now point to the safety nets and
+Clockmaker's new `npm run check`. No app code changed.
