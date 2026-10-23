@@ -9,7 +9,7 @@ Read these first, in this order:
 2. `PLAN.md`: the staged build. Work one stage at a time, on its branch.
 3. `HOUSE-STYLE.md`: the shared look and ways of working. Copied from
    `JohnBaish/clockwheel`; last re-copied 2026-10-23 (clockwheel commit
-   `a47861d`). Clockwheel holds the master copy. If it has changed since,
+   `36378ed`). Clockwheel holds the master copy. If it has changed since,
    re-copy it and note that here. The same goes for `SEO-HANDOVER.md` and
    `.claude/skills/fresh-look/` (the `/fresh-look` review).
 
@@ -1192,3 +1192,8 @@ boxes at all).
 From clockwheel `a47861d`: §15 now asks for clock times written with a full
 stop ("9.30am"), as Hindcaster now does (John). Flowcharter shows no clock
 times with minutes (only examples such as "8pm"), so no app code changed.
+
+### 2026-10-23 — house style re-copied (notes only, straight to `main`)
+
+From clockwheel `36378ed`: §15 now says temperatures are written "20°C", with no
+space (John). No app code changed.

@@ -59,8 +59,49 @@ Core tokens (all in `organic.css` `:root`):
 Each of neutral, accent and accent-2 has a 100–900 ramp
 (`--color-neutral-700` `#645c50` is the standard muted text colour;
 `--color-accent-700` `#8c491a` is the darker terracotta used for
-text-style action buttons and links). Light theme only — there is no
-dark mode.
+text-style action buttons and links).
+
+**Dark mode is optional, tool by tool** (John, 2026-10-23). Light is the
+house look and always the default; Hindcaster is the first tool with a
+dark mode, and it's the one to copy. Clockmaker, Backtimer and Flowcharter
+are light only for now (John may come back to them). The agreed dark
+colours (Hindcaster's "option B"; a first, near-black version was too
+dark and harsh on John's phone and laptop):
+
+| Token | Dark value |
+|---|---|
+| `--color-bg` | `#2a2723` warm dark grey |
+| `--color-surface` | `#37332e` |
+| `--color-text` | `#e8dfcf` soft cream |
+| `--color-accent` | `#dd8a56` terracotta, a shade lighter |
+| `--color-divider` | text at 16% |
+| `--color-neutral-100` / `-700` / `-800` | `#423d36` / `#b0a593` (muted text) / `#e3d9c7` |
+| `--color-accent-100` / `-300` / `-600` / `-700` / `-800` | `#4a2a14` / `#b2622d` / `#e8935d` / `#f2a573` / `#ffc6a5` |
+| `--color-accent-2-100` / `-800` | `#2f3a20` / `#d4e4b8` |
+| shadows | a 1px hairline in text at 6–8%, plus a dark shadow |
+
+Contrast on the background: text 11.2:1, muted text 6.1:1, terracotta
+5.6:1. Don't go lighter than this: a step further brought the small
+terracotta labels below 4.5:1. How it's built (Hindcaster's
+`src/styles/global.css`, `src/lib/theme.ts`,
+`src/components/ThemeSwitch.tsx`, `index.html`):
+
+- The dark values sit in the tool's `global.css` under
+  `@media screen { :root[data-theme="dark"] { … } }`, with
+  `color-scheme: dark`; `organic.css` stays as it is. Screen only, so a
+  printed page is always light.
+- A switch at the top right of the nav bar (like DPD's tracking page): a
+  pill with a sun or moon, `role="switch"`, a small "DARK" label on a
+  computer only, 44px tall to tap on a phone.
+- The choice is kept in `localStorage` (`<tool>.theme`), and a few lines
+  in `index.html` set it before the page draws, so there's no flash of
+  the light page. Blocked storage just means light.
+- Light by default, even when a phone is set to dark (John's choice;
+  following the phone's setting would be one line in `index.html`).
+- The footer's privacy wording mentions it. Hindcaster's: "Your device,
+  rather than the website, stores your last choices (location and light
+  or dark mode), so the page opens the same way next time."
+- Charts: re-check their colours in both themes ("Charts" in §5).
 
 ## 3. Type
 
@@ -517,6 +558,9 @@ John decides wording; these are his standing preferences, from Hindcaster
   16th", "October 18th to 20th 2025". Existing places that do otherwise are
   left as they are unless John asks (Clockmaker's Summary "18 Oct").
 - **Ranges:** "12 to 15°C", not a dash, so a range can't be read as a minus.
+- **Temperatures:** "20°C", with no space before the degree sign, as the
+  Met Office writes it (John, 23 October, after seeing "20 °C", the SI
+  rule, mocked up). Other units keep their space: "3.5 mm", "16 mph".
 - **Times:** each tool keeps one style. Clock times written for reading
   use a full stop between hours and minutes, the British way: "5.50am",
   "9.15pm"; on the hour "3pm", "midday", "midnight" (John, 23 October;
@@ -575,6 +619,9 @@ started this way.
    answers beside them, and build nothing visible until he agrees.
 8. Before building pages, show mock-ups at 1200px and 390px; before wiring
    in a favicon or preview image, show the options (§7).
+9. Late in the design, once the pages are agreed, ask John whether the
+   tool should have a dark mode (§2). If yes, use the agreed dark colours
+   and switch, and show mock-ups in both themes first.
 
 **John's own jobs later, when each comes up:** the Vercel project, its
 domain and Web Analytics (§9); any keys, as GitHub secrets, never pasted
