@@ -517,8 +517,13 @@ John decides wording; these are his standing preferences, from Hindcaster
   16th", "October 18th to 20th 2025". Existing places that do otherwise are
   left as they are unless John asks (Clockmaker's Summary "18 Oct").
 - **Ranges:** "12 to 15°C", not a dash, so a range can't be read as a minus.
-- **Times:** each tool keeps one style ("5:50am" in Hindcaster; 24-hour
-  "06:00" in Clockmaker, which suits broadcasting).
+- **Times:** each tool keeps one style. Clock times written for reading
+  use a full stop between hours and minutes, the British way: "5.50am",
+  "9.15pm"; on the hour "3pm", "midday", "midnight" (John, 23 October;
+  Hindcaster changed from "5:50am"). New tools do the same. Clockmaker's
+  24-hour "06:00" stays, as it suits broadcasting, and so do minutes and
+  seconds ("29:30", "60:00") in Clockmaker and Backtimer, which are
+  timings, not times of day.
 - **Rounding** (any tool showing decimals): halves away from zero, so 4.55
   shows as 4.6 and −0.05 as −0.1, never "−0.0". Don't use JavaScript's
   `toFixed` or a plain `Math.round` for this; work in whole hundredths

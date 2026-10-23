@@ -8,8 +8,8 @@ Read these first, in this order:
 1. `SPEC.md`: what Flowcharter is and does (agreed with John).
 2. `PLAN.md`: the staged build. Work one stage at a time, on its branch.
 3. `HOUSE-STYLE.md`: the shared look and ways of working. Copied from
-   `JohnBaish/clockwheel`; last re-copied 2026-10-22 (clockwheel commit
-   `d8c3aee`). Clockwheel holds the master copy. If it has changed since,
+   `JohnBaish/clockwheel`; last re-copied 2026-10-23 (clockwheel commit
+   `a47861d`). Clockwheel holds the master copy. If it has changed since,
    re-copy it and note that here. The same goes for `SEO-HANDOVER.md` and
    `.claude/skills/fresh-look/` (the `/fresh-look` review).
 
@@ -1186,3 +1186,9 @@ the example's eight items are cut off in their boxes (one was already); at
 820px one is. Tapping a box shows the whole text. **Couldn't be checked:** a
 real iPad (pinch to zoom inside Full screen; whether iPad Safari zooms on small
 boxes at all).
+
+### 2026-10-23 — house style re-copied (notes only, straight to `main`)
+
+From clockwheel `a47861d`: §15 now asks for clock times written with a full
+stop ("9.30am"), as Hindcaster now does (John). Flowcharter shows no clock
+times with minutes (only examples such as "8pm"), so no app code changed.
