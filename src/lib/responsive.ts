@@ -19,3 +19,10 @@ export function useIsNarrow(breakpoint: number): boolean {
   }, [breakpoint]);
   return narrow;
 }
+
+/** The width inside an element's padding: the room a chart has to fit. (In dark mode the chart's
+ *  frame is a card with padding; in light mode it has none, so this is its clientWidth.) */
+export function contentWidth(el: HTMLElement): number {
+  const style = getComputedStyle(el);
+  return el.clientWidth - (parseFloat(style.paddingLeft) || 0) - (parseFloat(style.paddingRight) || 0);
+}

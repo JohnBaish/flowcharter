@@ -6,7 +6,7 @@ import { SHAPES } from '../data/shapes.ts';
 import { chooseDirection, layoutChart, type ChartLayout } from '../lib/layout.ts';
 import { FONT_SIZE, LABEL_FONT, LABEL_FONT_SIZE, TEXT_FONT } from '../lib/shapes.ts';
 import { canvasMeasure, fontsReady } from '../lib/textWrap.ts';
-import { useIsNarrow } from '../lib/responsive.ts';
+import { contentWidth, useIsNarrow } from '../lib/responsive.ts';
 import { isTouch } from '../lib/focus.ts';
 import { FlowChart, ShapeKey } from '../components/FlowChart.tsx';
 import { useBackLayer } from '../lib/backLayers.ts';
@@ -88,7 +88,7 @@ export function ChartScreen() {
     if (!el) return;
     const measure = () => {
       const top = el.getBoundingClientRect().top + window.scrollY;
-      setSpace({ width: el.clientWidth, height: Math.max(320, window.innerHeight - Math.min(top, 260) - 24) });
+      setSpace({ width: contentWidth(el), height: Math.max(320, window.innerHeight - Math.min(top, 260) - 24) });
     };
     measure();
     const ro = new ResizeObserver(measure);

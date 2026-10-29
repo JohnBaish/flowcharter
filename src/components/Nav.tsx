@@ -1,5 +1,6 @@
 import { useApp, type Screen } from '../state/store.tsx';
 import { relativeTime, useNow } from '../lib/time.ts';
+import { ThemeSwitch } from './ThemeSwitch.tsx';
 
 // List and Chart aren't here: the List | Chart switch in a chart's own header is
 // the one way between them (John, 2026-10-15), and a chart is opened from the Library.
@@ -40,6 +41,9 @@ export function Nav({ screen, onNavigate }: { screen: Screen; onNavigate: (s: Sc
         </a>
       ))}
       <span className="tag tag-neutral mono nav-saved" data-noprint="1">saved {relativeTime(lastEditedAt, now)}</span>
+      {/* Last on a computer; on a phone beside the name, with the rest on the row beneath (global.css). */}
+      <ThemeSwitch />
+      <span className="nav-break" aria-hidden="true" />
     </div>
   );
 }

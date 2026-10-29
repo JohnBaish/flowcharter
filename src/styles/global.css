@@ -350,3 +350,71 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
 @media (pointer: coarse) {
   .plain-input, .input, select.input, .wiz-field, .wiz-answer input { font-size: 16px; }
 }
+
+/* Dark mode (John, 29 October 2026; HOUSE-STYLE §2): follows the device unless the visitor uses
+   the switch (src/lib/theme.ts). The house dark colours, as Hindcaster's, plus the ramp steps
+   Flowcharter uses that Hindcaster doesn't. Screen only, so a printed page is always light; Copy
+   image clones the chart without this stylesheet, so it is always light too. */
+@media screen {
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --color-bg: #2a2723;
+    --color-surface: #37332e;
+    --color-text: #e8dfcf;
+    --color-accent: #dd8a56;
+    --color-divider: color-mix(in srgb, #e8dfcf 16%, transparent);
+    --color-neutral-100: #423d36;
+    --color-neutral-200: #4b453d;
+    --color-neutral-300: #5b544a;
+    --color-neutral-400: #776e61;
+    --color-neutral-500: #9a9080;
+    --color-neutral-600: #a89d8b;
+    --color-neutral-700: #b0a593;
+    --color-neutral-800: #e3d9c7;
+    --color-neutral-900: #f0e8da;
+    --color-accent-100: #4a2a14;
+    --color-accent-200: #6a3a1c;
+    --color-accent-300: #b2622d;
+    --color-accent-600: #e8935d;
+    --color-accent-700: #f2a573;
+    --color-accent-800: #ffc6a5;
+    --color-accent-2-100: #2f3a20;
+    --color-accent-2-800: #d4e4b8;
+    --shadow-sm: 0 0 0 1px color-mix(in srgb, #e8dfcf 6%, transparent), 0 1px 2px #0006;
+    --shadow-md: 0 0 0 1px color-mix(in srgb, #e8dfcf 7%, transparent), 0 3px 10px #0008;
+    --shadow-lg: 0 0 0 1px color-mix(in srgb, #e8dfcf 8%, transparent), 0 12px 32px #000a;
+  }
+  /* The chart (John's option B, on a card): its lines and arrowheads in the page's text colour;
+     the boxes keep their pale fills and ink outlines, and the answers their cream pills. */
+  :root[data-theme="dark"] svg[aria-label^="Flowchart"] > path[stroke="#201e1d"] { stroke: var(--color-text); }
+  :root[data-theme="dark"] svg[aria-label^="Flowchart"] marker path { fill: var(--color-text); }
+  :root[data-theme="dark"] .chart-frame { background: var(--color-surface); border-radius: 22px; padding: 18px; }
+  /* On a phone the card reaches into the page's margin, so a chart has the same room to fit as in
+     light mode (a chart that just fits there would otherwise scroll sideways). */
+  @media (max-width: 720px) {
+    :root[data-theme="dark"] .chart-frame { width: calc(100% + 20px); margin-inline: -10px; padding: 12px 10px; border-radius: 18px; }
+  }
+  /* The "It goes back to an earlier step" arrow on the cards, which has no box behind it. */
+  :root[data-theme="dark"] .shape-icon-line { stroke: var(--color-text); }
+}
+
+/* The dark mode switch (as Hindcaster's): last in the nav bar on a computer. On a phone it sits
+   beside "Flowcharter", with New chart, Library and Guide on the row beneath. */
+.theme-switch { display: inline-flex; align-items: center; gap: 8px; flex: none; background: none; border: 0; padding: 4px 0; cursor: pointer; color: var(--color-neutral-700); font: inherit; }
+.theme-switch:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 999px; }
+.theme-switch-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; }
+.theme-switch-track { position: relative; width: 46px; height: 26px; border-radius: 999px; background: color-mix(in srgb, var(--color-text) 18%, transparent); transition: background 0.2s; }
+.theme-switch-knob { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--color-bg); box-shadow: 0 1px 3px #0004; display: grid; place-items: center; color: var(--color-accent); transition: transform 0.2s; }
+.theme-switch[aria-checked="true"] .theme-switch-track { background: var(--color-accent); }
+.theme-switch[aria-checked="true"] .theme-switch-knob { transform: translateX(20px); }
+.theme-switch svg { width: 12px; height: 12px; display: block; }
+.nav-break { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .theme-switch-track, .theme-switch-knob { transition: none; }
+}
+@media (max-width: 720px) {
+  .theme-switch { min-height: 44px; order: 1; }
+  .theme-switch-label { display: none; }
+  .nav-break { display: block; order: 2; flex-basis: 100%; height: 0; }
+  .nav-main > .nav-new, .nav-main > a { order: 3; }
+}

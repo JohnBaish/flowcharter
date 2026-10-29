@@ -80,7 +80,7 @@ function ShapeIcon({ type, small }: { type: ShapeType | 'back'; small?: boolean 
     delay: <path d="M1 3 H24 A9 9 0 0 1 24 21 H1 Z" {...p} />,
     document: <path d="M1 3 H33 V18 C25 14 9 24 1 18 Z" {...p} />,
     predefined: <><rect x="1" y="3" width="32" height="18" {...p} /><path d="M5 3 V21 M29 3 V21" stroke={INK} strokeWidth={1.4} /></>,
-    back: <path d="M28 18 H10 V6 M10 6 L5 11 M10 6 L15 11" fill="none" stroke={INK} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />,
+    back: <path className="shape-icon-line" d="M28 18 H10 V6 M10 6 L5 11 M10 6 L15 11" fill="none" stroke={INK} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />,
   };
   return <svg width={w} height={h} viewBox="0 0 34 24" aria-hidden="true" style={{ flex: 'none' }}>{shape[type]}</svg>;
 }

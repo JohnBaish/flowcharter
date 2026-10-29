@@ -1219,3 +1219,27 @@ errors, no sideways scroll. Waiting for John's choice before anything is built.
 card in the surface colour, or inside a thin outline. Claude suggests the card. Waiting for John.
 
 **John (same day):** the filled card. Not built yet.
+
+### 2026-10-29 — Dark mode built (branch `claude/sharp-ritchie-uzbr9y`, not merged)
+
+**John:** option B on the filled card; build it for the preview. **What:**
+- `src/lib/theme.ts` and `src/components/ThemeSwitch.tsx` (as Clockmaker's): follows the device
+  until the visitor uses the switch; only a choice that differs from the device is kept, key
+  `flowcharter-theme`; live change when the device changes. The same rule in `index.html` before
+  the page draws.
+- The switch is last in the nav bar on a computer. On a phone it sits beside "Flowcharter", with New
+  chart, Library and Guide on the row beneath (`.nav-break`), as the one row was already full.
+- `global.css`: the house dark colours under `@media screen` (printing stays light); the chart's
+  lines and arrowheads in the text colour, the boxes as they are; the chart frame a card in the
+  surface colour; on a phone the card reaches 10px into the page margin, so a chart has the same
+  355px to fit as in light mode (without it, the cousin chart scrolled sideways); the cards' "goes
+  back" arrow (`.shape-icon-line`) in the text colour.
+- `contentWidth()` in `lib/responsive.ts`: ChartScreen and LiveChart fit the chart inside the frame's
+  padding (none in light mode, so no change there).
+
+**Verified:** `npx tsc -b`, lint (the two known warnings), `npm run check`, build. In Chromium at
+1200px and 390px with touch: light and dark devices open to match; the switch's choice kept across a
+reload; setting it back clears it; follows the device live; no errors; no sideways scroll (Library,
+Guide, four test charts, the cards). Charts on the card with cream lines; fits as in light mode on
+both widths; the editing box still sits over its shape; Copy image the same, pixel for pixel, in
+dark and light; prints light with no card. **Couldn't be checked:** a real phone; Safari.

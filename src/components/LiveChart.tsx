@@ -4,6 +4,7 @@ import { layoutChart, type ChartLayout } from '../lib/layout.ts';
 import { LABEL_FONT, TEXT_FONT } from '../lib/shapes.ts';
 import { canvasMeasure, fontsReady } from '../lib/textWrap.ts';
 import { FlowChart, type Draft } from './FlowChart.tsx';
+import { contentWidth } from '../lib/responsive.ts';
 
 // Below this the chart's words get too small to read; a wider chart scrolls
 // sideways inside its frame instead.
@@ -34,7 +35,7 @@ export function LiveChart({ items, title, draft }: { items: Item[]; title: strin
   useLayoutEffect(() => {
     const el = frame.current;
     if (!el) return;
-    const measure = () => setWidth(el.clientWidth);
+    const measure = () => setWidth(contentWidth(el));
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
