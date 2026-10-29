@@ -1,0 +1,21 @@
+:root {
+  color-scheme: dark;
+  --color-bg: #2a2723; --color-surface: #37332e; --color-text: #e8dfcf; --color-accent: #dd8a56;
+  --color-divider: color-mix(in srgb, #e8dfcf 16%, transparent);
+  --color-neutral-100: #423d36; --color-neutral-200: #4b453d; --color-neutral-300: #5b544a;
+  --color-neutral-400: #776e61; --color-neutral-500: #9a9080; --color-neutral-600: #a89d8b;
+  --color-neutral-700: #b0a593; --color-neutral-800: #e3d9c7; --color-neutral-900: #f0e8da;
+  --color-accent-100: #4a2a14; --color-accent-200: #6a3a1c; --color-accent-300: #b2622d;
+  --color-accent-600: #e8935d; --color-accent-700: #f2a573; --color-accent-800: #ffc6a5;
+  --color-accent-2-100: #2f3a20; --color-accent-2-800: #d4e4b8;
+  --shadow-sm: 0 0 0 1px color-mix(in srgb, #e8dfcf 6%, transparent), 0 1px 2px #0006;
+  --shadow-md: 0 0 0 1px color-mix(in srgb, #e8dfcf 7%, transparent), 0 3px 10px #0008;
+  --shadow-lg: 0 0 0 1px color-mix(in srgb, #e8dfcf 8%, transparent), 0 12px 32px #000a;
+}
+body { background: var(--color-bg); }
+/* the mock switch, as Hindcaster's, set to dark */
+.mock-switch { display: inline-flex; align-items: center; gap: 8px; color: var(--color-neutral-700); font: 600 10px Figtree, sans-serif; letter-spacing: .1em; text-transform: uppercase; margin-left: 12px; }
+.mock-track { position: relative; width: 46px; height: 26px; border-radius: 999px; background: var(--color-accent); }
+.mock-knob { position: absolute; top: 3px; left: 23px; width: 20px; height: 20px; border-radius: 50%; background: var(--color-bg); display: grid; place-items: center; color: var(--color-accent); }
+.mock-knob svg { width: 12px; height: 12px; }
+@media (max-width: 720px) { .mock-switch .mock-label { display: none; } }

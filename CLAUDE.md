@@ -1202,3 +1202,14 @@ space (John). No app code changed.
 
 From clockwheel `cba1629`: every tool has a dark mode that follows the device's setting (§2), built in
 from the start (§16). Flowcharter has none yet: mock-ups went to John; nothing changed in the app.
+
+### 2026-10-29 — Dark mode mock-ups (design only)
+
+John asked for dark mode here too, mock-ups first. Made by adding the house dark colours
+(HOUSE-STYLE §2) and a pretend switch in the browser only; nothing in the app changed.
+`design/previews/dark-mode-2026-10-29/`: Guide, Library, List and Chart at 1200px and 390px with
+touch. The chart draws its lines in ink (`#201e1d`, written out for Copy image), so they vanish on a
+dark page; two options: **A** the chart keeps its cream paper on the dark page (`chart-a.css`), **B**
+lines, arrows and the key's text in the page's text colour, with the boxes keeping their pale fills
+and ink outlines (`chart-b.css`). Copy image and printing stay light either way. Checked: no
+errors, no sideways scroll. Waiting for John's choice before anything is built.

@@ -1,0 +1,4 @@
+/* Option B: lines and arrows in the page's text colour; boxes keep their pale fills and ink outlines */
+.chart-frame svg path[stroke="#201e1d"] { stroke: var(--color-text); }
+.chart-frame svg g.fc-edit path[stroke="#201e1d"], .chart-frame svg g.fc-edit path { stroke: #201e1d; }
+.chart-frame svg marker path { fill: var(--color-text); }

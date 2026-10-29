@@ -1,0 +1,3 @@
+/* Option A: the chart keeps its light paper on a dark page */
+.chart-frame { background: #f5ead8; border-radius: 22px; padding: 18px; }
+.chart-frame .chart-key-item { color: #201e1d; }
