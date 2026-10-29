@@ -29,6 +29,7 @@ Key points from the house style, repeated because they matter most:
   (John, 2026-10-18; helpers in `lib/words.ts`). Names and controls stay as
   digits (see the 2026-10-18 number-style entry).
 - Add a dated entry below for every change.
+- **Project tracker:** when something significant changes (a stage finished, a decision made, something goes live or is parked), update this project's file and its line in `INDEX.md` in `JohnBaish/baish.net-directory`, following that repo's README.
 
 ## Layout
 
@@ -1249,3 +1250,9 @@ Library footer and the Guide's "Where they're kept": "Your flowcharts are saved 
 on this device, along with your choice of light or dark mode if you change it. …". Checked at 1200px and 390px with
 touch, in light and dark: the wording shows, no errors, no sideways scroll. At John's word, the branch was merged to `main` with the
 dark mode work.
+
+### 2026-10-29 — project tracker line (notes only, straight to `main`)
+
+At John's request: a line in the key points asking future sessions to update
+this project's file in the project tracker (`JohnBaish/baish.net-directory`)
+when something significant changes.
