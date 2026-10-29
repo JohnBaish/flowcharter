@@ -1213,3 +1213,7 @@ dark page; two options: **A** the chart keeps its cream paper on the dark page (
 lines, arrows and the key's text in the page's text colour, with the boxes keeping their pale fills
 and ink outlines (`chart-b.css`). Copy image and printing stay light either way. Checked: no
 errors, no sideways scroll. Waiting for John's choice before anything is built.
+
+**Same day:** John prefers option B and asked about a frame. Two mocked up
+(`flowcharter-chart-b-{card,line}-*.png`, `frame-card.css`, `frame-line.css`): the chart on a filled
+card in the surface colour, or inside a thin outline. Claude suggests the card. Waiting for John.
