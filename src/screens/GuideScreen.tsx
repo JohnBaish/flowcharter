@@ -141,8 +141,8 @@ export function GuideScreen() {
         <div className="card-kicker">Your flowcharts</div>
         <h3 className="card-title" style={heading}>Where they're kept</h3>
         <p style={body}>
-          Your flowcharts are saved automatically, but only in this browser, on this device. Use <strong>Export</strong> on
-          the Library to keep a backup or to move them to another device, and <strong>Import</strong> to bring them back.
+          Your flowcharts are saved automatically, but only in this browser, on this device, along with your choice of light
+          or dark mode if you change it. Use <strong>Export</strong> on the Library to keep a backup or to move them to another device, and <strong>Import</strong> to bring them back.
         </p>
         <p style={{ ...body, margin: 0 }}>
           The flowcharts you make here are not collected; they're only saved in your browser. We collect anonymous visit

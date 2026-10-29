@@ -128,8 +128,8 @@ export function LibraryScreen() {
         }}
       >
         <p style={{ margin: 0 }}>
-          Your flowcharts are saved automatically, but only in this browser, on this device. Use Export to keep a backup or
-          move them to another device.
+          Your flowcharts are saved automatically, but only in this browser, on this device, along with your choice of light
+          or dark mode if you change it. Use Export to keep a backup or move them to another device.
         </p>
         <p style={{ margin: 'var(--space-2) 0 0' }}>
           Flowcharter is a free-to-use personal project by John Baish. The flowcharts you make here are not collected;

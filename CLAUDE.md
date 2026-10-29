@@ -1243,3 +1243,9 @@ reload; setting it back clears it; follows the device live; no errors; no sidewa
 Guide, four test charts, the cards). Charts on the card with cream lines; fits as in light mode on
 both widths; the editing box still sits over its shape; Copy image the same, pixel for pixel, in
 dark and light; prints light with no card. **Couldn't be checked:** a real phone; Safari.
+
+**Footer wording, then merged and live (2026-10-29):** John approved a line about the light or dark choice, in the
+Library footer and the Guide's "Where they're kept": "Your flowcharts are saved automatically, but only in this browser,
+on this device, along with your choice of light or dark mode if you change it. …". Checked at 1200px and 390px with
+touch, in light and dark: the wording shows, no errors, no sideways scroll. At John's word, the branch was merged to `main` with the
+dark mode work.
