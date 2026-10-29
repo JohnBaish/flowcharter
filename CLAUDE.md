@@ -1217,3 +1217,5 @@ errors, no sideways scroll. Waiting for John's choice before anything is built.
 **Same day:** John prefers option B and asked about a frame. Two mocked up
 (`flowcharter-chart-b-{card,line}-*.png`, `frame-card.css`, `frame-line.css`): the chart on a filled
 card in the surface colour, or inside a thin outline. Claude suggests the card. Waiting for John.
+
+**John (same day):** the filled card. Not built yet.
