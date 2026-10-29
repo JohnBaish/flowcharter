@@ -8,8 +8,8 @@ Read these first, in this order:
 1. `SPEC.md`: what Flowcharter is and does (agreed with John).
 2. `PLAN.md`: the staged build. Work one stage at a time, on its branch.
 3. `HOUSE-STYLE.md`: the shared look and ways of working. Copied from
-   `JohnBaish/clockwheel`; last re-copied 2026-10-23 (clockwheel commit
-   `36378ed`). Clockwheel holds the master copy. If it has changed since,
+   `JohnBaish/clockwheel`; last re-copied 2026-10-29 (clockwheel commit
+   `cba1629`). Clockwheel holds the master copy. If it has changed since,
    re-copy it and note that here. The same goes for `SEO-HANDOVER.md` and
    `.claude/skills/fresh-look/` (the `/fresh-look` review).
 
@@ -1197,3 +1197,8 @@ times with minutes (only examples such as "8pm"), so no app code changed.
 
 From clockwheel `36378ed`: §15 now says temperatures are written "20°C", with no
 space (John). No app code changed.
+
+### 2026-10-29 — house style re-copied (notes only, straight to `main`)
+
+From clockwheel `cba1629`: every tool has a dark mode that follows the device's setting (§2), built in
+from the start (§16). Flowcharter has none yet: mock-ups went to John; nothing changed in the app.
