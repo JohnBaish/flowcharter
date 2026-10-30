@@ -384,6 +384,10 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
     --shadow-md: 0 0 0 1px color-mix(in srgb, #e8dfcf 7%, transparent), 0 3px 10px #0008;
     --shadow-lg: 0 0 0 1px color-mix(in srgb, #e8dfcf 8%, transparent), 0 12px 32px #000a;
   }
+  /* Finer text smoothing in dark mode: Macs draw light text on a dark page with heavy, soft edges,
+     most of all the Caprasimo headings (John, October 30th 2026; HOUSE-STYLE §2). Only macOS
+     browsers use it; light mode is left as it is. */
+  :root[data-theme="dark"] body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
   /* The chart (John's option B, on a card): its lines and arrowheads in the page's text colour;
      the boxes keep their pale fills and ink outlines, and the answers their cream pills. */
   :root[data-theme="dark"] svg[aria-label^="Flowchart"] > path[stroke="#201e1d"] { stroke: var(--color-text); }
