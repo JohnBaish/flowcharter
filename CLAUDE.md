@@ -8,8 +8,8 @@ Read these first, in this order:
 1. `SPEC.md`: what Flowcharter is and does (agreed with John).
 2. `PLAN.md`: the staged build. Work one stage at a time, on its branch.
 3. `HOUSE-STYLE.md`: the shared look and ways of working. Copied from
-   `JohnBaish/clockwheel`; last re-copied 2026-10-30 (clockwheel commit
-   `674122d`). Clockwheel holds the master copy. If it has changed since,
+   `JohnBaish/clockwheel`; last re-copied 2026-10-31 (clockwheel commit
+   `1335025`). Clockwheel holds the master copy. If it has changed since,
    re-copy it and note that here. The same goes for `SEO-HANDOVER.md` and
    `.claude/skills/fresh-look/` (the `/fresh-look` review).
 
@@ -29,7 +29,7 @@ Key points from the house style, repeated because they matter most:
   (John, 2026-10-18; helpers in `lib/words.ts`). Names and controls stay as
   digits (see the 2026-10-18 number-style entry).
 - Add a dated entry below for every change.
-- **Project tracker:** when something significant changes (a stage finished, a decision made, something goes live or is parked), update this project's file and its line in `INDEX.md` in `JohnBaish/baish.net-directory`, following that repo's README.
+- **Project tracker:** when something significant changes (a stage finished, a decision made, something goes live or is parked), update this project's file and its line in `INDEX.md` in `JohnBaish/baish.net-directory`, following that repo's README. Before committing there, run `node site/check-tracker.mjs` in that repo and fix anything it lists.
 
 ## Layout
 
@@ -1278,3 +1278,9 @@ touch, light and dark devices, every main screen: smoothing `antialiased` in dar
 errors; no sideways scroll. No element drawn in Caprasimo above weight 400 (no faked bold) on any screen.
 **Couldn't be checked:** how a Mac actually draws the text (this container runs Linux); John to look on
 his MacBook.
+
+### 2026-10-31 — house style re-copied (notes only, straight to `main`)
+
+From clockwheel `1335025`: §10 asks sessions to run `node site/check-tracker.mjs` in
+`JohnBaish/baish.net-directory` before committing tracker changes, as does the tracker line in the
+key points above (John). No app code changed.
