@@ -9,7 +9,7 @@ Read these first, in this order:
 2. `PLAN.md`: the staged build. Work one stage at a time, on its branch.
 3. `HOUSE-STYLE.md`: the shared look and ways of working. Copied from
    `JohnBaish/clockwheel`; last re-copied 2026-11-01 (clockwheel commit
-   `b31863e`). Clockwheel holds the master copy. If it has changed since,
+   `a6cb099`). Clockwheel holds the master copy. If it has changed since,
    re-copy it and note that here. The same goes for `SEO-HANDOVER.md` and
    `.claude/skills/fresh-look/` (the `/fresh-look` review).
 
@@ -1297,3 +1297,10 @@ From clockwheel `b31863e` (from the Refueller session): §15 lists Lightreader's
 agreed exception beside Clockmaker's, and §1 and §16 describe the baish.net overview in two parts (the words in
 `design/overview/baish-net-overview.md`, the pictures in a PDF). `SEO-HANDOVER.md` gains Lightreader's and
 Refueller's columns and the hub's new description. No app code changed.
+
+### 2026-11-01 — house style re-copied: tidy branches as you go (notes only, straight to `main`)
+
+From clockwheel `a6cb099`: §10 now asks sessions to delete a branch as soon as it's merged, keep unmerged ones only for
+work worth returning to (noted in the project's notes), tag dead unmerged work before deleting, check merged status with
+full history (cloud copies are often shallow), and list branches for John to delete, as cloud sessions can't (John).
+No app code changed.
