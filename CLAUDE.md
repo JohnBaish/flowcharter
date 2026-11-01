@@ -8,8 +8,8 @@ Read these first, in this order:
 1. `SPEC.md`: what Flowcharter is and does (agreed with John).
 2. `PLAN.md`: the staged build. Work one stage at a time, on its branch.
 3. `HOUSE-STYLE.md`: the shared look and ways of working. Copied from
-   `JohnBaish/clockwheel`; last re-copied 2026-10-31 (clockwheel commit
-   `9edeea5`). Clockwheel holds the master copy. If it has changed since,
+   `JohnBaish/clockwheel`; last re-copied 2026-11-01 (clockwheel commit
+   `b31863e`). Clockwheel holds the master copy. If it has changed since,
    re-copy it and note that here. The same goes for `SEO-HANDOVER.md` and
    `.claude/skills/fresh-look/` (the `/fresh-look` review).
 
@@ -1290,3 +1290,10 @@ key points above (John). No app code changed.
 From clockwheel `9edeea5`: tracker changes go straight to the tracker's `main`, John's standing
 permission even when a session was given its own branch (§10 and the tracker line in the key points
 above). No app code changed.
+
+### 2026-11-01 — house style and SEO handover re-copied (notes only, straight to `main`)
+
+From clockwheel `b31863e` (from the Refueller session): §15 lists Lightreader's 24-hour times ("06:48") as an
+agreed exception beside Clockmaker's, and §1 and §16 describe the baish.net overview in two parts (the words in
+`design/overview/baish-net-overview.md`, the pictures in a PDF). `SEO-HANDOVER.md` gains Lightreader's and
+Refueller's columns and the hub's new description. No app code changed.
