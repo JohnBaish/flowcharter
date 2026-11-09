@@ -20,6 +20,8 @@ const MIN_SCALE_PHONE = 0.75;
 // …but a chart only a little too wide for a phone may shrink as far as this to
 // fit completely, rather than scroll a few boxes out of sight (fresh look 5.1).
 const FIT_SCALE_PHONE = 0.65;
+// Less than this tall counts as a short screen: a phone held sideways (2026-11-09).
+const SHORT = 500;
 
 const NAMES = { down: 'Down', across: 'Across' } as const;
 
@@ -88,7 +90,10 @@ export function ChartScreen() {
     if (!el) return;
     const measure = () => {
       const top = el.getBoundingClientRect().top + window.scrollY;
-      setSpace({ width: contentWidth(el), height: Math.max(320, window.innerHeight - Math.min(top, 260) - 24) });
+      // A short screen (a phone held sideways, less than 500px tall; 2026-11-09): the chart can be
+      // scrolled up to fill it, so the room is the whole screen's height, not what's left below the header.
+      const short = window.innerHeight < SHORT;
+      setSpace({ width: contentWidth(el), height: short ? Math.max(200, window.innerHeight - 24) : Math.max(320, window.innerHeight - Math.min(top, 260) - 24) });
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -112,7 +117,9 @@ export function ChartScreen() {
   // Too wide to fit, so it scrolls sideways: offer Full screen on a phone, and on
   // any touch screen (an iPad, or an iPhone Duo opened sideways, gets the
   // computer layout but has no mouse to scroll with; John, 2026-10-22).
-  const wide = (isNarrow || isTouch()) && items.length > 0 && !!layout && layout.width * scale > space.width + 1;
+  // On a short screen held sideways, also when it's too tall to see at once (2026-11-09).
+  const wide = (isNarrow || isTouch()) && items.length > 0 && !!layout
+    && (layout.width * scale > space.width + 1 || (window.innerHeight < SHORT && layout.height * scale > space.height + 1));
   useEffect(() => { setChartWide(wide); }, [wide, setChartWide]);
 
   // — Changing a box's words (John, 2026-10-20): only the words, never the shape. —

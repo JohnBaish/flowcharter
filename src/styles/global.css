@@ -201,6 +201,13 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
 }
 .chart-edit-panel-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
 .chart-edit-panel-actions .btn { min-height: 44px; padding: 0 20px; }
+/* A short screen (a phone held sideways, 2026-11-09): the buttons beside the words, so the panel and the
+   keyboard leave some of the chart in view. */
+@media (max-height: 500px) {
+  .chart-edit-panel { display: grid; grid-template-columns: 1fr auto; column-gap: 12px; align-items: end; padding: 8px var(--space-4) 10px; }
+  .chart-edit-panel h3 { grid-column: 1 / -1; margin-bottom: 4px; }
+  .chart-edit-panel-actions { margin-top: 0; }
+}
 @media print { .chart-hint, .chart-edit-box, .chart-edit-hint, .chart-edit-panel { display: none !important; } }
 
 /* — Guide screen — */

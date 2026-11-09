@@ -1314,3 +1314,16 @@ A "Delete merged branches" workflow (`.github/workflows/tidy-branches.yml`, Run 
 From clockwheel `5086657`: §10 now asks a session to run the "Delete merged branches" workflow itself after a merge (trial run
 first, then the real run, then check the branches are gone and log it), rather than listing branches for John (John). No app code
 changed.
+
+### 2026-11-09 — a phone held sideways (branch `claude/bold-rubin-n8utv4`, merged)
+
+From a check of every site on a sideways iPhone (John: make the fixes and merge each without asking). On a screen less than 500px tall
+(`SHORT` in `ChartScreen.tsx`): (1) the room a chart has is the whole screen's height, not what's left below the header with a 320px
+floor (which made Automatic think a short screen was taller than it is); (2) Full screen is offered when the chart is too tall to see at
+once, as well as too wide (on a smaller iPhone held sideways a Down chart was 784px tall on a 320 to 375px screen, with no Full screen);
+(3) "Change the words" has its buttons beside the box (`global.css`), 100px tall (was 178), so the panel and the keyboard leave some of the
+chart in view. Upright phones and computers unchanged. **Verified:** build, checks (34 + 12), lint (the two known warnings); in Chromium
+with touch at 667×320, 667×375, 844×390 and 390×844, and 1200px with a mouse, the newsreaders, every-shape and weekend test charts:
+Full screen offered sideways whenever a chart doesn't fit (it opens the whole chart), the panel as above, no errors. Automatic's rule is
+unchanged (the way round that needs less shrinking): at 667×375 the every-shape chart is still Down, as it shrinks less that way.
+**Not checked:** a real iPhone with its keyboard up. Merged to `main`.
