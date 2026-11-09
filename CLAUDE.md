@@ -8,8 +8,8 @@ Read these first, in this order:
 1. `SPEC.md`: what Flowcharter is and does (agreed with John).
 2. `PLAN.md`: the staged build. Work one stage at a time, on its branch.
 3. `HOUSE-STYLE.md`: the shared look and ways of working. Copied from
-   `JohnBaish/clockwheel`; last re-copied 2026-11-01 (clockwheel commit
-   `5086657`). Clockwheel holds the master copy. If it has changed since,
+   `JohnBaish/clockwheel`; last re-copied 2026-11-09 (clockwheel commit
+   `49cbf9e`). Clockwheel holds the master copy. If it has changed since,
    re-copy it and note that here. The same goes for `SEO-HANDOVER.md` and
    `.claude/skills/fresh-look/` (the `/fresh-look` review).
 
@@ -1327,3 +1327,7 @@ with touch at 667×320, 667×375, 844×390 and 390×844, and 1200px with a mouse
 Full screen offered sideways whenever a chart doesn't fit (it opens the whole chart), the panel as above, no errors. Automatic's rule is
 unchanged (the way round that needs less shrinking): at 667×375 the every-shape chart is still Down, as it shrinks less that way.
 **Not checked:** a real iPhone with its keyboard up. Merged to `main`.
+
+### 2026-11-09 — house style and fresh look re-copied (notes only, straight to `main`)
+
+From clockwheel `49cbf9e`: §6 adds "A phone held sideways" (a short screen is `max-height: 500px`; keep the top small; no chart, map or pop-up taller than the screen; draggable things shorter than it; 16px boxes), §10 and §11 check at 844×390 with touch too, and the fresh-look review now does every pass sideways as well (its `SKILL.md` and report template, re-copied); also the November 5th §2 section on reviewing dark mode colours. No app code changed.
