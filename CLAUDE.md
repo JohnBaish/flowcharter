@@ -1340,3 +1340,8 @@ follow suit so they all match. `global.css`, one block at the end, dark mode on 
 and cards (including the chart's card) lifted with a shadow. Light mode, printing and Copy image unchanged. **Verified:** `tsc -b`,
 lint (the two known warnings), checks 34 + 12, build; Chromium, the Guide at 1200px, 390px and 844×390 with touch, light and dark:
 dark page `#24211e`, no errors, no sideways scroll. **Couldn't check:** a real phone or Mac.
+
+### 2026-11-14 — house style re-copied (notes only, straight to `main`)
+
+From clockwheel: §2 now records the darker dark page (`#24211e`), the card shadow, raised panels
+`#403b35` with `#ea9862` accents, and coloured state edges. No app code changed.
