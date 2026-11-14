@@ -429,3 +429,12 @@ select.input { width: auto; max-width: 100%; padding: 3px 10px; font-size: 13px;
   .nav-break { display: block; order: 2; flex-basis: 100%; height: 0; }
   .nav-main > .nav-new, .nav-main > a { order: 3; }
 }
+
+/* Dark mode a step darker (John, November 14th 2026, house style §2): the page #24211e (was
+   #2a2723) and cards lifted with a shadow, matching Riverwatcher, Lightreader, Refueller and
+   Hindcaster after their dark colour review. Dark mode on screen only: light mode, printing and
+   copied images are unchanged. */
+@media screen {
+  :root[data-theme="dark"] { --color-bg: #24211e; }
+  :root[data-theme="dark"] .card { box-shadow: 0 0 0 1px color-mix(in srgb, #e8dfcf 8%, transparent), 0 4px 14px #0009; }
+}

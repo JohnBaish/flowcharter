@@ -1331,3 +1331,12 @@ unchanged (the way round that needs less shrinking): at 667×375 the every-shape
 ### 2026-11-09 — house style and fresh look re-copied (notes only, straight to `main`)
 
 From clockwheel `49cbf9e`: §6 adds "A phone held sideways" (a short screen is `max-height: 500px`; keep the top small; no chart, map or pop-up taller than the screen; draggable things shorter than it; 16px boxes), §10 and §11 check at 844×390 with touch too, and the fresh-look review now does every pass sideways as well (its `SKILL.md` and report template, re-copied); also the November 5th §2 section on reviewing dark mode colours. No app code changed.
+
+
+### 2026-11-14 — dark mode a step darker, to match the other tools (branch `dark-step`, merged)
+
+After the dark colour review of Riverwatcher, Lightreader, Refueller and Hindcaster (house style §2), John agreed the other sites
+follow suit so they all match. `global.css`, one block at the end, dark mode on screen only: the page `#24211e` (was `#2a2723`)
+and cards (including the chart's card) lifted with a shadow. Light mode, printing and Copy image unchanged. **Verified:** `tsc -b`,
+lint (the two known warnings), checks 34 + 12, build; Chromium, the Guide at 1200px, 390px and 844×390 with touch, light and dark:
+dark page `#24211e`, no errors, no sideways scroll. **Couldn't check:** a real phone or Mac.
